@@ -16,15 +16,17 @@ import {
   DEMOGRAPHIC_OPTIONS,
 } from '@/lib/constants'
 
+const NOTES_MAX = 500
+
 const DEFAULT_FORM: EventFormData = {
-  eventType: '',
-  budget: '',
-  attendance: '',
-  season: '',
-  venue: 'Indoor',
-  alcohol: 'Full bar',
+  eventType:   '',
+  budget:      '',
+  attendance:  '',
+  season:      '',
+  venue:       'Indoor',
+  alcohol:     'Full bar',
   demographic: 'Young professionals (25–35)',
-  notes: '',
+  notes:       '',
 }
 
 interface EventPlannerFormProps {
@@ -39,9 +41,9 @@ export function EventPlannerForm({ onSubmit, isLoading }: EventPlannerFormProps)
   const validate = (): boolean => {
     const errs: Partial<Record<keyof EventFormData, string>> = {}
     if (!form.eventType) errs.eventType = 'Please select an event type'
-    if (!form.budget) errs.budget = 'Please select a budget range'
+    if (!form.budget)    errs.budget    = 'Please select a budget range'
     if (!form.attendance) errs.attendance = 'Please select expected attendance'
-    if (!form.season) errs.season = 'Please select a season'
+    if (!form.season)    errs.season    = 'Please select a season'
     setErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -58,6 +60,10 @@ export function EventPlannerForm({ onSubmit, isLoading }: EventPlannerFormProps)
 
   const set = <K extends keyof EventFormData>(key: K, val: EventFormData[K]) =>
     setForm((prev) => ({ ...prev, [key]: val }))
+
+  const notesLen = form.notes.length
+  const notesNearLimit = notesLen >= NOTES_MAX * 0.85  // warn at 85%
+  const notesAtLimit   = notesLen >= NOTES_MAX
 
   return (
     <form onSubmit={handleSubmit} noValidate>
@@ -132,7 +138,7 @@ export function EventPlannerForm({ onSubmit, isLoading }: EventPlannerFormProps)
 
         <hr className="border-border mb-6" />
 
-        {/* Notes */}
+        {/* Notes with character counter */}
         <div className="mb-7">
           <Textarea
             id="notes"
@@ -140,9 +146,20 @@ export function EventPlannerForm({ onSubmit, isLoading }: EventPlannerFormProps)
             hint="Optional"
             placeholder="Any special requests, themes, dietary requirements, or property-specific details…"
             value={form.notes}
-            onChange={(e) => set('notes', e.target.value)}
+            onChange={(e) => set('notes', e.target.value.slice(0, NOTES_MAX))}
             rows={3}
+            maxLength={NOTES_MAX}
           />
+          {/* Counter — only visible once the user starts typing */}
+          {notesLen > 0 && (
+            <p className={`text-right text-[0.72rem] mt-1 tabular-nums transition-colors ${
+              notesAtLimit   ? 'text-red-500 font-medium' :
+              notesNearLimit ? 'text-amber-500' :
+              'text-muted'
+            }`}>
+              {notesLen} / {NOTES_MAX}
+            </p>
+          )}
         </div>
 
         {/* Actions */}

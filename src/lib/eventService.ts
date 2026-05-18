@@ -69,11 +69,22 @@ function extractMessage(err: unknown): string {
 
 // ─── CRUD ─────────────────────────────────────────────────────────────────────
 
+// Only the columns needed for EventCard list + EventDetailModal.
+// Excludes no columns currently — all are used by EventDetailModal —
+// but explicitly listing them means a future heavy column won't be
+// accidentally pulled into the list view.
+const LIST_COLUMNS = [
+  'id', 'created_at', 'title', 'tagline', 'flyer_headline', 'meta',
+  'overview', 'theme', 'pro_tip', 'catering', 'entertainment',
+  'logistics', 'budget_breakdown', 'setup_logistics',
+  'resident_email', 'timeline', 'vendor_ideas', 'staffing', 'alcohol_estimate',
+].join(', ')
+
 export async function fetchEventPlans(): Promise<ServiceResult<SavedEvent[]>> {
   try {
     const { data, error } = await supabase
       .from('event_plans')
-      .select('*')
+      .select(LIST_COLUMNS)
       .order('created_at', { ascending: false })
 
     if (error) return { data: null, error: error.message }
