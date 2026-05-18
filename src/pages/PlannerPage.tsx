@@ -1,15 +1,17 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { AlertTriangle, RefreshCw, CheckCircle2, Loader2 } from 'lucide-react'
 import type { EventFormData, SavedEvent, LoadingStep } from '@/types'
 import { useEventPlanner } from '@/hooks/useEventPlanner'
 import { useSavedEvents } from '@/hooks/useSavedEvents'
 import { EventPlannerForm } from '@/components/events/EventPlannerForm'
 import { EventPlanResult } from '@/components/events/EventPlanResult'
+import { TemplateSelector } from '@/components/events/TemplateSelector'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
+import type { LuxuryTemplate } from '@/lib/templates'
 
 export function PlannerPage() {
-  const { status, plan, error, retryCount, loadingSteps, generate, retry, reset } = useEventPlanner()
+  const { status, plan, error, retryCount, loadingSteps, generate, retry, reset, loadTemplate } = useEventPlanner()
   const { save, isSaved } = useSavedEvents()
   const [currentFormData, setCurrentFormData] = useState<EventFormData | null>(null)
 
@@ -17,6 +19,15 @@ export function PlannerPage() {
     setCurrentFormData(data)
     void generate(data)
   }
+
+  const handleSelectTemplate = useCallback((template: LuxuryTemplate) => {
+    setCurrentFormData(template.formData)
+    loadTemplate(template.plan)
+    // Scroll down so the result is visible on mobile
+    setTimeout(() => {
+      document.getElementById('plan-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 50)
+  }, [loadTemplate])
 
   const handleSave = async (event: SavedEvent): Promise<SavedEvent | null> => {
     return save(event)
@@ -27,11 +38,26 @@ export function PlannerPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
       {/* Page header */}
-      <div className="mb-8">
+      <div className="mb-6">
         <h1 className="font-serif text-4xl font-light text-charcoal mb-2">Event Planner</h1>
         <p className="text-muted font-light text-sm leading-relaxed">
-          Fill in the details below and Claude AI will craft a complete, production-ready event plan via Supabase Edge Function.
+          Start from a template for an instant plan, or fill in the form to generate one with Claude AI.
         </p>
+      </div>
+
+      {/* Template selector — collapses after selection */}
+      <TemplateSelector
+        onSelect={handleSelectTemplate}
+        disabled={status === 'loading'}
+      />
+
+      {/* Divider */}
+      <div className="flex items-center gap-3 mb-5">
+        <hr className="flex-1 border-border" />
+        <span className="text-[0.7rem] text-muted uppercase tracking-[0.12em] font-light shrink-0">
+          or generate with AI
+        </span>
+        <hr className="flex-1 border-border" />
       </div>
 
       {/* Form */}
@@ -84,11 +110,7 @@ export function PlannerPage() {
           <div className="p-6 text-center">
             <p className="text-[0.875rem] text-red-700 font-light mb-5 leading-relaxed">{error}</p>
             <div className="flex items-center justify-center gap-3">
-              <Button
-                variant="gold"
-                size="sm"
-                onClick={() => retry(currentFormData)}
-              >
+              <Button variant="gold" size="sm" onClick={() => retry(currentFormData)}>
                 <RefreshCw size={13} className="mr-2" />
                 Try Again
               </Button>
@@ -102,7 +124,7 @@ export function PlannerPage() {
 
       {/* ── Success ── */}
       {status === 'success' && plan && currentFormData && (
-        <div className="mt-6">
+        <div className="mt-6" id="plan-result">
           <EventPlanResult
             plan={plan}
             formData={currentFormData}
@@ -116,7 +138,7 @@ export function PlannerPage() {
   )
 }
 
-// ─── Step indicator dot ───────────────────────────────────────────────────────
+// ─── Step indicator ───────────────────────────────────────────────────────────
 
 function StepIndicator({ status }: { status: LoadingStep['status'] }) {
   if (status === 'done') {

@@ -11,6 +11,7 @@ export { LoadingDots } from './ui/LoadingDots'
 export { SupabaseStatus, SupabasePill } from './ui/SupabaseStatus'
 
 // Events
+export { TemplateSelector } from './events/TemplateSelector'
 export { EventPlannerForm } from './events/EventPlannerForm'
 export { EventPlanResult, PlanSection, PlanList } from './events/EventPlanResult'
 export { EventCard } from './events/EventCard'

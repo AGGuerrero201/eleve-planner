@@ -110,5 +110,16 @@ export function useEventPlanner() {
     void generate(data)
   }, [generate])
 
-  return { status, plan, error, retryCount, loadingSteps, generate, retry, reset }
+  // Load a pre-written template plan instantly — no Claude call.
+  // Behaves identically to a successful generate() call from the UI's perspective.
+  const loadTemplate = useCallback((templatePlan: EventPlan) => {
+    setPlan(templatePlan)
+    setStatus('success')
+    setError(null)
+    setRetryCount(0)
+    // Clear hash so "Enhance with AI" always fires after a template load
+    lastGeneratedHashRef.current = null
+  }, [])
+
+  return { status, plan, error, retryCount, loadingSteps, generate, retry, reset, loadTemplate }
 }
