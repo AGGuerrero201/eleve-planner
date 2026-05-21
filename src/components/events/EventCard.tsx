@@ -1,7 +1,8 @@
 import { Trash2 } from 'lucide-react'
-import type { SavedEvent } from '@/types'
+import type { SavedEvent, EventWorkflowStatus } from '@/types'
+import { WORKFLOW_STATUS_LABELS } from '@/lib/workflowStatus'
 import { Badge } from '@/components/ui/Badge'
-import { formatDate, truncate } from '@/lib/utils'
+import { formatDate, truncate, cn } from '@/lib/utils'
 
 interface EventCardProps {
   event: SavedEvent
@@ -31,8 +32,13 @@ export function EventCard({ event, onClick, onDelete }: EventCardProps) {
         <Trash2 size={13} />
       </button>
 
+      {/* Workflow status badge */}
+      <div className="mb-2.5">
+        <WorkflowBadge status={event.workflowStatus} />
+      </div>
+
       {/* Type */}
-      <p className="text-[0.67rem] font-medium tracking-[0.15em] uppercase text-gold mb-2.5">
+      <p className="text-[0.67rem] font-medium tracking-[0.15em] uppercase text-gold mb-1.5">
         {event.meta.eventType}
       </p>
 
@@ -58,5 +64,36 @@ export function EventCard({ event, onClick, onDelete }: EventCardProps) {
         Saved {formatDate(event.savedAt)}
       </p>
     </article>
+  )
+}
+
+// ─── WorkflowBadge ────────────────────────────────────────────────────────────
+
+const STATUS_STYLES: Record<EventWorkflowStatus, string> = {
+  draft:       'bg-warm-gray border-border text-muted',
+  in_progress: 'bg-blue-50 border-blue-200 text-blue-700',
+  finalized:   'bg-green-50 border-green-200 text-green-700',
+  archived:    'bg-charcoal/5 border-charcoal/15 text-charcoal-light',
+}
+
+const STATUS_DOTS: Record<EventWorkflowStatus, string> = {
+  draft:       'bg-muted/50',
+  in_progress: 'bg-blue-400',
+  finalized:   'bg-green-500',
+  archived:    'bg-charcoal-light/40',
+}
+
+export function WorkflowBadge({ status }: { status: EventWorkflowStatus }) {
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center gap-1.5 text-[0.67rem] font-medium tracking-[0.08em] uppercase',
+        'px-2 py-0.5 rounded-sm border',
+        STATUS_STYLES[status]
+      )}
+    >
+      <span className={cn('w-1.5 h-1.5 rounded-full shrink-0', STATUS_DOTS[status])} />
+      {WORKFLOW_STATUS_LABELS[status]}
+    </span>
   )
 }

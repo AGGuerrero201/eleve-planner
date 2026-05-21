@@ -276,17 +276,20 @@ function ResidentEmailCard({ email }: { email: EventPlan['residentEmail'] }) {
 export function PlanSection({
   title,
   icon,
+  action,
   children,
 }: {
   title: string
   icon?: React.ReactNode
+  action?: React.ReactNode
   children: React.ReactNode
 }) {
   return (
     <div className="mb-5">
       <h4 className="flex items-center gap-1.5 text-[0.67rem] font-medium tracking-[0.15em] uppercase text-charcoal-light pb-2 mb-3 border-b border-border">
         {icon && <span className="text-gold">{icon}</span>}
-        {title}
+        <span className="flex-1">{title}</span>
+        {action && <span className="ml-auto">{action}</span>}
       </h4>
       {children}
     </div>

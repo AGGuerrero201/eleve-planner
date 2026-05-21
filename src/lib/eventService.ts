@@ -3,7 +3,7 @@
  */
 
 import { supabase } from '@/lib/supabase'
-import type { SavedEvent, EventFormData } from '@/types'
+import type { SavedEvent, EventFormData, EventWorkflowStatus } from '@/types'
 import type { EventPlanRow, EventPlanInsert } from '@/types/database'
 
 // ─── Result type ─────────────────────────────────────────────────────────────
@@ -37,6 +37,7 @@ function rowToSavedEvent(row: EventPlanRow): SavedEvent {
     alcoholEstimate: (row.alcohol_estimate as SavedEvent['alcoholEstimate']) ?? null,
     residentEmail: (row.resident_email as SavedEvent['residentEmail']) ?? { subject: '', body: '' },
     meta: row.meta as EventFormData,
+    workflowStatus: ((row as Record<string, unknown>).workflow_status as EventWorkflowStatus) ?? 'draft',
   }
 }
 
@@ -59,6 +60,7 @@ function savedEventToInsert(event: SavedEvent): EventPlanInsert {
     alcohol_estimate: event.alcoholEstimate as unknown as import('@/types/database').Json ?? null,
     resident_email: event.residentEmail as unknown as import('@/types/database').Json,
     meta: event.meta as unknown as import('@/types/database').Json,
+    workflow_status: event.workflowStatus ?? 'draft',
   }
 }
 
@@ -78,6 +80,7 @@ const LIST_COLUMNS = [
   'overview', 'theme', 'pro_tip', 'catering', 'entertainment',
   'logistics', 'budget_breakdown', 'setup_logistics',
   'resident_email', 'timeline', 'vendor_ideas', 'staffing', 'alcohol_estimate',
+  'workflow_status',
 ].join(', ')
 
 export async function fetchEventPlans(): Promise<ServiceResult<SavedEvent[]>> {
@@ -130,6 +133,38 @@ export async function createEventPlan(event: SavedEvent): Promise<ServiceResult<
 export async function deleteEventPlan(id: string): Promise<ServiceResult<true>> {
   try {
     const { error } = await supabase.from('event_plans').delete().eq('id', id)
+    if (error) return { data: null, error: error.message }
+    return { data: true, error: null }
+  } catch (err) {
+    return { data: null, error: extractMessage(err) }
+  }
+}
+
+export async function updateEventPlanField(
+  id: string,
+  patch: Record<string, unknown>
+): Promise<ServiceResult<true>> {
+  try {
+    const { error } = await supabase
+      .from('event_plans')
+      .update(patch)
+      .eq('id', id)
+    if (error) return { data: null, error: error.message }
+    return { data: true, error: null }
+  } catch (err) {
+    return { data: null, error: extractMessage(err) }
+  }
+}
+
+export async function updateEventPlanStatus(
+  id: string,
+  status: EventWorkflowStatus
+): Promise<ServiceResult<true>> {
+  try {
+    const { error } = await supabase
+      .from('event_plans')
+      .update({ workflow_status: status })
+      .eq('id', id)
     if (error) return { data: null, error: error.message }
     return { data: true, error: null }
   } catch (err) {

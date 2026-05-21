@@ -8,13 +8,18 @@ export { Badge } from './ui/Badge'
 export { Modal } from './ui/Modal'
 export { SectionLabel } from './ui/SectionLabel'
 export { LoadingDots } from './ui/LoadingDots'
+export { EditableText } from './ui/EditableText'
+export { EditableTextarea } from './ui/EditableTextarea'
+export { EditableList } from './ui/EditableList'
 export { SupabaseStatus, SupabasePill } from './ui/SupabaseStatus'
+export { EleveLogo, EleveWordmark } from './ui/EleveLogo'
 
 // Events
 export { TemplateSelector } from './events/TemplateSelector'
+export { PlannerWizard } from './events/PlannerWizard'
 export { EventPlannerForm } from './events/EventPlannerForm'
 export { EventPlanResult, PlanSection, PlanList } from './events/EventPlanResult'
-export { EventCard } from './events/EventCard'
+export { EventCard, WorkflowBadge } from './events/EventCard'
 export { EventDetailModal } from './events/EventDetailModal'
 
 // Layout

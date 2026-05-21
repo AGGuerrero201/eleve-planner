@@ -35,6 +35,7 @@ export interface Database {
           alcohol_estimate: Json | null
           resident_email: Json    // ResidentEmail
           meta: Json              // EventFormData
+          workflow_status: string
         }
         Insert: {
           id?: string
@@ -56,6 +57,7 @@ export interface Database {
           alcohol_estimate?: Json | null
           resident_email?: Json
           meta: Json
+          workflow_status?: string
         }
         Update: Partial<Database['public']['Tables']['event_plans']['Insert']>
       }
