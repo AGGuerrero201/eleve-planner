@@ -82,7 +82,7 @@ export function StepDemographic({ value, onChange }: StepDemographicProps) {
               type="button"
               onClick={() => onChange(opt.value)}
               className={cn(
-                'text-left px-5 py-4 rounded-sm border transition-all duration-150',
+                'text-left px-5 py-4 rounded-sm border transition-all duration-200',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40',
                 selected
                   ? 'border-gold bg-gold/6'
@@ -127,7 +127,7 @@ export function StepDemographic({ value, onChange }: StepDemographicProps) {
                     key={cue}
                     className={cn(
                       'text-[0.65rem] font-light px-2 py-0.5 rounded-sm border',
-                      'transition-colors duration-150',
+                      'transition-colors duration-200',
                       selected
                         ? 'border-gold/30 bg-gold/8 text-charcoal-light'
                         : 'border-border bg-warm-gray text-muted'

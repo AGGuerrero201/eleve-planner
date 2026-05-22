@@ -70,7 +70,7 @@ export function StepBudget({
               type="button"
               onClick={() => onBudget(b)}
               className={cn(
-                'text-left px-4 py-3 rounded-sm border transition-all duration-150',
+                'text-left px-4 py-3 rounded-sm border transition-all duration-200',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40',
                 budget === b
                   ? 'border-gold bg-gold/6 text-charcoal'
@@ -103,7 +103,7 @@ export function StepBudget({
               type="button"
               onClick={() => onAttendance(a)}
               className={cn(
-                'px-4 py-2 rounded-sm border text-[0.8rem] font-light transition-all duration-150',
+                'px-4 py-2 rounded-sm border text-[0.8rem] font-light transition-all duration-200',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40',
                 attendance === a
                   ? 'border-gold bg-gold/6 text-charcoal font-medium'
@@ -128,7 +128,7 @@ export function StepBudget({
               type="button"
               onClick={() => onSeason(s)}
               className={cn(
-                'flex flex-col items-center gap-1.5 py-3.5 px-2 rounded-sm border transition-all duration-150',
+                'flex flex-col items-center gap-1.5 py-3.5 px-2 rounded-sm border transition-all duration-200',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40',
                 season === s
                   ? 'border-gold bg-gold/6 text-charcoal'

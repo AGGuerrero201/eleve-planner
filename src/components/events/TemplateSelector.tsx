@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Zap, ChevronDown, ChevronUp } from 'lucide-react'
 import { LUXURY_TEMPLATES, type LuxuryTemplate } from '@/lib/templates'
+import { CATEGORY_LABELS, ALL_TEMPLATE_CATEGORIES, type TemplateCategory } from '@/types/templates'
 import { cn } from '@/lib/utils'
 
 interface TemplateSelectorProps {
@@ -8,16 +9,13 @@ interface TemplateSelectorProps {
   disabled?: boolean
 }
 
-const CATEGORY_LABELS: Record<LuxuryTemplate['category'], string> = {
-  social:       'Social',
-  wellness:     'Wellness',
-  seasonal:     'Seasonal',
-  family:       'Family',
-  professional: 'Professional',
-}
-
 export function TemplateSelector({ onSelect, disabled = false }: TemplateSelectorProps) {
   const [open, setOpen] = useState(false)
+  const [activeCategory, setActiveCategory] = useState<TemplateCategory | 'all'>('all')
+
+  const filtered = activeCategory === 'all'
+    ? LUXURY_TEMPLATES
+    : LUXURY_TEMPLATES.filter((t) => t.category === activeCategory)
 
   return (
     <div className="mb-5">
@@ -30,8 +28,7 @@ export function TemplateSelector({ onSelect, disabled = false }: TemplateSelecto
           'w-full flex items-center justify-between',
           'bg-charcoal text-gold-light px-5 py-3.5 rounded-sm',
           'text-[0.75rem] font-medium tracking-[0.1em] uppercase',
-          'transition-opacity duration-200',
-          'disabled:opacity-40',
+          'transition-opacity duration-200 disabled:opacity-40',
           open ? 'rounded-b-none' : ''
         )}
       >
@@ -40,22 +37,43 @@ export function TemplateSelector({ onSelect, disabled = false }: TemplateSelecto
           Start from a luxury template
         </span>
         <span className="flex items-center gap-1.5 text-[0.68rem] text-gold/70 normal-case tracking-normal font-light">
-          {open ? (
-            <>Hide <ChevronUp size={13} /></>
-          ) : (
-            <>Browse {LUXURY_TEMPLATES.length} templates <ChevronDown size={13} /></>
-          )}
+          {open
+            ? <><span>Hide</span> <ChevronUp size={13} /></>
+            : <><span>Browse {LUXURY_TEMPLATES.length} templates</span> <ChevronDown size={13} /></>
+          }
         </span>
       </button>
 
-      {/* Template grid */}
       {open && (
         <div className="border border-t-0 border-border rounded-b-sm bg-warm-gray p-4 animate-fade-up">
           <p className="text-[0.72rem] text-muted font-light mb-3 leading-relaxed">
-            Each template is a complete, production-ready event plan. Select one to load it instantly — no AI call needed. You can still enhance it with Claude afterwards.
+            Templates with a full plan load instantly. Concept templates seed Claude with your event profile.
           </p>
+
+          {/* Category filter pills */}
+          <div className="flex flex-wrap gap-1.5 mb-4">
+            <CategoryPill
+              label={`All (${LUXURY_TEMPLATES.length})`}
+              active={activeCategory === 'all'}
+              onClick={() => setActiveCategory('all')}
+            />
+            {ALL_TEMPLATE_CATEGORIES.map((cat) => {
+              const count = LUXURY_TEMPLATES.filter((t) => t.category === cat).length
+              if (count === 0) return null
+              return (
+                <CategoryPill
+                  key={cat}
+                  label={`${CATEGORY_LABELS[cat]} (${count})`}
+                  active={activeCategory === cat}
+                  onClick={() => setActiveCategory(cat)}
+                />
+              )
+            })}
+          </div>
+
+          {/* Template grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-            {LUXURY_TEMPLATES.map((template) => (
+            {filtered.map((template) => (
               <TemplateCard
                 key={template.id}
                 template={template}
@@ -73,7 +91,34 @@ export function TemplateSelector({ onSelect, disabled = false }: TemplateSelecto
   )
 }
 
-// ─── Individual template card ─────────────────────────────────────────────────
+// ─── Category filter pill ─────────────────────────────────────────────────────
+
+function CategoryPill({
+  label,
+  active,
+  onClick,
+}: {
+  label: string
+  active: boolean
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        'text-[0.67rem] font-medium tracking-[0.06em] uppercase px-2.5 py-1 rounded-sm border transition-all duration-150',
+        active
+          ? 'bg-charcoal text-gold-light border-charcoal'
+          : 'bg-white text-muted border-border hover:border-charcoal-light hover:text-charcoal'
+      )}
+    >
+      {label}
+    </button>
+  )
+}
+
+// ─── Template card ────────────────────────────────────────────────────────────
 
 function TemplateCard({
   template,
@@ -84,6 +129,7 @@ function TemplateCard({
   onSelect: () => void
   disabled: boolean
 }) {
+  const isInstant = template.plan !== undefined
   return (
     <button
       type="button"
@@ -91,24 +137,31 @@ function TemplateCard({
       disabled={disabled}
       className={cn(
         'text-left w-full bg-white border border-border rounded-sm p-3.5',
-        'transition-all duration-150',
-        'hover:border-gold hover:shadow-sm hover:-translate-y-px',
+        'transition-colors duration-200',
+        'hover:border-gold/50 hover:bg-warm-gray',
         'disabled:opacity-40 disabled:cursor-not-allowed',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-1'
       )}
     >
-      {/* Category */}
-      <p className="text-[0.62rem] font-medium tracking-[0.14em] uppercase text-gold mb-1.5">
-        {CATEGORY_LABELS[template.category]}
-      </p>
+      {/* Category + instant badge */}
+      <div className="flex items-center justify-between mb-1.5">
+        <p className="text-[0.62rem] font-medium tracking-[0.14em] uppercase text-gold">
+          {CATEGORY_LABELS[template.category]}
+        </p>
+        {isInstant && (
+          <span className="text-[0.58rem] font-medium tracking-[0.08em] uppercase text-green-600 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded-sm">
+            Instant
+          </span>
+        )}
+      </div>
 
       {/* Label */}
-      <p className="font-serif text-[1rem] font-light text-charcoal leading-snug mb-1.5">
+      <p className="font-serif text-[0.95rem] font-light text-charcoal leading-snug mb-1.5">
         {template.label}
       </p>
 
       {/* Description */}
-      <p className="text-[0.75rem] text-muted font-light leading-snug mb-2.5">
+      <p className="text-[0.72rem] text-muted font-light leading-snug mb-2.5">
         {template.description}
       </p>
 
@@ -117,7 +170,7 @@ function TemplateCard({
         {template.previewTags.map((tag) => (
           <span
             key={tag}
-            className="text-[0.65rem] font-medium tracking-[0.04em] bg-warm-gray border border-border text-charcoal-light px-1.5 py-0.5 rounded-sm"
+            className="text-[0.62rem] font-medium tracking-[0.04em] bg-warm-gray border border-border text-charcoal-light px-1.5 py-0.5 rounded-sm"
           >
             {tag}
           </span>

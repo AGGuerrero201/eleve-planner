@@ -200,11 +200,6 @@ export function PlannerWizard({
             Back
           </button>
 
-          {/* Step counter */}
-          <span className="text-[0.7rem] text-muted/60 font-light tabular-nums">
-            {step} of {WIZARD_STEP_COUNT}
-          </span>
-
           {/* Next — hidden on step 5 (StepRoute has its own action buttons) */}
           {step < WIZARD_STEP_COUNT ? (
             <button
@@ -223,16 +218,18 @@ export function PlannerWizard({
           )}
         </div>
 
-        {/* Dev helper: reset button visible in all steps */}
-        <div className="text-center mt-3">
-          <button
-            type="button"
-            onClick={reset}
-            className="text-[0.65rem] text-muted/40 hover:text-muted transition-colors"
-          >
-            Start over
-          </button>
-        </div>
+        {/* Start over — only from step 2, discreet */}
+        {step > 1 && (
+          <div className="text-center mt-2">
+            <button
+              type="button"
+              onClick={reset}
+              className="text-[0.62rem] text-muted/30 hover:text-muted/60 transition-colors duration-200"
+            >
+              Start over
+            </button>
+          </div>
+        )}
 
       </div>
     </div>
@@ -241,86 +238,31 @@ export function PlannerWizard({
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-/**
- * Progress bar + step label header.
- * Replaced when real step UIs are built — this is temporary scaffolding.
- */
 function WizardHeader({ currentStep }: { currentStep: number }) {
   return (
-    <div className="bg-charcoal px-6 py-4">
-      {/* Step label row */}
+    <div className="bg-charcoal px-5 py-4">
+      {/* Step identity row */}
       <div className="flex items-center justify-between mb-3">
         <span className="text-[0.67rem] font-medium tracking-[0.14em] uppercase text-gold">
-          Step {currentStep}
+          Step {currentStep} of {WIZARD_STEP_COUNT}
         </span>
-        <span className="text-[0.72rem] font-light text-gold-light">
+        <span className="text-[0.75rem] font-light text-gold-light">
           {WIZARD_STEP_LABELS[currentStep]}
         </span>
       </div>
 
-      {/* Progress bar */}
-      <div className="h-px bg-white/10 rounded-full overflow-hidden">
-        <div
-          className="h-full bg-gold/60 transition-all duration-500 ease-out"
-          style={{ width: `${(currentStep / WIZARD_STEP_COUNT) * 100}%` }}
-        />
-      </div>
-
-      {/* Step dot indicators */}
-      <div className="flex justify-between mt-2.5">
+      {/* Step indicators — dots only, no redundant progress bar */}
+      <div className="flex items-center gap-1.5">
         {Array.from({ length: WIZARD_STEP_COUNT }, (_, i) => i + 1).map((s) => (
-          <span
+          <div
             key={s}
             className={cn(
-              'text-[0.6rem] font-medium transition-colors duration-300',
-              s === currentStep
-                ? 'text-gold'
-                : s < currentStep
-                ? 'text-gold/40'
-                : 'text-white/15'
+              'h-px flex-1 transition-all duration-400',
+              s <= currentStep ? 'bg-gold/70' : 'bg-white/15'
             )}
-          >
-            {WIZARD_STEP_LABELS[s]}
-          </span>
+          />
         ))}
       </div>
-    </div>
-  )
-}
-
-/**
- * Placeholder shown for each step until its real UI is built.
- * Displays the step intent, what's coming, and any accumulated value.
- * Removed step-by-step as real step components replace it.
- */
-function StepPlaceholder({
-  step,
-  title,
-  description,
-  hint,
-  currentValue,
-}: {
-  step: number
-  title: string
-  description: string
-  hint: string
-  currentValue?: string
-}) {
-  return (
-    <div className="flex-1 flex flex-col items-center justify-center text-center py-8 gap-4">
-      <div className="w-10 h-10 rounded-sm border border-gold/25 flex items-center justify-center">
-        <span className="font-serif text-gold text-lg font-light">{step}</span>
-      </div>
-      <div>
-        <h3 className="font-serif text-xl font-light text-charcoal mb-1">{title}</h3>
-        <p className="text-[0.82rem] text-muted font-light">{description}</p>
-      </div>
-      {currentValue && (
-        <div className="text-[0.72rem] bg-warm-gray border border-border px-3 py-1.5 rounded-sm text-charcoal-light">
-          Current: <span className="font-medium">{currentValue}</span>
-        </div>
-      )}
-      <p className="text-[0.7rem] text-gold/60 font-light italic mt-2 max-w-xs">{hint}</p>
     </div>
   )
 }

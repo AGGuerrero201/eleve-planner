@@ -94,7 +94,7 @@ export function EditableText({
   }
 
   return (
-    <div className={cn('flex items-center gap-2 cursor-pointer', className)} onClick={startEdit}>
+    <div className={cn('flex items-center gap-2 cursor-pointer group/et', className)} onClick={startEdit}>
       {label && <span className="text-[0.68rem] font-medium tracking-[0.1em] uppercase text-charcoal-light shrink-0">{label}</span>}
       <span className="flex-1 text-[0.875rem] font-light text-charcoal leading-snug hover:text-charcoal/70 transition-colors">
         {value || <span className="text-muted italic">{placeholder}</span>}
@@ -102,7 +102,7 @@ export function EditableText({
       <span className="shrink-0 flex items-center gap-1">
         {saved
           ? <CheckCircle2 size={12} className="text-green-600" />
-          : <Pencil size={11} className="text-muted/60 hover:text-gold transition-colors" />
+          : <Pencil size={11} className="text-muted/50 group-hover/et:text-gold transition-colors duration-200" />
         }
       </span>
     </div>

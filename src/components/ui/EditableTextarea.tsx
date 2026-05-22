@@ -111,7 +111,7 @@ export function EditableTextarea({
       <span className="absolute top-0 right-0 flex items-center gap-1">
         {saved
           ? <CheckCircle2 size={12} className="text-green-600" />
-          : <Pencil size={11} className="text-muted/50 hover:text-gold transition-colors" />
+          : <Pencil size={11} className="text-muted/50 hover:text-gold transition-colors duration-200" />
         }
       </span>
     </div>

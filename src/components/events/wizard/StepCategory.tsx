@@ -119,7 +119,7 @@ export function StepCategory({ value, onChange }: StepCategoryProps) {
           <div
             key={cat.id}
             className={cn(
-              'rounded-sm border overflow-hidden transition-all duration-150',
+              'rounded-sm border overflow-hidden transition-all duration-200',
               isOpen
                 ? 'border-gold/50'
                 : hasSelection
@@ -132,7 +132,7 @@ export function StepCategory({ value, onChange }: StepCategoryProps) {
               type="button"
               onClick={() => toggle(cat.id)}
               className={cn(
-                'w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors duration-150',
+                'w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors duration-200',
                 isOpen
                   ? 'bg-charcoal'
                   : hasSelection
@@ -144,7 +144,7 @@ export function StepCategory({ value, onChange }: StepCategoryProps) {
               <span
                 className={cn(
                   'text-[0.95rem] leading-none shrink-0 transition-colors',
-                  isOpen ? 'text-gold' : hasSelection ? 'text-gold' : 'text-muted/40'
+                  isOpen ? 'text-gold' : hasSelection ? 'text-gold' : 'text-charcoal/30'
                 )}
                 aria-hidden
               >
@@ -192,7 +192,7 @@ export function StepCategory({ value, onChange }: StepCategoryProps) {
                       type="button"
                       onClick={() => onChange(evt.value)}
                       className={cn(
-                        'text-left px-4 py-3 transition-colors duration-150',
+                        'text-left px-4 py-3 transition-colors duration-200',
                         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-inset',
                         selected
                           ? 'bg-gold/8'

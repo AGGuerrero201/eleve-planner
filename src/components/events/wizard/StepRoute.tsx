@@ -1,55 +1,32 @@
 /**
  * StepRoute.tsx — Step 5 of the PlannerWizard
  *
- * The final step. Two paths side by side:
- *
- *   LEFT  — Template Baseline
- *     Shows 1–3 matched templates filtered by the chosen eventType.
- *     If no match, shows all templates.
- *     Clicking one calls onLoadTemplate(template) → instant plan, no Claude call.
- *
- *   RIGHT — Premium AI Generation
- *     One card. Shows a summary of the choices made in steps 1–4.
- *     Clicking generates via the Edge Function → full Claude plan.
- *
- * Both paths produce an EventPlan that flows into EventPlanResult unchanged.
+ * Two paths:
+ *   LEFT  — Template Baseline: shows matched templates.
+ *            plan defined = instant load (no Claude)
+ *            plan undefined = pre-fills form + Claude generates
+ *   RIGHT — Premium AI: generates from scratch via Edge Function
  */
 
 import { useMemo } from 'react'
-import { Loader2, Zap, BookOpen } from 'lucide-react'
+import { Loader2, Zap, BookOpen, Sparkles } from 'lucide-react'
 import { LUXURY_TEMPLATES, type LuxuryTemplate } from '@/lib/templates'
+import { CATEGORY_LABELS } from '@/types/templates'
+import { matchTemplates, hasStrongMatch } from '@/lib/templateMatching'
 import type { EventFormData } from '@/types'
 import { cn } from '@/lib/utils'
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
 interface StepRouteProps {
-  formData:        EventFormData
-  isLoading:       boolean
-  onGenerate:      () => void
-  onLoadTemplate:  (template: LuxuryTemplate) => void
+  formData:       EventFormData
+  isLoading:      boolean
+  onGenerate:     () => void
+  onLoadTemplate: (template: LuxuryTemplate) => void
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// ─── Summary builder ──────────────────────────────────────────────────────────
 
-/** Returns up to 3 templates matched by eventType, falling back to all. */
-function matchTemplates(formData: EventFormData): LuxuryTemplate[] {
-  const byEventType = LUXURY_TEMPLATES.filter(
-    (t) => t.formData.eventType === formData.eventType
-  )
-  if (byEventType.length > 0) return byEventType.slice(0, 3)
-
-  // Loose fallback: match by demographic
-  const byDemo = LUXURY_TEMPLATES.filter(
-    (t) => t.formData.demographic === formData.demographic
-  )
-  if (byDemo.length > 0) return byDemo.slice(0, 3)
-
-  // Final fallback: first 3 templates
-  return LUXURY_TEMPLATES.slice(0, 3)
-}
-
-/** One-line summary of what was chosen across steps 1–4. */
 function buildSummary(f: EventFormData): string[] {
   const lines: string[] = []
   if (f.eventType)   lines.push(f.eventType)
@@ -64,30 +41,21 @@ function buildSummary(f: EventFormData): string[] {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export function StepRoute({
-  formData,
-  isLoading,
-  onGenerate,
-  onLoadTemplate,
-}: StepRouteProps) {
-  const matched  = useMemo(() => matchTemplates(formData), [formData])
-  const summary  = useMemo(() => buildSummary(formData), [formData])
-  const hasExact = LUXURY_TEMPLATES.some((t) => t.formData.eventType === formData.eventType)
+export function StepRoute({ formData, isLoading, onGenerate, onLoadTemplate }: StepRouteProps) {
+  const matched     = useMemo(() => matchTemplates(formData, LUXURY_TEMPLATES, 3), [formData])
+  const strongMatch = useMemo(() => hasStrongMatch(formData, LUXURY_TEMPLATES), [formData])
+  const summary     = useMemo(() => buildSummary(formData), [formData])
 
   return (
     <div className="flex flex-col gap-4">
-
-      {/* Instruction */}
       <p className="text-[0.78rem] text-muted font-light">
         Your event profile is ready. Choose how you want your plan generated.
       </p>
 
-      {/* Two-column route cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
-        {/* ── LEFT: Template Baseline ─────────────────────────────────── */}
+        {/* ── LEFT: Template Baseline ──────────────────────────────────── */}
         <div className="flex flex-col border border-border rounded-sm overflow-hidden">
-          {/* Card header */}
           <div className="bg-warm-gray px-4 py-3 border-b border-border flex items-center gap-2">
             <BookOpen size={13} className="text-charcoal-light shrink-0" strokeWidth={1.5} />
             <div>
@@ -95,56 +63,62 @@ export function StepRoute({
                 Template Baseline
               </p>
               <p className="text-[0.65rem] font-light text-muted mt-0.5">
-                Instant — no AI call required
+                {strongMatch ? 'Matched to your selections' : 'Similar templates shown'}
               </p>
             </div>
           </div>
 
-          {/* Matched templates */}
           <div className="flex flex-col flex-1 divide-y divide-border">
-            {matched.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                disabled={isLoading}
-                onClick={() => onLoadTemplate(t)}
-                className={cn(
-                  'text-left px-4 py-3 transition-colors duration-150',
-                  'hover:bg-gold/5 disabled:opacity-40 disabled:cursor-not-allowed',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-inset'
-                )}
-              >
-                <p className="text-[0.82rem] font-medium text-charcoal leading-snug">
-                  {t.label}
-                </p>
-                <p className="text-[0.7rem] font-light text-muted leading-snug mt-0.5">
-                  {t.description}
-                </p>
-                <div className="flex flex-wrap gap-1 mt-1.5">
-                  {t.previewTags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-[0.62rem] font-light px-1.5 py-0.5 bg-warm-gray border border-border rounded-sm text-muted"
-                    >
-                      {tag}
+            {matched.map((t) => {
+              const isInstant = t.plan !== undefined
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  disabled={isLoading}
+                  onClick={() => onLoadTemplate(t)}
+                  className={cn(
+                    'text-left px-4 py-3 transition-colors duration-150',
+                    'hover:bg-gold/5 disabled:opacity-40 disabled:cursor-not-allowed',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-inset'
+                  )}
+                >
+                  <div className="flex items-start justify-between gap-2 mb-0.5">
+                    <p className="text-[0.82rem] font-medium text-charcoal leading-snug">
+                      {t.label}
+                    </p>
+                    {isInstant
+                      ? <span className="text-[0.58rem] font-medium text-green-600 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded-sm shrink-0">Instant</span>
+                      : <span className="text-[0.58rem] font-medium text-gold/80 bg-gold/8 border border-gold/20 px-1.5 py-0.5 rounded-sm shrink-0 flex items-center gap-0.5"><Sparkles size={8} />AI</span>
+                    }
+                  </div>
+                  <p className="text-[0.68rem] font-light text-muted leading-snug mb-1.5">
+                    {t.description}
+                  </p>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[0.6rem] text-gold/70 uppercase tracking-[0.08em]">
+                      {CATEGORY_LABELS[t.category]}
                     </span>
-                  ))}
-                </div>
-              </button>
-            ))}
+                    {t.previewTags.slice(0, 2).map((tag) => (
+                      <span key={tag} className="text-[0.6rem] text-muted bg-warm-gray border border-border px-1.5 py-0.5 rounded-sm">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </button>
+              )
+            })}
 
-            {/* If no exact eventType match, add a note */}
-            {!hasExact && (
+            {!strongMatch && (
               <p className="px-4 py-2 text-[0.67rem] text-muted/60 font-light italic">
-                Showing similar templates — no exact match for {formData.eventType || 'your selection'}.
+                Showing similar templates — no exact match for your event type.
               </p>
             )}
           </div>
         </div>
 
-        {/* ── RIGHT: Premium AI Generation ───────────────────────────── */}
+        {/* ── RIGHT: Premium AI Generation ─────────────────────────────── */}
         <div className="flex flex-col border border-charcoal rounded-sm overflow-hidden">
-          {/* Card header */}
           <div className="bg-charcoal px-4 py-3 border-b border-white/10 flex items-center gap-2">
             <Zap size={13} className="text-gold shrink-0" strokeWidth={1.5} />
             <div>
@@ -157,10 +131,7 @@ export function StepRoute({
             </div>
           </div>
 
-          {/* Summary of choices + generate button */}
           <div className="flex flex-col flex-1 px-4 py-3 justify-between gap-4">
-
-            {/* Choices recap */}
             <div>
               <p className="text-[0.67rem] font-medium tracking-[0.1em] uppercase text-muted mb-2">
                 Your selections
@@ -175,7 +146,6 @@ export function StepRoute({
               </div>
             </div>
 
-            {/* Generate button */}
             <button
               type="button"
               onClick={onGenerate}
@@ -184,7 +154,7 @@ export function StepRoute({
                 'w-full flex items-center justify-center gap-2',
                 'bg-gold text-white text-[0.78rem] font-medium tracking-[0.07em] uppercase',
                 'py-2.5 rounded-sm transition-all duration-200',
-                'hover:bg-gold-dark active:scale-[0.98]',
+                'hover:opacity-90 active:scale-[0.98]',
                 'disabled:opacity-50 disabled:cursor-not-allowed',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40'
               )}

@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
 import type { SavedEvent, EventWorkflowStatus } from '@/types'
 import { WORKFLOW_STATUS_LABELS } from '@/lib/workflowStatus'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { Badge } from '@/components/ui/Badge'
 import { formatDate, truncate, cn } from '@/lib/utils'
 
@@ -11,22 +13,34 @@ interface EventCardProps {
 }
 
 export function EventCard({ event, onClick, onDelete }: EventCardProps) {
-  const handleDelete = (e: React.MouseEvent) => {
+  const [confirming, setConfirming] = useState(false)
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (window.confirm('Delete this saved event?')) {
-      onDelete()
-    }
+    setConfirming(true)
   }
 
   return (
     <article
-      className="bg-white border-r border-b border-border p-6 cursor-pointer transition-colors duration-150 hover:bg-warm-gray group relative"
-      onClick={onClick}
+      className={cn(
+        'relative bg-white border-r border-b border-border p-6 cursor-pointer',
+        'transition-colors duration-200 hover:bg-warm-gray group',
+      )}
+      onClick={() => { if (!confirming) onClick() }}
     >
+      {/* Inline confirm dialog — overlays the card */}
+      <ConfirmDialog
+        open={confirming}
+        message="Delete this event?"
+        confirmLabel="Delete"
+        onConfirm={() => { setConfirming(false); onDelete() }}
+        onCancel={() => setConfirming(false)}
+      />
+
       {/* Delete button */}
       <button
-        onClick={handleDelete}
-        className="absolute top-4 right-4 p-1.5 text-border group-hover:text-muted hover:!text-red-500 transition-colors duration-150 rounded-sm"
+        onClick={handleDeleteClick}
+        className="absolute top-4 right-4 p-1.5 text-border group-hover:text-muted hover:!text-red-500 transition-colors duration-200 rounded-sm"
         aria-label="Delete event"
       >
         <Trash2 size={13} />
@@ -37,7 +51,7 @@ export function EventCard({ event, onClick, onDelete }: EventCardProps) {
         <WorkflowBadge status={event.workflowStatus} />
       </div>
 
-      {/* Type */}
+      {/* Event type */}
       <p className="text-[0.67rem] font-medium tracking-[0.15em] uppercase text-gold mb-1.5">
         {event.meta.eventType}
       </p>

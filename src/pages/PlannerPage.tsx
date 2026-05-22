@@ -8,6 +8,7 @@ import { EventPlanResult } from '@/components/events/EventPlanResult'
 import { TemplateSelector } from '@/components/events/TemplateSelector'
 import { PlannerWizard } from '@/components/events/PlannerWizard'
 import { Button } from '@/components/ui/Button'
+import { SupabaseStatus } from '@/components/ui/SupabaseStatus'
 import { cn } from '@/lib/utils'
 import type { LuxuryTemplate } from '@/lib/templates'
 
@@ -33,11 +34,20 @@ export function PlannerPage() {
 
   const handleSelectTemplate = useCallback((template: LuxuryTemplate) => {
     setCurrentFormData(template.formData)
-    loadTemplate(template.plan)
-    setTimeout(() => {
-      document.getElementById('plan-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 50)
-  }, [loadTemplate])
+    if (template.plan) {
+      // Full plan available — instant load, no Claude call
+      loadTemplate(template.plan)
+      setTimeout(() => {
+        document.getElementById('plan-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 50)
+    } else {
+      // Metadata-only template — seed the form and generate with Claude
+      void generate(template.formData)
+      setTimeout(() => {
+        document.getElementById('plan-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 200)
+    }
+  }, [loadTemplate, generate])
 
   const handleSave = async (event: SavedEvent): Promise<SavedEvent | null> => {
     return save(event)
@@ -64,6 +74,9 @@ export function PlannerPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+
+      {/* Supabase connection status — only relevant on the planner page */}
+      <SupabaseStatus />
 
       {/* ── Page header with mode toggle ─────────────────────────────────── */}
       <div className="flex items-start justify-between mb-6 gap-4">
