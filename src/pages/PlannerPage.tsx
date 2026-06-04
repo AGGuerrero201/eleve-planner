@@ -1,47 +1,67 @@
 import { useState, useCallback } from 'react'
-import { AlertTriangle, RefreshCw, CheckCircle2, Loader2, LayoutList, Sparkles } from 'lucide-react'
+import { AlertTriangle, RefreshCw, CheckCircle2, Loader2, ChevronDown, ChevronUp } from 'lucide-react'
 import type { EventFormData, SavedEvent, LoadingStep } from '@/types'
 import { useEventPlanner } from '@/hooks/useEventPlanner'
 import { useSavedEvents } from '@/hooks/useSavedEvents'
 import { EventPlannerForm } from '@/components/events/EventPlannerForm'
 import { EventPlanResult } from '@/components/events/EventPlanResult'
-import { TemplateSelector } from '@/components/events/TemplateSelector'
 import { PlannerWizard } from '@/components/events/PlannerWizard'
+import { PlannerEntry } from '@/components/events/PlannerEntry'
+import { CollectionBrowser } from '@/components/events/CollectionBrowser'
 import { Button } from '@/components/ui/Button'
 import { SupabaseStatus } from '@/components/ui/SupabaseStatus'
 import { cn } from '@/lib/utils'
 import type { LuxuryTemplate } from '@/lib/templates'
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type PlannerMode = 'entry' | 'templates' | 'wizard' | 'classic'
+
+const DEFAULT_FORM: EventFormData = {
+  eventType:   '',
+  budget:      '',
+  attendance:  '',
+  season:      '',
+  venue:       'Indoor',
+  alcohol:     'Full bar',
+  demographic: '' as EventFormData['demographic'],
+  notes:       '',
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export function PlannerPage() {
   const { status, plan, error, retryCount, loadingSteps, generate, retry, reset, loadTemplate } = useEventPlanner()
   const { save, isSaved } = useSavedEvents()
   const [currentFormData, setCurrentFormData] = useState<EventFormData | null>(null)
 
-  // ── wizardMode toggle ───────────────────────────────────────────────────────
-  // true  = guided wizard flow (new)
-  // false = classic form + template selector (existing, always preserved)
-  // Defaults to wizard so new users experience the guided flow.
-  // Power users can switch back instantly via the toggle in the header.
+  // ── Mode state ───────────────────────────────────────────────────────────
+  // 'entry'     → show PlannerEntry choice
+  // 'templates' → show CollectionBrowser
+  // 'wizard'    → show PlannerWizard (guided)
+  // 'classic'   → show EventPlannerForm
+  const [mode, setMode] = useState<PlannerMode>('entry')
 
-  const [wizardMode, setWizardMode] = useState(true)
+  // ── Wizard lifted state ──────────────────────────────────────────────────
+  const [wizardFormData, setWizardFormData]         = useState<EventFormData>(DEFAULT_FORM)
+  const [wizardStep, setWizardStep]                 = useState(1)
+  const [wizardAtmosphereId, setWizardAtmosphereId] = useState('')
+  const [wizardCollapsed, setWizardCollapsed]       = useState(false)
 
-  // ── Shared handlers (used by both wizard and classic form) ──────────────────
+  // ── Shared handlers ──────────────────────────────────────────────────────
 
-  const handleSubmit = (data: EventFormData) => {
-    setCurrentFormData(data)
-    void generate(data)
+  const handleSave = async (event: SavedEvent): Promise<SavedEvent | null> => {
+    return save(event)
   }
 
   const handleSelectTemplate = useCallback((template: LuxuryTemplate) => {
     setCurrentFormData(template.formData)
     if (template.plan) {
-      // Full plan available — instant load, no Claude call
       loadTemplate(template.plan)
       setTimeout(() => {
         document.getElementById('plan-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }, 50)
     } else {
-      // Metadata-only template — seed the form and generate with Claude
       void generate(template.formData)
       setTimeout(() => {
         document.getElementById('plan-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -49,151 +69,215 @@ export function PlannerPage() {
     }
   }, [loadTemplate, generate])
 
-  const handleSave = async (event: SavedEvent): Promise<SavedEvent | null> => {
-    return save(event)
-  }
+  // ── Wizard handlers ──────────────────────────────────────────────────────
 
-  // ── Wizard-specific handlers ────────────────────────────────────────────────
-
-  // Called by PlannerWizard Step 5 "Generate Plan"
   const handleWizardGenerate = useCallback((data: EventFormData) => {
     setCurrentFormData(data)
+    setWizardFormData(data)
     void generate(data)
-    // Scroll to result after generation starts
+    setWizardCollapsed(true)
     setTimeout(() => {
       document.getElementById('plan-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 200)
+    }, 300)
   }, [generate])
 
-  // Called by PlannerWizard Step 5 "Use Template"
   const handleWizardTemplate = useCallback((template: LuxuryTemplate) => {
+    setWizardCollapsed(true)
     handleSelectTemplate(template)
   }, [handleSelectTemplate])
 
+  const handleWizardReset = useCallback(() => {
+    setWizardFormData(DEFAULT_FORM)
+    setWizardStep(1)
+    setWizardAtmosphereId('')
+    setWizardCollapsed(false)
+    reset()
+  }, [reset])
+
+  // ── Classic form handler ─────────────────────────────────────────────────
+
+  const handleClassicSubmit = (data: EventFormData) => {
+    setCurrentFormData(data)
+    void generate(data)
+  }
+
+  // ── Entry selection ──────────────────────────────────────────────────────
+
+  const handleEntrySelect = (selected: 'templates' | 'custom') => {
+    if (selected === 'templates') {
+      setMode('templates')
+    } else {
+      setMode('wizard')
+    }
+  }
+
   const planIsSaved = plan !== null ? isSaved(plan.title, plan.tagline) : false
+  const showResult  = status === 'success' && plan && currentFormData
+
+  // ── Page title by mode ───────────────────────────────────────────────────
+
+  const subtitle =
+    mode === 'entry'     ? 'Choose your planning approach below.' :
+    mode === 'templates' ? 'Browse curated collections and select an experience.' :
+    mode === 'wizard'    ? 'Answer a few questions and we\'ll find the perfect event plan.' :
+                           'Start from a template or fill in the form to generate a plan.'
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+    <div className="max-w-3xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
 
-      {/* Supabase connection status — only relevant on the planner page */}
       <SupabaseStatus />
 
-      {/* ── Page header with mode toggle ─────────────────────────────────── */}
-      <div className="flex items-start justify-between mb-6 gap-4">
+      {/* ── Page header ──────────────────────────────────────────────────── */}
+      <div className="flex items-start justify-between mb-8 gap-4">
         <div>
-          <h1 className="font-serif text-4xl font-light text-charcoal mb-2">Event Planner</h1>
-          <p className="text-muted font-light text-sm leading-relaxed">
-            {wizardMode
-              ? 'Answer a few questions and we\'ll find the perfect event plan.'
-              : 'Start from a template for an instant plan, or fill in the form to generate one.'}
+          <h1 className="font-serif text-[2.25rem] font-light text-charcoal mb-2 leading-tight">
+            Event Planner
+          </h1>
+          <p className="text-muted font-light text-[0.875rem] leading-relaxed max-w-sm">
+            {subtitle}
           </p>
         </div>
 
-        {/* Mode toggle — unobtrusive, top-right */}
-        <button
-          type="button"
-          onClick={() => setWizardMode((v) => !v)}
-          disabled={status === 'loading'}
-          className={cn(
-            'flex items-center gap-1.5 text-[0.7rem] font-medium tracking-[0.06em] uppercase',
-            'border px-3 py-1.5 rounded-sm transition-all duration-200 shrink-0 mt-1',
-            'disabled:opacity-40 disabled:cursor-not-allowed',
-            wizardMode
-              ? 'border-border text-muted hover:border-charcoal-light hover:text-charcoal bg-white'
-              : 'border-gold/30 text-gold bg-gold/5 hover:bg-gold/10'
-          )}
-          title={wizardMode ? 'Switch to classic form' : 'Switch to guided wizard'}
-        >
-          {wizardMode
-            ? <><LayoutList size={12} /> Classic Form</>
-            : <><Sparkles size={12} /> Guided Flow</>}
-        </button>
+        {/* Mode switcher — only visible after entry choice made */}
+        {mode !== 'entry' && (
+          <ModeToggle mode={mode} onSwitch={setMode} disabled={status === 'loading'} />
+        )}
       </div>
 
-      {/* ── Wizard mode (new) ─────────────────────────────────────────────── */}
-      {wizardMode && (
-        <PlannerWizard
-          onGenerate={handleWizardGenerate}
-          onLoadTemplate={handleWizardTemplate}
+      {/* ── Entry choice ─────────────────────────────────────────────────── */}
+      {mode === 'entry' && (
+        <PlannerEntry
+          onSelect={handleEntrySelect}
+          disabled={status === 'loading'}
+        />
+      )}
+
+      {/* ── Collection browser ───────────────────────────────────────────── */}
+      {mode === 'templates' && (
+        <div className="mb-6">
+          <CollectionBrowser
+            onSelect={(template) => {
+              handleSelectTemplate(template)
+            }}
+            onBack={() => setMode('entry')}
+            disabled={status === 'loading'}
+          />
+        </div>
+      )}
+
+      {/* ── Guided wizard ────────────────────────────────────────────────── */}
+      {mode === 'wizard' && (
+        <>
+          {wizardCollapsed && showResult ? (
+            <div className="bg-white border border-border rounded-sm mb-5 overflow-hidden shadow-sm">
+              <button
+                type="button"
+                onClick={() => setWizardCollapsed(false)}
+                className="w-full flex items-center justify-between px-5 py-4 hover:bg-warm-gray transition-colors duration-200"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-[0.65rem] font-medium tracking-[0.16em] uppercase text-gold">
+                    Event Profile
+                  </span>
+                  <span className="w-px h-3 bg-border" />
+                  <span className="text-[0.8rem] font-light text-charcoal-light">
+                    {wizardFormData.eventType || currentFormData?.eventType}
+                    {(wizardFormData.season || currentFormData?.season)
+                      ? ` · ${wizardFormData.season || currentFormData?.season}`
+                      : ''}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[0.65rem] text-muted font-light tracking-wide">Edit</span>
+                  <ChevronDown size={12} className="text-muted" />
+                </div>
+              </button>
+            </div>
+          ) : wizardCollapsed ? null : (
+            <PlannerWizard
+              onGenerate={handleWizardGenerate}
+              onLoadTemplate={handleWizardTemplate}
+              onReset={handleWizardReset}
+              isLoading={status === 'loading'}
+              initialStep={wizardStep}
+              initialFormData={wizardFormData}
+              initialAtmosphereId={wizardAtmosphereId}
+              onStepChange={setWizardStep}
+              onFormChange={setWizardFormData}
+              onAtmosphereChange={setWizardAtmosphereId}
+            />
+          )}
+
+          {wizardCollapsed && !showResult && (
+            <button
+              type="button"
+              onClick={() => setWizardCollapsed(false)}
+              className="w-full flex items-center justify-center gap-2 py-3.5 text-[0.72rem] text-muted hover:text-charcoal transition-colors border border-border rounded-sm bg-white mb-5"
+            >
+              <ChevronUp size={12} /> Revise selections
+            </button>
+          )}
+        </>
+      )}
+
+      {/* ── Classic form ─────────────────────────────────────────────────── */}
+      {mode === 'classic' && (
+        <EventPlannerForm
+          onSubmit={handleClassicSubmit}
           isLoading={status === 'loading'}
         />
       )}
 
-      {/* ── Classic mode (existing — fully preserved) ─────────────────────── */}
-      {!wizardMode && (
-        <>
-          {/* Template selector */}
-          <TemplateSelector
-            onSelect={handleSelectTemplate}
-            disabled={status === 'loading'}
-          />
-
-          {/* Divider */}
-          <div className="flex items-center gap-3 mb-5">
-            <hr className="flex-1 border-border" />
-            <span className="text-[0.7rem] text-muted uppercase tracking-[0.12em] font-light shrink-0">
-              or generate with AI
-            </span>
-            <hr className="flex-1 border-border" />
-          </div>
-
-          {/* Classic form */}
-          <EventPlannerForm onSubmit={handleSubmit} isLoading={status === 'loading'} />
-        </>
-      )}
-
-      {/* ── Loading state (shared by both modes) ─────────────────────────── */}
+      {/* ── Loading ───────────────────────────────────────────────────────── */}
       {status === 'loading' && (
-        <div className="mt-6 bg-white border border-border rounded-sm overflow-hidden animate-fade-up">
+        <div className="mt-7 bg-white border border-border rounded-sm overflow-hidden animate-fade-up shadow-sm">
           <div className="bg-charcoal px-6 py-4 flex items-center gap-3">
-            <Loader2 size={14} className="text-gold animate-spin" />
-            <span className="text-[0.72rem] font-medium tracking-[0.14em] uppercase text-gold-light">
+            <Loader2 size={13} className="text-gold animate-spin" />
+            <span className="text-[0.68rem] font-medium tracking-[0.16em] uppercase text-gold-light">
               Crafting your event plan
             </span>
           </div>
-          <div className="p-6">
-            <div className="space-y-3">
+          <div className="p-7">
+            <div className="space-y-3.5">
               {loadingSteps.map((step: LoadingStep) => (
                 <div key={step.id} className="flex items-center gap-3">
                   <StepIndicator status={step.status} />
-                  <span
-                    className={cn(
-                      'text-[0.85rem] font-light transition-colors duration-300',
-                      step.status === 'active'  && 'text-charcoal font-medium',
-                      step.status === 'done'    && 'text-muted',
-                      step.status === 'pending' && 'text-muted/50',
-                    )}
-                  >
+                  <span className={cn(
+                    'text-[0.85rem] font-light transition-colors duration-300',
+                    step.status === 'active'  && 'text-charcoal font-normal',
+                    step.status === 'done'    && 'text-muted',
+                    step.status === 'pending' && 'text-muted/40',
+                  )}>
                     {step.label}
                   </span>
                 </div>
               ))}
             </div>
-            <p className="text-[0.75rem] text-muted font-light mt-5 pt-4 border-t border-border italic">
-              Powered by Claude Sonnet 4 via Supabase Edge Function
+            <p className="text-[0.72rem] text-muted/50 font-light mt-6 pt-5 border-t border-border italic">
+              Plan generated in seconds via AI
             </p>
           </div>
         </div>
       )}
 
-      {/* ── Error state (shared by both modes) ───────────────────────────── */}
+      {/* ── Error ────────────────────────────────────────────────────────── */}
       {status === 'error' && error && currentFormData && (
-        <div className="mt-6 bg-white border border-red-200 rounded-sm overflow-hidden animate-fade-up">
-          <div className="bg-red-50 px-5 py-3.5 flex items-center gap-2 border-b border-red-200">
-            <AlertTriangle size={14} className="text-red-500 shrink-0" />
-            <span className="text-[0.72rem] font-medium tracking-[0.12em] uppercase text-red-700">
+        <div className="mt-7 bg-white border border-red-200 rounded-sm overflow-hidden animate-fade-up">
+          <div className="bg-red-50 px-5 py-3.5 flex items-center gap-2.5 border-b border-red-100">
+            <AlertTriangle size={13} className="text-red-400 shrink-0" />
+            <span className="text-[0.68rem] font-medium tracking-[0.12em] uppercase text-red-600">
               Generation failed
-              {retryCount > 0 && ` (attempt ${retryCount + 1})`}
+              {retryCount > 0 && ` · attempt ${retryCount + 1}`}
             </span>
           </div>
-          <div className="p-6 text-center">
-            <p className="text-[0.875rem] text-red-700 font-light mb-5 leading-relaxed">{error}</p>
+          <div className="p-7 text-center">
+            <p className="text-[0.875rem] text-red-600 font-light mb-6 leading-relaxed">{error}</p>
             <div className="flex items-center justify-center gap-3">
               <Button variant="gold" size="sm" onClick={() => retry(currentFormData)}>
-                <RefreshCw size={13} className="mr-2" />
+                <RefreshCw size={12} className="mr-2" />
                 Try Again
               </Button>
-              <Button variant="outline" size="sm" onClick={reset}>
+              <Button variant="outline" size="sm" onClick={() => { handleWizardReset(); setMode('entry') }}>
                 Start Over
               </Button>
             </div>
@@ -201,9 +285,9 @@ export function PlannerPage() {
         </div>
       )}
 
-      {/* ── Success (shared by both modes) ───────────────────────────────── */}
-      {status === 'success' && plan && currentFormData && (
-        <div className="mt-6" id="plan-result">
+      {/* ── Success ──────────────────────────────────────────────────────── */}
+      {showResult && (
+        <div className="mt-7 animate-fade-up" id="plan-result">
           <EventPlanResult
             plan={plan}
             formData={currentFormData}
@@ -218,14 +302,52 @@ export function PlannerPage() {
   )
 }
 
-// ─── Step indicator (loading steps, unchanged) ────────────────────────────────
+// ─── Mode toggle ──────────────────────────────────────────────────────────────
+// Discreet switcher shown after entry choice — lets user switch between modes
+
+function ModeToggle({
+  mode,
+  onSwitch,
+  disabled,
+}: {
+  mode:     PlannerMode
+  onSwitch: (m: PlannerMode) => void
+  disabled: boolean
+}) {
+  const options: { value: PlannerMode; label: string }[] = [
+    { value: 'templates', label: 'Templates' },
+    { value: 'wizard',    label: 'Guided' },
+    { value: 'classic',   label: 'Classic' },
+  ]
+
+  return (
+    <div className="flex items-center border border-border rounded-sm overflow-hidden shrink-0 mt-1.5">
+      {options.map(({ value, label }) => (
+        <button
+          key={value}
+          type="button"
+          onClick={() => onSwitch(value)}
+          disabled={disabled}
+          className={cn(
+            'text-[0.62rem] font-medium tracking-[0.08em] uppercase px-3 py-1.5',
+            'border-r border-border last:border-r-0 transition-colors duration-150',
+            'disabled:opacity-40 disabled:cursor-not-allowed',
+            mode === value
+              ? 'bg-charcoal text-gold-light'
+              : 'bg-white text-muted hover:bg-warm-gray hover:text-charcoal'
+          )}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+// ─── Step indicator ───────────────────────────────────────────────────────────
 
 function StepIndicator({ status }: { status: LoadingStep['status'] }) {
-  if (status === 'done') {
-    return <CheckCircle2 size={15} className="text-green-600 shrink-0" />
-  }
-  if (status === 'active') {
-    return <Loader2 size={15} className="text-gold animate-spin shrink-0" />
-  }
-  return <span className="w-[15px] h-[15px] rounded-full border border-border shrink-0" />
+  if (status === 'done')   return <CheckCircle2 size={14} className="text-green-500 shrink-0" />
+  if (status === 'active') return <Loader2 size={14} className="text-gold animate-spin shrink-0" />
+  return <span className="w-[14px] h-[14px] rounded-full border border-border/60 shrink-0" />
 }

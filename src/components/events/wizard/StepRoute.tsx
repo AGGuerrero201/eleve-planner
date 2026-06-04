@@ -1,13 +1,3 @@
-/**
- * StepRoute.tsx — Step 5 of the PlannerWizard
- *
- * Two paths:
- *   LEFT  — Template Baseline: shows matched templates.
- *            plan defined = instant load (no Claude)
- *            plan undefined = pre-fills form + Claude generates
- *   RIGHT — Premium AI: generates from scratch via Edge Function
- */
-
 import { useMemo } from 'react'
 import { Loader2, Zap, BookOpen, Sparkles } from 'lucide-react'
 import { LUXURY_TEMPLATES, type LuxuryTemplate } from '@/lib/templates'
@@ -16,16 +6,12 @@ import { matchTemplates, hasStrongMatch } from '@/lib/templateMatching'
 import type { EventFormData } from '@/types'
 import { cn } from '@/lib/utils'
 
-// ─── Props ────────────────────────────────────────────────────────────────────
-
 interface StepRouteProps {
   formData:       EventFormData
   isLoading:      boolean
   onGenerate:     () => void
   onLoadTemplate: (template: LuxuryTemplate) => void
 }
-
-// ─── Summary builder ──────────────────────────────────────────────────────────
 
 function buildSummary(f: EventFormData): string[] {
   const lines: string[] = []
@@ -39,30 +25,29 @@ function buildSummary(f: EventFormData): string[] {
   return lines
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
 export function StepRoute({ formData, isLoading, onGenerate, onLoadTemplate }: StepRouteProps) {
   const matched     = useMemo(() => matchTemplates(formData, LUXURY_TEMPLATES, 3), [formData])
   const strongMatch = useMemo(() => hasStrongMatch(formData, LUXURY_TEMPLATES), [formData])
   const summary     = useMemo(() => buildSummary(formData), [formData])
 
   return (
-    <div className="flex flex-col gap-4">
-      <p className="text-[0.78rem] text-muted font-light">
+    <div className="flex flex-col gap-5">
+
+      <p className="text-[0.78rem] text-muted font-light leading-relaxed">
         Your event profile is ready. Choose how you want your plan generated.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
-        {/* ── LEFT: Template Baseline ──────────────────────────────────── */}
+        {/* ── Template Baseline ─────────────────────────────────────────── */}
         <div className="flex flex-col border border-border rounded-sm overflow-hidden">
-          <div className="bg-warm-gray px-4 py-3 border-b border-border flex items-center gap-2">
-            <BookOpen size={13} className="text-charcoal-light shrink-0" strokeWidth={1.5} />
+          <div className="bg-warm-gray px-4 py-3.5 border-b border-border flex items-center gap-2.5">
+            <BookOpen size={12} className="text-charcoal-light shrink-0" strokeWidth={1.5} />
             <div>
-              <p className="text-[0.75rem] font-medium text-charcoal leading-none">
+              <p className="text-[0.72rem] font-medium text-charcoal leading-none">
                 Template Baseline
               </p>
-              <p className="text-[0.65rem] font-light text-muted mt-0.5">
+              <p className="text-[0.62rem] font-light text-muted mt-0.5">
                 {strongMatch ? 'Matched to your selections' : 'Similar templates shown'}
               </p>
             </div>
@@ -78,29 +63,29 @@ export function StepRoute({ formData, isLoading, onGenerate, onLoadTemplate }: S
                   disabled={isLoading}
                   onClick={() => onLoadTemplate(t)}
                   className={cn(
-                    'text-left px-4 py-3 transition-colors duration-150',
+                    'text-left px-4 py-3.5 transition-colors duration-150',
                     'hover:bg-gold/5 disabled:opacity-40 disabled:cursor-not-allowed',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-inset'
                   )}
                 >
-                  <div className="flex items-start justify-between gap-2 mb-0.5">
+                  <div className="flex items-start justify-between gap-2 mb-1">
                     <p className="text-[0.82rem] font-medium text-charcoal leading-snug">
                       {t.label}
                     </p>
                     {isInstant
-                      ? <span className="text-[0.58rem] font-medium text-green-600 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded-sm shrink-0">Instant</span>
-                      : <span className="text-[0.58rem] font-medium text-gold/80 bg-gold/8 border border-gold/20 px-1.5 py-0.5 rounded-sm shrink-0 flex items-center gap-0.5"><Sparkles size={8} />AI</span>
+                      ? <span className="text-[0.55rem] font-semibold text-green-600 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded-sm shrink-0 uppercase tracking-wide">Instant</span>
+                      : <span className="text-[0.55rem] font-semibold text-gold bg-gold/8 border border-gold/20 px-1.5 py-0.5 rounded-sm shrink-0 flex items-center gap-0.5 uppercase tracking-wide"><Sparkles size={7} />AI</span>
                     }
                   </div>
-                  <p className="text-[0.68rem] font-light text-muted leading-snug mb-1.5">
+                  <p className="text-[0.7rem] font-light text-muted leading-snug mb-2">
                     {t.description}
                   </p>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[0.6rem] text-gold/70 uppercase tracking-[0.08em]">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-[0.58rem] text-gold/70 uppercase tracking-[0.1em] font-medium">
                       {CATEGORY_LABELS[t.category]}
                     </span>
                     {t.previewTags.slice(0, 2).map((tag) => (
-                      <span key={tag} className="text-[0.6rem] text-muted bg-warm-gray border border-border px-1.5 py-0.5 rounded-sm">
+                      <span key={tag} className="text-[0.58rem] text-muted bg-warm-gray border border-border px-1.5 py-px rounded-sm">
                         {tag}
                       </span>
                     ))}
@@ -110,64 +95,70 @@ export function StepRoute({ formData, isLoading, onGenerate, onLoadTemplate }: S
             })}
 
             {!strongMatch && (
-              <p className="px-4 py-2 text-[0.67rem] text-muted/60 font-light italic">
-                Showing similar templates — no exact match for your event type.
-              </p>
+              <div className="px-4 py-3.5 bg-warm-gray/50">
+                <p className="text-[0.68rem] text-muted font-light leading-relaxed">
+                  No exact match — these are the closest in the library.
+                </p>
+                <p className="text-[0.67rem] text-gold/80 font-light mt-1">
+                  For a precise plan, use Premium AI →
+                </p>
+              </div>
             )}
           </div>
         </div>
 
-        {/* ── RIGHT: Premium AI Generation ─────────────────────────────── */}
+        {/* ── Premium AI Generation ─────────────────────────────────────── */}
         <div className="flex flex-col border border-charcoal rounded-sm overflow-hidden">
-          <div className="bg-charcoal px-4 py-3 border-b border-white/10 flex items-center gap-2">
-            <Zap size={13} className="text-gold shrink-0" strokeWidth={1.5} />
+          <div className="bg-charcoal px-4 py-3.5 border-b border-white/10 flex items-center gap-2.5">
+            <Zap size={12} className="text-gold shrink-0" strokeWidth={1.5} />
             <div>
-              <p className="text-[0.75rem] font-medium text-gold-light leading-none">
+              <p className="text-[0.72rem] font-medium text-gold-light leading-none">
                 Premium AI Plan
               </p>
-              <p className="text-[0.65rem] font-light text-white/40 mt-0.5">
-                Custom-generated by Claude Sonnet 4
+              <p className="text-[0.62rem] font-light text-white/35 mt-0.5">
+                AI-generated to your brief
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col flex-1 px-4 py-3 justify-between gap-4">
+          <div className="flex flex-col flex-1 px-4 py-4 justify-between gap-5">
             <div>
-              <p className="text-[0.67rem] font-medium tracking-[0.1em] uppercase text-muted mb-2">
+              <p className="text-[0.62rem] font-medium tracking-[0.12em] uppercase text-muted mb-2.5">
                 Your selections
               </p>
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1.5">
                 {summary.map((line) => (
                   <div key={line} className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-gold/50 shrink-0" />
+                    <span className="w-1 h-1 rounded-full bg-gold/40 shrink-0" />
                     <span className="text-[0.78rem] font-light text-charcoal">{line}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={onGenerate}
-              disabled={isLoading}
-              className={cn(
-                'w-full flex items-center justify-center gap-2',
-                'bg-gold text-white text-[0.78rem] font-medium tracking-[0.07em] uppercase',
-                'py-2.5 rounded-sm transition-all duration-200',
-                'hover:opacity-90 active:scale-[0.98]',
-                'disabled:opacity-50 disabled:cursor-not-allowed',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40'
-              )}
-            >
-              {isLoading
-                ? <><Loader2 size={13} className="animate-spin" /> Generating…</>
-                : <>Generate My Plan</>
-              }
-            </button>
-
-            <p className="text-[0.65rem] text-muted/50 font-light text-center -mt-2">
-              Takes 20–40 seconds
-            </p>
+            <div className="flex flex-col gap-2">
+              <button
+                type="button"
+                onClick={onGenerate}
+                disabled={isLoading}
+                className={cn(
+                  'w-full flex items-center justify-center gap-2',
+                  'bg-gold text-white text-[0.72rem] font-medium tracking-[0.1em] uppercase',
+                  'py-3 rounded-sm transition-all duration-200',
+                  'hover:bg-gold-dark active:scale-[0.98]',
+                  'disabled:opacity-50 disabled:cursor-not-allowed',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40'
+                )}
+              >
+                {isLoading
+                  ? <><Loader2 size={12} className="animate-spin" /> Generating…</>
+                  : <>Generate My Plan</>
+                }
+              </button>
+              <p className="text-[0.62rem] text-muted/40 font-light text-center">
+                Takes 20–40 seconds
+              </p>
+            </div>
           </div>
         </div>
 

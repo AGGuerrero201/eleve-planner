@@ -5,7 +5,7 @@ import { CATEGORY_LABELS, ALL_TEMPLATE_CATEGORIES, type TemplateCategory } from 
 import { cn } from '@/lib/utils'
 
 interface TemplateSelectorProps {
-  onSelect: (template: LuxuryTemplate) => void
+  onSelect:  (template: LuxuryTemplate) => void
   disabled?: boolean
 }
 
@@ -18,7 +18,8 @@ export function TemplateSelector({ onSelect, disabled = false }: TemplateSelecto
     : LUXURY_TEMPLATES.filter((t) => t.category === activeCategory)
 
   return (
-    <div className="mb-5">
+    <div className="mb-6">
+
       {/* Toggle button */}
       <button
         type="button"
@@ -26,32 +27,33 @@ export function TemplateSelector({ onSelect, disabled = false }: TemplateSelecto
         disabled={disabled}
         className={cn(
           'w-full flex items-center justify-between',
-          'bg-charcoal text-gold-light px-5 py-3.5 rounded-sm',
-          'text-[0.75rem] font-medium tracking-[0.1em] uppercase',
+          'bg-charcoal text-gold-light px-5 py-4',
+          'text-[0.7rem] font-medium tracking-[0.12em] uppercase',
           'transition-opacity duration-200 disabled:opacity-40',
-          open ? 'rounded-b-none' : ''
+          open ? 'rounded-t-sm' : 'rounded-sm'
         )}
       >
         <span className="flex items-center gap-2.5">
-          <Zap size={13} className="text-gold" />
+          <Zap size={12} className="text-gold" strokeWidth={1.5} />
           Start from a luxury template
         </span>
-        <span className="flex items-center gap-1.5 text-[0.68rem] text-gold/70 normal-case tracking-normal font-light">
+        <span className="flex items-center gap-1.5 text-[0.65rem] text-white/35 normal-case tracking-normal font-light">
           {open
-            ? <><span>Hide</span> <ChevronUp size={13} /></>
-            : <><span>Browse {LUXURY_TEMPLATES.length} templates</span> <ChevronDown size={13} /></>
+            ? <><span>Hide</span><ChevronUp size={12} /></>
+            : <><span>Browse {LUXURY_TEMPLATES.length} templates</span><ChevronDown size={12} /></>
           }
         </span>
       </button>
 
       {open && (
-        <div className="border border-t-0 border-border rounded-b-sm bg-warm-gray p-4 animate-fade-up">
-          <p className="text-[0.72rem] text-muted font-light mb-3 leading-relaxed">
+        <div className="border border-t-0 border-border rounded-b-sm bg-warm-gray/50 p-5 animate-fade-up">
+
+          <p className="text-[0.72rem] text-muted font-light mb-4 leading-relaxed">
             Templates with a full plan load instantly. Concept templates seed Claude with your event profile.
           </p>
 
           {/* Category filter pills */}
-          <div className="flex flex-wrap gap-1.5 mb-4">
+          <div className="flex gap-1.5 mb-5 overflow-x-auto pb-1 -mx-5 px-5 sm:mx-0 sm:px-0 sm:flex-wrap">
             <CategoryPill
               label={`All (${LUXURY_TEMPLATES.length})`}
               active={activeCategory === 'all'}
@@ -85,21 +87,18 @@ export function TemplateSelector({ onSelect, disabled = false }: TemplateSelecto
               />
             ))}
           </div>
+
         </div>
       )}
     </div>
   )
 }
 
-// ─── Category filter pill ─────────────────────────────────────────────────────
+// ─── Category pill ────────────────────────────────────────────────────────────
 
-function CategoryPill({
-  label,
-  active,
-  onClick,
-}: {
-  label: string
-  active: boolean
+function CategoryPill({ label, active, onClick }: {
+  label:   string
+  active:  boolean
   onClick: () => void
 }) {
   return (
@@ -107,10 +106,11 @@ function CategoryPill({
       type="button"
       onClick={onClick}
       className={cn(
-        'text-[0.67rem] font-medium tracking-[0.06em] uppercase px-2.5 py-1 rounded-sm border transition-all duration-150',
+        'text-[0.62rem] font-medium tracking-[0.08em] uppercase px-3 py-1.5 rounded-sm border',
+        'transition-all duration-200 whitespace-nowrap shrink-0',
         active
           ? 'bg-charcoal text-gold-light border-charcoal'
-          : 'bg-white text-muted border-border hover:border-charcoal-light hover:text-charcoal'
+          : 'bg-white text-muted border-border hover:border-charcoal/20 hover:text-charcoal'
       )}
     >
       {label}
@@ -120,36 +120,33 @@ function CategoryPill({
 
 // ─── Template card ────────────────────────────────────────────────────────────
 
-function TemplateCard({
-  template,
-  onSelect,
-  disabled,
-}: {
+function TemplateCard({ template, onSelect, disabled }: {
   template: LuxuryTemplate
   onSelect: () => void
   disabled: boolean
 }) {
   const isInstant = template.plan !== undefined
+
   return (
     <button
       type="button"
       onClick={onSelect}
       disabled={disabled}
       className={cn(
-        'text-left w-full bg-white border border-border rounded-sm p-3.5',
-        'transition-colors duration-200',
-        'hover:border-gold/50 hover:bg-warm-gray',
+        'text-left w-full bg-white border border-border rounded-sm p-4',
+        'transition-all duration-200',
+        'hover:border-gold/40 hover:shadow-sm',
         'disabled:opacity-40 disabled:cursor-not-allowed',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-1'
       )}
     >
       {/* Category + instant badge */}
-      <div className="flex items-center justify-between mb-1.5">
-        <p className="text-[0.62rem] font-medium tracking-[0.14em] uppercase text-gold">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-[0.58rem] font-medium tracking-[0.16em] uppercase text-gold">
           {CATEGORY_LABELS[template.category]}
         </p>
         {isInstant && (
-          <span className="text-[0.58rem] font-medium tracking-[0.08em] uppercase text-green-600 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded-sm">
+          <span className="text-[0.55rem] font-semibold tracking-[0.08em] uppercase text-green-600 bg-green-50 border border-green-200 px-1.5 py-px rounded-sm">
             Instant
           </span>
         )}
@@ -161,7 +158,7 @@ function TemplateCard({
       </p>
 
       {/* Description */}
-      <p className="text-[0.72rem] text-muted font-light leading-snug mb-2.5">
+      <p className="text-[0.7rem] text-muted font-light leading-relaxed mb-3">
         {template.description}
       </p>
 
@@ -170,7 +167,7 @@ function TemplateCard({
         {template.previewTags.map((tag) => (
           <span
             key={tag}
-            className="text-[0.62rem] font-medium tracking-[0.04em] bg-warm-gray border border-border text-charcoal-light px-1.5 py-0.5 rounded-sm"
+            className="text-[0.58rem] font-medium tracking-[0.04em] bg-warm-gray border border-border text-charcoal-light px-1.5 py-px rounded-sm"
           >
             {tag}
           </span>

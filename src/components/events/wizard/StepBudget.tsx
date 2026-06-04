@@ -1,31 +1,19 @@
 /**
  * StepBudget.tsx — Step 4 of the PlannerWizard
- *
- * Collects three fields that define scale and timing:
- *   budget      → EventFormData.budget
- *   attendance  → EventFormData.attendance
- *   season      → EventFormData.season
- *
- * All three are required before Next is enabled.
- * Uses the tile/pill selection pattern consistent with the Elevé design system.
  */
 
 import type { Budget, Attendance, Season } from '@/types'
 import { BUDGETS, ATTENDANCES, SEASONS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
-// ─── Props ────────────────────────────────────────────────────────────────────
-
 interface StepBudgetProps {
-  budget:     Budget | ''
-  attendance: Attendance | ''
-  season:     Season | ''
+  budget:       Budget | ''
+  attendance:   Attendance | ''
+  season:       Season | ''
   onBudget:     (v: Budget)     => void
   onAttendance: (v: Attendance) => void
   onSeason:     (v: Season)     => void
 }
-
-// ─── Budget meta — adds a per-person hint beneath each option ─────────────────
 
 const BUDGET_META: Record<Budget, string> = {
   'Under $1,000':       'Approx. $20–80 / person',
@@ -36,16 +24,12 @@ const BUDGET_META: Record<Budget, string> = {
   '$25,000+':           'Approx. $500+ / person',
 }
 
-// ─── Season icons — single character, no library dependency ──────────────────
-
 const SEASON_GLYPHS: Record<Season, string> = {
-  'Spring':       '❧',
-  'Summer':       '◎',
+  'Spring':        '❧',
+  'Summer':        '◎',
   'Fall / Autumn': '◈',
-  'Winter':       '❄',
+  'Winter':        '❄',
 }
-
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export function StepBudget({
   budget,
@@ -56,29 +40,27 @@ export function StepBudget({
   onSeason,
 }: StepBudgetProps) {
   return (
-    <div className="flex flex-col gap-7">
+    <div className="flex flex-col gap-8">
 
       {/* ── Budget ─────────────────────────────────────────────────────── */}
       <div>
-        <FieldLabel required filled={!!budget}>
-          Estimated Budget
-        </FieldLabel>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        <FieldLabel required filled={!!budget}>Estimated Budget</FieldLabel>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
           {BUDGETS.map((b) => (
             <button
               key={b}
               type="button"
               onClick={() => onBudget(b)}
               className={cn(
-                'text-left px-4 py-3 rounded-sm border transition-all duration-200',
+                'text-left px-4 py-3.5 rounded-sm border transition-all duration-200',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40',
                 budget === b
-                  ? 'border-gold bg-gold/6 text-charcoal'
-                  : 'border-border bg-white text-charcoal hover:border-gold/40 hover:bg-warm-gray'
+                  ? 'border-gold bg-gold/6 shadow-sm'
+                  : 'border-border bg-white hover:border-gold/30 hover:bg-warm-gray'
               )}
             >
               <span className={cn(
-                'block text-[0.82rem] font-medium leading-snug mb-0.5',
+                'block text-[0.82rem] font-medium leading-snug mb-1',
                 budget === b ? 'text-charcoal' : 'text-charcoal'
               )}>
                 {b}
@@ -93,9 +75,7 @@ export function StepBudget({
 
       {/* ── Attendance ─────────────────────────────────────────────────── */}
       <div>
-        <FieldLabel required filled={!!attendance}>
-          Expected Attendance
-        </FieldLabel>
+        <FieldLabel required filled={!!attendance}>Expected Attendance</FieldLabel>
         <div className="flex flex-wrap gap-2">
           {ATTENDANCES.map((a) => (
             <button
@@ -103,11 +83,11 @@ export function StepBudget({
               type="button"
               onClick={() => onAttendance(a)}
               className={cn(
-                'px-4 py-2 rounded-sm border text-[0.8rem] font-light transition-all duration-200',
+                'px-4 py-2.5 rounded-sm border text-[0.8rem] font-light transition-all duration-200',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40',
                 attendance === a
-                  ? 'border-gold bg-gold/6 text-charcoal font-medium'
-                  : 'border-border bg-white text-muted hover:border-gold/40 hover:text-charcoal hover:bg-warm-gray'
+                  ? 'border-gold bg-gold/6 text-charcoal font-medium shadow-sm'
+                  : 'border-border bg-white text-muted hover:border-gold/30 hover:text-charcoal hover:bg-warm-gray'
               )}
             >
               {a}
@@ -118,9 +98,7 @@ export function StepBudget({
 
       {/* ── Season ─────────────────────────────────────────────────────── */}
       <div>
-        <FieldLabel required filled={!!season}>
-          Season
-        </FieldLabel>
+        <FieldLabel required filled={!!season}>Season</FieldLabel>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {SEASONS.map((s) => (
             <button
@@ -128,19 +106,19 @@ export function StepBudget({
               type="button"
               onClick={() => onSeason(s)}
               className={cn(
-                'flex flex-col items-center gap-1.5 py-3.5 px-2 rounded-sm border transition-all duration-200',
+                'flex flex-col items-center gap-2 py-5 px-2 rounded-sm border transition-all duration-200',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40',
                 season === s
-                  ? 'border-gold bg-gold/6 text-charcoal'
-                  : 'border-border bg-white text-muted hover:border-gold/40 hover:text-charcoal hover:bg-warm-gray'
+                  ? 'border-gold bg-gold/6 shadow-sm'
+                  : 'border-border bg-white hover:border-gold/30 hover:bg-warm-gray'
               )}
             >
-              <span className="text-[1.1rem] leading-none" aria-hidden>
+              <span className="text-[1.15rem] leading-none" aria-hidden>
                 {SEASON_GLYPHS[s]}
               </span>
               <span className={cn(
-                'text-[0.75rem] font-light leading-none',
-                season === s ? 'font-medium text-charcoal' : 'text-muted'
+                'text-[0.72rem] leading-none',
+                season === s ? 'font-medium text-charcoal' : 'font-light text-muted'
               )}>
                 {s}
               </span>
@@ -165,17 +143,17 @@ function FieldLabel({
   filled?: boolean
 }) {
   return (
-    <div className="flex items-center gap-2 mb-2.5">
-      <span className="text-[0.68rem] font-medium tracking-[0.12em] uppercase text-charcoal-light">
+    <div className="flex items-center gap-2 mb-3">
+      <span className="text-[0.67rem] font-medium tracking-[0.14em] uppercase text-charcoal-light">
         {children}
       </span>
       {required && !filled && (
-        <span className="text-[0.62rem] text-muted/60 font-light normal-case tracking-normal">
+        <span className="text-[0.6rem] text-muted/50 font-light normal-case tracking-normal">
           required
         </span>
       )}
       {filled && (
-        <span className="text-[0.62rem] text-green-600 font-medium">✓</span>
+        <span className="text-[0.6rem] font-semibold text-green-600">✓</span>
       )}
     </div>
   )

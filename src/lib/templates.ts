@@ -1961,4 +1961,6 @@ export const LUXURY_TEMPLATES: LuxuryTemplate[] = [
     promptContext: 'This is a relaxed family Sunday afternoon in the outdoor garden or courtyard. Warm, unhurried, genuinely family-oriented without being childish. Lawn games, a children\u2019s activity station, premium non-alcoholic drinks. Simplicity is the luxury here.',
   },
 
+
+  // ══════════════════════════════════════════════════════════════════════════
 ]

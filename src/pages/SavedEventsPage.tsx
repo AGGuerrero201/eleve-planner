@@ -57,7 +57,6 @@ export function SavedEventsPage() {
   ): Promise<string | null> => {
     const err = await updateField(id, patch)
     if (!err) {
-      // Patch selectedEvent so the modal reflects the change immediately
       setSelectedEvent((prev) => {
         if (!prev || prev.id !== id) return prev
         const updates: Partial<SavedEvent> = {}
@@ -83,11 +82,8 @@ export function SavedEventsPage() {
   ): Promise<string | null> => {
     const event = events.find((e) => e.id === id)
     if (!event) return 'Event not found'
-
     const result = await regenerateSection(event, section)
     if (result.error) return result.error
-
-    // Reuse existing handleFieldSave — it patches Supabase and selectedEvent
     const patch = sectionToPatch(section, result.value)
     return handleFieldSave(id, patch)
   }, [events, handleFieldSave])
@@ -102,25 +98,28 @@ export function SavedEventsPage() {
   ]
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+
+      {/* ── Header ───────────────────────────────────────────────────────── */}
+      <div className="flex items-start justify-between mb-8 flex-wrap gap-4">
         <div>
-          <h1 className="font-serif text-4xl font-light text-charcoal mb-1">Saved Events</h1>
+          <h1 className="font-serif text-[2.25rem] font-light text-charcoal mb-1.5 leading-tight">
+            Saved Events
+          </h1>
           {status === 'success' && events.length > 0 && (
-            <p className="text-muted font-light text-sm">
+            <p className="text-muted font-light text-[0.875rem]">
               {events.length} event{events.length !== 1 ? 's' : ''} in your library
             </p>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3 mt-1">
           <button
             onClick={() => void fetch()}
             disabled={isLoading}
-            className="flex items-center gap-1.5 text-[0.75rem] text-muted hover:text-charcoal transition-colors disabled:opacity-40 px-2 py-1"
+            className="flex items-center gap-1.5 text-[0.72rem] text-muted/70 hover:text-charcoal transition-colors duration-200 disabled:opacity-40"
             title="Refresh"
           >
-            <RefreshCw size={13} className={isLoading ? 'animate-spin' : ''} />
+            <RefreshCw size={12} className={isLoading ? 'animate-spin' : ''} />
             Refresh
           </button>
           {events.length > 0 && (
@@ -131,111 +130,120 @@ export function SavedEventsPage() {
         </div>
       </div>
 
-      {/* Filter tabs */}
+      {/* ── Filter tabs ──────────────────────────────────────────────────── */}
       {status === 'success' && events.length > 0 && (
-        <div className="flex items-center gap-0 border border-border rounded-sm overflow-hidden mb-6 w-fit">
-          {TABS.map((tab) => {
-            const count = counts[tab.value]
-            const isActive = activeFilter === tab.value
-            return (
-              <button
-                key={tab.value}
-                onClick={() => setActiveFilter(tab.value)}
-                className={cn(
-                  'flex items-center gap-1.5 px-3.5 py-2 text-[0.72rem] font-medium tracking-[0.06em] uppercase transition-colors duration-150 border-r border-border last:border-r-0',
-                  isActive
-                    ? 'bg-charcoal text-gold-light'
-                    : 'bg-white text-muted hover:bg-warm-gray hover:text-charcoal'
-                )}
-              >
-                {tab.label}
-                {count > 0 && (
-                  <span className={cn(
-                    'text-[0.65rem] px-1.5 py-0.5 rounded-sm font-medium tabular-nums',
-                    isActive ? 'bg-white/15 text-gold-light' : 'bg-warm-gray text-muted'
-                  )}>
-                    {count}
-                  </span>
-                )}
-              </button>
-            )
-          })}
+        <div className="overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0 mb-8 pb-px">
+          <div className="flex items-center border border-border rounded-sm overflow-hidden w-fit min-w-full sm:min-w-0 sm:w-fit">
+            {TABS.map((tab) => {
+              const count = counts[tab.value]
+              const isActive = activeFilter === tab.value
+              return (
+                <button
+                  key={tab.value}
+                  onClick={() => setActiveFilter(tab.value)}
+                  className={cn(
+                    'flex items-center gap-2 px-4 py-2.5 text-[0.68rem] font-medium tracking-[0.08em] uppercase',
+                    'transition-colors duration-150 border-r border-border last:border-r-0 whitespace-nowrap',
+                    isActive
+                      ? 'bg-charcoal text-gold-light'
+                      : 'bg-white text-muted hover:bg-warm-gray hover:text-charcoal'
+                  )}
+                >
+                  {tab.label}
+                  {count > 0 && (
+                    <span className={cn(
+                      'text-[0.62rem] px-1.5 py-px rounded-sm font-medium tabular-nums leading-none',
+                      isActive ? 'bg-white/15 text-gold-light' : 'bg-border/60 text-muted'
+                    )}>
+                      {count}
+                    </span>
+                  )}
+                </button>
+              )
+            })}
+          </div>
         </div>
       )}
 
-      {/* Loading skeleton */}
+      {/* ── Loading skeleton ─────────────────────────────────────────────── */}
       {isLoading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[1.5px] bg-border border-t border-l border-border">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-border">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white p-6 animate-pulse">
-              <div className="h-3 w-16 bg-warm-gray rounded mb-3" />
-              <div className="h-3 w-20 bg-warm-gray rounded mb-4" />
-              <div className="h-5 w-3/4 bg-warm-gray rounded mb-2" />
-              <div className="h-4 w-full bg-warm-gray rounded mb-1" />
-              <div className="h-4 w-2/3 bg-warm-gray rounded mb-5" />
-              <div className="flex gap-2">
-                <div className="h-6 w-16 bg-warm-gray rounded" />
-                <div className="h-6 w-16 bg-warm-gray rounded" />
+            <div key={i} className="bg-white p-7 border-r border-b border-border animate-pulse">
+              <div className="h-5 w-20 bg-warm-gray rounded-sm mb-5" />
+              <div className="h-2.5 w-24 bg-warm-gray rounded mb-2.5" />
+              <div className="h-6 w-3/4 bg-warm-gray rounded mb-2" />
+              <div className="h-4 w-full bg-warm-gray rounded mb-1.5" />
+              <div className="h-4 w-2/3 bg-warm-gray rounded mb-6" />
+              <div className="flex gap-1.5 mb-5">
+                <div className="h-5 w-14 bg-warm-gray rounded-sm" />
+                <div className="h-5 w-16 bg-warm-gray rounded-sm" />
+                <div className="h-5 w-20 bg-warm-gray rounded-sm" />
               </div>
+              <div className="h-3 w-28 bg-warm-gray rounded" />
             </div>
           ))}
         </div>
       )}
 
-      {/* Error state */}
+      {/* ── Error ────────────────────────────────────────────────────────── */}
       {status === 'error' && error && (
-        <div className="flex flex-col items-center gap-4 py-20 text-center">
-          <div className="w-12 h-12 rounded-sm bg-red-50 flex items-center justify-center">
-            <AlertCircle size={20} className="text-red-400" />
+        <div className="flex flex-col items-center gap-4 py-24 text-center">
+          <div className="w-12 h-12 border border-red-100 bg-red-50 flex items-center justify-center rounded-sm">
+            <AlertCircle size={18} className="text-red-400" />
           </div>
           <div>
-            <p className="text-sm text-charcoal-light font-light mb-1">Could not load saved events</p>
-            <p className="text-xs text-muted font-light">{error}</p>
+            <p className="text-[0.875rem] text-charcoal-light font-light mb-1">Could not load saved events</p>
+            <p className="text-[0.78rem] text-muted font-light">{error}</p>
           </div>
           <Button variant="outline" size="sm" onClick={() => void fetch()}>Try Again</Button>
         </div>
       )}
 
-      {/* Empty — no events at all */}
+      {/* ── Empty — no events ────────────────────────────────────────────── */}
       {noEventsAtAll && (
-        <div className="text-center py-24 px-6">
-          <div className="w-14 h-14 rounded-sm bg-warm-gray flex items-center justify-center mx-auto mb-6">
-            <BookOpen size={22} className="text-border" strokeWidth={1} />
+        <div className="text-center py-28 px-6">
+          <div className="w-14 h-14 border border-border bg-warm-gray flex items-center justify-center mx-auto mb-7 rounded-sm">
+            <BookOpen size={20} className="text-muted/40" strokeWidth={1.25} />
           </div>
-          <h3 className="font-serif text-2xl font-light text-charcoal-light mb-2">No saved events yet</h3>
-          <p className="text-muted font-light text-sm mb-8 max-w-xs mx-auto leading-relaxed">
+          <h3 className="font-serif text-[1.6rem] font-light text-charcoal-light mb-3">
+            No saved events yet
+          </h3>
+          <p className="text-muted font-light text-[0.875rem] mb-9 max-w-xs mx-auto leading-relaxed">
             Generate and save event plans to build your curated event library.
           </p>
-          <Button variant="gold" size="md" onClick={() => navigate('/planner')}>Plan an Event</Button>
+          <Button variant="gold" size="md" onClick={() => navigate('/planner')}>
+            Plan an Event
+          </Button>
         </div>
       )}
 
-      {/* Empty — filter has no results */}
+      {/* ── Empty — filter has no results ────────────────────────────────── */}
       {isEmpty && (
-        <div className="text-center py-16 px-6">
-          <p className="font-serif text-xl font-light text-charcoal-light mb-2">
+        <div className="text-center py-20 px-6 animate-fade-up">
+          <p className="font-serif text-[1.4rem] font-light text-charcoal-light mb-2">
             No {WORKFLOW_STATUS_LABELS[activeFilter as EventWorkflowStatus]} events
           </p>
-          <p className="text-muted font-light text-sm mb-5">
-            Change an event status in the modal to see it here.
+          <p className="text-muted font-light text-[0.875rem] mb-6">
+            Change an event's status in the detail view to see it here.
           </p>
           <button
             onClick={() => setActiveFilter('all')}
-            className="text-[0.78rem] font-medium tracking-[0.08em] uppercase text-charcoal-light underline underline-offset-2 hover:text-charcoal transition-colors"
+            className="text-[0.72rem] font-medium tracking-[0.1em] uppercase text-muted hover:text-charcoal underline underline-offset-4 transition-colors"
           >
             View all events
           </button>
         </div>
       )}
 
-      {/* Cards grid */}
+      {/* ── Cards grid ───────────────────────────────────────────────────── */}
       {status === 'success' && filteredEvents.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-border">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-border animate-fade-up">
           {filteredEvents.map((event) => (
             <div key={event.id} className="relative">
               {deletingId === event.id && (
                 <div className="absolute inset-0 bg-white/80 z-10 flex items-center justify-center">
-                  <Loader2 size={18} className="text-gold animate-spin" />
+                  <Loader2 size={16} className="text-gold animate-spin" />
                 </div>
               )}
               <EventCard
@@ -248,7 +256,7 @@ export function SavedEventsPage() {
         </div>
       )}
 
-      {/* Detail modal */}
+      {/* ── Detail modal ─────────────────────────────────────────────────── */}
       <EventDetailModal
         event={selectedEvent}
         onClose={() => setSelectedEvent(null)}
