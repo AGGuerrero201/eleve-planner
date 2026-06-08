@@ -37,10 +37,67 @@ export function StepRoute({ formData, isLoading, onGenerate, onLoadTemplate }: S
         Your event profile is ready. Choose how you want your plan generated.
       </p>
 
+      {/* On mobile: AI panel first (order-first), templates second.
+          On sm+:   templates left, AI right (original order restored). */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
-        {/* ── Template Baseline ─────────────────────────────────────────── */}
-        <div className="flex flex-col border border-border rounded-sm overflow-hidden">
+        {/* ── Premium AI Generation — order-first on mobile ─────────── */}
+        <div className="order-first sm:order-last flex flex-col border border-charcoal rounded-sm overflow-hidden">
+          <div className="bg-charcoal px-4 py-3.5 border-b border-white/10 flex items-center gap-2.5">
+            <Zap size={12} className="text-gold shrink-0" strokeWidth={1.5} />
+            <div>
+              <p className="text-[0.72rem] font-medium text-gold-light leading-none">
+                Premium AI Plan
+              </p>
+              <p className="text-[0.62rem] font-light text-white/35 mt-0.5">
+                AI-generated to your brief
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col flex-1 px-4 py-4 justify-between gap-5">
+            <div>
+              <p className="text-[0.62rem] font-medium tracking-[0.12em] uppercase text-muted mb-2.5">
+                Your selections
+              </p>
+              <div className="flex flex-col gap-1.5">
+                {summary.map((line) => (
+                  <div key={line} className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-gold/40 shrink-0" />
+                    <span className="text-[0.78rem] font-light text-charcoal">{line}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <button
+                type="button"
+                onClick={onGenerate}
+                disabled={isLoading}
+                className={cn(
+                  'w-full flex items-center justify-center gap-2',
+                  'bg-gold text-white text-[0.72rem] font-medium tracking-[0.1em] uppercase',
+                  'py-3 rounded-sm transition-all duration-200',
+                  'hover:bg-gold-dark active:scale-[0.98]',
+                  'disabled:opacity-50 disabled:cursor-not-allowed',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40'
+                )}
+              >
+                {isLoading
+                  ? <><Loader2 size={12} className="animate-spin" /> Generating…</>
+                  : <>Generate My Plan</>
+                }
+              </button>
+              <p className="text-[0.62rem] text-muted/40 font-light text-center">
+                Takes 20–40 seconds
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Template Baseline — order-last on mobile ──────────────── */}
+        <div className="order-last sm:order-first flex flex-col border border-border rounded-sm overflow-hidden">
           <div className="bg-warm-gray px-4 py-3.5 border-b border-border flex items-center gap-2.5">
             <BookOpen size={12} className="text-charcoal-light shrink-0" strokeWidth={1.5} />
             <div>
@@ -104,61 +161,6 @@ export function StepRoute({ formData, isLoading, onGenerate, onLoadTemplate }: S
                 </p>
               </div>
             )}
-          </div>
-        </div>
-
-        {/* ── Premium AI Generation ─────────────────────────────────────── */}
-        <div className="flex flex-col border border-charcoal rounded-sm overflow-hidden">
-          <div className="bg-charcoal px-4 py-3.5 border-b border-white/10 flex items-center gap-2.5">
-            <Zap size={12} className="text-gold shrink-0" strokeWidth={1.5} />
-            <div>
-              <p className="text-[0.72rem] font-medium text-gold-light leading-none">
-                Premium AI Plan
-              </p>
-              <p className="text-[0.62rem] font-light text-white/35 mt-0.5">
-                AI-generated to your brief
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-col flex-1 px-4 py-4 justify-between gap-5">
-            <div>
-              <p className="text-[0.62rem] font-medium tracking-[0.12em] uppercase text-muted mb-2.5">
-                Your selections
-              </p>
-              <div className="flex flex-col gap-1.5">
-                {summary.map((line) => (
-                  <div key={line} className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-gold/40 shrink-0" />
-                    <span className="text-[0.78rem] font-light text-charcoal">{line}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <button
-                type="button"
-                onClick={onGenerate}
-                disabled={isLoading}
-                className={cn(
-                  'w-full flex items-center justify-center gap-2',
-                  'bg-gold text-white text-[0.72rem] font-medium tracking-[0.1em] uppercase',
-                  'py-3 rounded-sm transition-all duration-200',
-                  'hover:bg-gold-dark active:scale-[0.98]',
-                  'disabled:opacity-50 disabled:cursor-not-allowed',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40'
-                )}
-              >
-                {isLoading
-                  ? <><Loader2 size={12} className="animate-spin" /> Generating…</>
-                  : <>Generate My Plan</>
-                }
-              </button>
-              <p className="text-[0.62rem] text-muted/40 font-light text-center">
-                Takes 20–40 seconds
-              </p>
-            </div>
           </div>
         </div>
 

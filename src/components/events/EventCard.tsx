@@ -23,12 +23,18 @@ export function EventCard({ event, onClick, onDelete }: EventCardProps) {
   return (
     <article
       className={cn(
-        'relative bg-white border-r border-b border-border p-6 cursor-pointer',
+        'relative p-6 cursor-pointer rounded-sm',
         'transition-colors duration-200 hover:bg-warm-gray group',
       )}
+      style={{
+        // Each card owns its border — works cleanly in a gap grid at any column count.
+        // No border-r / border-b collapse tricks that leave filled empty cells.
+        backgroundColor: 'var(--card-bg, #FAFAF8)',
+        border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))',
+      }}
       onClick={() => { if (!confirming) onClick() }}
     >
-      {/* Inline confirm dialog — overlays the card */}
+      {/* Inline confirm dialog */}
       <ConfirmDialog
         open={confirming}
         message="Delete this event?"

@@ -1,25 +1,18 @@
-/**
- * src/components/vendors/EventVendorPanel.tsx
- *
- * Shows vendor recommendations for an event plan.
- * Used in both EventPlanResult (after generation) and EventDetailModal (saved events).
- */
-
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Star, ChevronDown, ChevronUp, CheckCircle2, AlertTriangle, Store } from 'lucide-react'
 import { useVendors } from '@/hooks/useVendors'
 import { getVendorRecommendations, getSuggestedCategories } from '@/lib/vendorRecommendations'
-import type { CategoryRecommendation, VendorMatch } from '@/lib/vendorRecommendations'
+import type { CategoryRecommendation } from '@/lib/vendorRecommendations'
 import type { EventFormData } from '@/types'
 import { cn } from '@/lib/utils'
 
 interface EventVendorPanelProps {
   formData: EventFormData
-  compact?: boolean   // true = modal view (tighter spacing)
+  compact?: boolean
 }
 
-const MAX_VISIBLE = 2  // vendors shown per category before "show more"
+const MAX_VISIBLE = 2
 
 export function EventVendorPanel({ formData, compact = false }: EventVendorPanelProps) {
   const { vendors, status } = useVendors()
@@ -37,7 +30,6 @@ export function EventVendorPanel({ formData, compact = false }: EventVendorPanel
     [formData.eventType]
   )
 
-  // Don't render while loading or if no vendors in hub at all
   if (status === 'loading') return null
   if (status === 'success' && vendors.length === 0) return null
 
@@ -54,11 +46,11 @@ export function EventVendorPanel({ formData, compact = false }: EventVendorPanel
   return (
     <div className={cn('border-t border-border', compact ? 'mt-4 pt-4' : 'mt-6 pt-6')}>
 
-      {/* Section header */}
+      {/* Section header — min-h-[44px] for comfortable mobile tap target */}
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}
-        className="w-full flex items-center justify-between mb-1 group"
+        className="w-full flex items-center justify-between mb-1 group min-h-[44px] py-1"
       >
         <div className="flex items-center gap-2">
           <Store size={12} className="text-gold/70" />
@@ -71,7 +63,7 @@ export function EventVendorPanel({ formData, compact = false }: EventVendorPanel
             </span>
           )}
         </div>
-        <span className="text-muted/40 group-hover:text-muted transition-colors">
+        <span className="text-muted/40 group-hover:text-muted transition-colors p-1">
           {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
         </span>
       </button>
@@ -87,7 +79,6 @@ export function EventVendorPanel({ formData, compact = false }: EventVendorPanel
       {expanded && (
         <div className={cn('space-y-5', compact ? 'mt-4' : 'mt-5')}>
 
-          {/* Matched categories */}
           {recommendations.map((rec) => (
             <CategoryBlock
               key={rec.category}
@@ -98,7 +89,6 @@ export function EventVendorPanel({ formData, compact = false }: EventVendorPanel
             />
           ))}
 
-          {/* Suggested categories with no vendors */}
           {suggestedCategories.length > 0 && (
             <div>
               <p className="text-[0.6rem] font-medium tracking-[0.14em] uppercase text-muted/40 mb-2">
@@ -125,7 +115,6 @@ export function EventVendorPanel({ formData, compact = false }: EventVendorPanel
             </div>
           )}
 
-          {/* CTA to vendor hub */}
           <div className="pt-2 border-t border-border/60">
             <button
               type="button"
@@ -155,12 +144,11 @@ function CategoryBlock({
   onToggleExpand: () => void
   compact:        boolean
 }) {
-  const visible  = isExpanded ? rec.vendors : rec.vendors.slice(0, MAX_VISIBLE)
-  const hasMore  = rec.vendors.length > MAX_VISIBLE
+  const visible = isExpanded ? rec.vendors : rec.vendors.slice(0, MAX_VISIBLE)
+  const hasMore = rec.vendors.length > MAX_VISIBLE
 
   return (
     <div>
-      {/* Category label */}
       <div className="flex items-center gap-2 mb-2">
         <span className="text-[0.6rem] font-medium tracking-[0.14em] uppercase text-muted/50">
           {rec.label}
@@ -170,7 +158,6 @@ function CategoryBlock({
         </span>
       </div>
 
-      {/* Vendor rows */}
       <div className="space-y-1.5">
         {visible.map(({ vendor, reason }) => (
           <div
@@ -180,12 +167,9 @@ function CategoryBlock({
               'hover:border-charcoal/15 transition-colors duration-150'
             )}
           >
-            {/* Favorite indicator */}
             {vendor.favorite && (
               <Star size={10} className="text-gold shrink-0" fill="currentColor" />
             )}
-
-            {/* Name + reason */}
             <div className="flex-1 min-w-0">
               <p className="text-[0.82rem] font-light text-charcoal truncate">
                 {vendor.name}
@@ -194,11 +178,7 @@ function CategoryBlock({
                 {reason}
               </p>
             </div>
-
-            {/* COI badge */}
             <CoiIndicator status={vendor.coiStatus} />
-
-            {/* Price tier */}
             <span className="text-[0.58rem] font-medium uppercase tracking-wide text-muted/50 shrink-0">
               {vendor.priceTier === 'budget' ? 'Budget' :
                vendor.priceTier === 'mid' ? 'Mid' :
@@ -208,30 +188,21 @@ function CategoryBlock({
         ))}
       </div>
 
-      {/* Show more / less */}
       {hasMore && (
         <button
           type="button"
           onClick={onToggleExpand}
           className="mt-1.5 text-[0.65rem] text-muted/50 hover:text-charcoal transition-colors font-light"
         >
-          {isExpanded
-            ? 'Show less'
-            : `+${rec.vendors.length - MAX_VISIBLE} more`}
+          {isExpanded ? 'Show less' : `+${rec.vendors.length - MAX_VISIBLE} more`}
         </button>
       )}
     </div>
   )
 }
 
-// ─── COI indicator ────────────────────────────────────────────────────────────
-
 function CoiIndicator({ status }: { status: string }) {
-  if (status === 'on_file') {
-    return <CheckCircle2 size={11} className="text-green-500 shrink-0" />
-  }
-  if (status === 'expired') {
-    return <AlertTriangle size={11} className="text-red-400 shrink-0" />
-  }
+  if (status === 'on_file')  return <CheckCircle2 size={11} className="text-green-500 shrink-0" />
+  if (status === 'expired')  return <AlertTriangle size={11} className="text-red-400 shrink-0" />
   return null
 }

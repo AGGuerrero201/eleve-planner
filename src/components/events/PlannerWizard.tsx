@@ -8,7 +8,6 @@ import { StepDemographic } from '@/components/events/wizard/StepDemographic'
 import { StepAtmosphere } from '@/components/events/wizard/StepAtmosphere'
 import { StepCategory } from '@/components/events/wizard/StepCategory'
 import { StepRoute } from '@/components/events/wizard/StepRoute'
-import type { Budget, Attendance, Season } from '@/types'
 
 export const WIZARD_STEP_COUNT = 5
 
@@ -111,7 +110,7 @@ export function PlannerWizard({
       <WizardHeader currentStep={step} />
 
       {/* ── Step content ────────────────────────────────────────────────── */}
-      <div className="px-6 sm:px-8 pt-7 pb-6 min-h-[300px] flex flex-col">
+      <div className="px-5 sm:px-8 pt-7 pb-6 min-h-[300px] flex flex-col">
 
         {step === 1 && (
           <StepCategory
@@ -164,10 +163,10 @@ export function PlannerWizard({
             disabled={step === 1 || isLoading}
             className={cn(
               'flex items-center gap-1.5 text-[0.7rem] font-medium tracking-[0.06em]',
-              'transition-colors duration-150 px-1 py-1',
+              'transition-colors duration-150 px-1 py-2 min-h-[44px]',
               step === 1 || isLoading
                 ? 'opacity-0 pointer-events-none'
-                : 'text-[var(--stone)] hover:text-charcoal'
+                : 'text-[var(--stone,#8C8478)] hover:text-charcoal'
             )}
           >
             <ChevronLeft size={12} strokeWidth={1.5} />
@@ -181,8 +180,8 @@ export function PlannerWizard({
               disabled={isLoading || !canNext}
               title={!canNext ? 'Please complete all fields to continue' : undefined}
               className={cn(
-                'flex items-center gap-1.5 text-[0.7rem] font-medium tracking-[0.06em] px-1 py-1',
-                'transition-colors duration-150',
+                'flex items-center gap-1.5 text-[0.7rem] font-medium tracking-[0.06em]',
+                'px-1 py-2 min-h-[44px] transition-colors duration-150',
                 canNext
                   ? 'text-charcoal hover:text-gold'
                   : 'text-muted/30 cursor-not-allowed'
@@ -198,7 +197,7 @@ export function PlannerWizard({
 
         {/* Start over */}
         {step > 1 && (
-          <div className="text-center mt-3">
+          <div className="text-center mt-2">
             <button
               type="button"
               onClick={reset}
@@ -218,24 +217,21 @@ export function PlannerWizard({
 
 function WizardHeader({ currentStep }: { currentStep: number }) {
   return (
-    <div className="bg-charcoal px-6 sm:px-8 py-4">
-
-      {/* Step label row */}
+    <div className="bg-charcoal px-5 sm:px-8 py-4">
       <div className="flex items-center justify-between mb-4">
-        {/* "Step N of 5" in luxury label-caps */}
         <span
-          className="text-[0.6rem] font-medium uppercase"
+          className="text-[0.6rem] font-medium uppercase shrink-0"
           style={{ letterSpacing: '0.14em', color: 'var(--gold, #B8955A)' }}
         >
           Step {currentStep} of {WIZARD_STEP_COUNT}
         </span>
-        {/* Step name — light, editorial */}
-        <span className="text-[0.7rem] font-light text-white/50 truncate ml-4 max-w-[160px] sm:max-w-none text-right tracking-wide">
+        {/* Removed max-w cap — "Budget & Scale" no longer truncates */}
+        <span className="text-[0.7rem] font-light text-white/50 truncate ml-4 text-right tracking-wide">
           {WIZARD_STEP_LABELS[currentStep]}
         </span>
       </div>
 
-      {/* Progress dots — more refined than filled bars */}
+      {/* Progress dots */}
       <div className="flex items-center gap-1.5">
         {Array.from({ length: WIZARD_STEP_COUNT }, (_, i) => i + 1).map((s) => {
           const isDone    = s < currentStep
@@ -243,19 +239,21 @@ function WizardHeader({ currentStep }: { currentStep: number }) {
           return (
             <div
               key={s}
-              className={cn(
-                'transition-all duration-300',
-                isCurrent
-                  ? 'w-5 h-[3px] rounded-full bg-gold'
+              className="transition-all duration-300"
+              style={{
+                width:        isCurrent ? '20px' : '3px',
+                height:       isCurrent ? '3px'  : '3px',
+                borderRadius: '9999px',
+                backgroundColor: isCurrent
+                  ? 'var(--gold, #B8955A)'
                   : isDone
-                  ? 'w-[3px] h-[3px] rounded-full bg-gold/40'
-                  : 'w-[3px] h-[3px] rounded-full bg-white/12'
-              )}
+                  ? 'rgba(184,149,90,0.40)'
+                  : 'rgba(255,255,255,0.12)',
+              }}
             />
           )
         })}
       </div>
-
     </div>
   )
 }

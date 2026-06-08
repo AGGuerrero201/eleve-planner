@@ -31,7 +31,6 @@ export function PlannerPage() {
   const { status, plan, error, retryCount, loadingSteps, generate, retry, reset, loadTemplate } = useEventPlanner()
   const { save, isSaved } = useSavedEvents()
   const [currentFormData, setCurrentFormData] = useState<EventFormData | null>(null)
-
   const [mode, setMode] = useState<PlannerMode>('entry')
 
   const [wizardFormData, setWizardFormData]         = useState<EventFormData>(DEFAULT_FORM)
@@ -39,9 +38,7 @@ export function PlannerPage() {
   const [wizardAtmosphereId, setWizardAtmosphereId] = useState('')
   const [wizardCollapsed, setWizardCollapsed]       = useState(false)
 
-  const handleSave = async (event: SavedEvent): Promise<SavedEvent | null> => {
-    return save(event)
-  }
+  const handleSave = async (event: SavedEvent): Promise<SavedEvent | null> => save(event)
 
   const handleSelectTemplate = useCallback((template: LuxuryTemplate) => {
     setCurrentFormData(template.formData)
@@ -87,11 +84,7 @@ export function PlannerPage() {
   }
 
   const handleEntrySelect = (selected: 'templates' | 'custom') => {
-    if (selected === 'templates') {
-      setMode('templates')
-    } else {
-      setMode('wizard')
-    }
+    setMode(selected === 'templates' ? 'templates' : 'wizard')
   }
 
   const planIsSaved = plan !== null ? isSaved(plan.title, plan.tagline) : false
@@ -108,8 +101,8 @@ export function PlannerPage() {
 
       <SupabaseStatus />
 
-      {/* ── Page header ──────────────────────────────────────────────────── */}
-      <div className="flex items-start justify-between mb-8 gap-4">
+      {/* ── Page header — stacks on mobile, row on sm+ ─────────────────── */}
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-8 gap-3">
         <div>
           <h1 className="font-serif text-[2.25rem] font-light text-charcoal mb-2 leading-tight">
             Event Planner
@@ -119,23 +112,25 @@ export function PlannerPage() {
           </p>
         </div>
         {mode !== 'entry' && (
-          <ModeToggle mode={mode} onSwitch={setMode} disabled={status === 'loading'} />
+          <ModeToggle
+            mode={mode}
+            onSwitch={setMode}
+            disabled={status === 'loading'}
+            className="self-start sm:mt-1.5 sm:shrink-0"
+          />
         )}
       </div>
 
       {/* ── Entry choice ─────────────────────────────────────────────────── */}
       {mode === 'entry' && (
-        <PlannerEntry
-          onSelect={handleEntrySelect}
-          disabled={status === 'loading'}
-        />
+        <PlannerEntry onSelect={handleEntrySelect} disabled={status === 'loading'} />
       )}
 
       {/* ── Collection browser ───────────────────────────────────────────── */}
       {mode === 'templates' && (
         <div className="mb-6">
           <CollectionBrowser
-            onSelect={(template) => handleSelectTemplate(template)}
+            onSelect={handleSelectTemplate}
             onBack={() => setMode('entry')}
             disabled={status === 'loading'}
           />
@@ -146,41 +141,31 @@ export function PlannerPage() {
       {mode === 'wizard' && (
         <>
           {wizardCollapsed && showResult ? (
-            // Collapsed wizard pill — refined
             <button
               type="button"
               onClick={() => setWizardCollapsed(false)}
-              className="w-full flex items-center justify-between px-5 py-4 mb-5 rounded-sm transition-colors duration-200"
+              className="w-full flex items-center justify-between px-5 py-4 mb-5 rounded-sm transition-colors duration-200 min-h-[52px]"
               style={{
                 backgroundColor: 'var(--card-bg, #FAFAF8)',
                 border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))',
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(184,154,106,0.50)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(180,166,150,0.28)'
-              }}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 min-w-0">
                 <span
-                  className="label-caps"
+                  className="text-[0.62rem] font-medium tracking-[0.16em] uppercase shrink-0"
                   style={{ color: 'var(--gold, #B8955A)' }}
                 >
                   Event Profile
                 </span>
-                <span
-                  className="w-px h-3 shrink-0"
-                  style={{ backgroundColor: 'rgba(180,166,150,0.40)' }}
-                />
-                <span className="text-[0.8rem] font-light text-charcoal-light">
+                <span className="w-px h-3 bg-border shrink-0" />
+                <span className="text-[0.8rem] font-light text-charcoal-light truncate">
                   {wizardFormData.eventType || currentFormData?.eventType}
                   {(wizardFormData.season || currentFormData?.season)
                     ? ` · ${wizardFormData.season || currentFormData?.season}`
                     : ''}
                 </span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0">
                 <span className="text-[0.62rem] text-muted font-light tracking-wide">Revise</span>
                 <ChevronDown size={11} className="text-muted" strokeWidth={1.5} />
               </div>
@@ -204,9 +189,9 @@ export function PlannerPage() {
             <button
               type="button"
               onClick={() => setWizardCollapsed(false)}
-              className="w-full flex items-center justify-center gap-2 py-3.5 text-[0.72rem] text-muted hover:text-charcoal transition-colors rounded-sm mb-5"
+              className="w-full flex items-center justify-center gap-2 py-3.5 text-[0.72rem] text-muted hover:text-charcoal transition-colors rounded-sm mb-5 min-h-[44px]"
               style={{
-                border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))',
+                border: 'var(--card-border)',
                 backgroundColor: 'var(--card-bg, #FAFAF8)',
               }}
             >
@@ -218,10 +203,7 @@ export function PlannerPage() {
 
       {/* ── Classic form ─────────────────────────────────────────────────── */}
       {mode === 'classic' && (
-        <EventPlannerForm
-          onSubmit={handleClassicSubmit}
-          isLoading={status === 'loading'}
-        />
+        <EventPlannerForm onSubmit={handleClassicSubmit} isLoading={status === 'loading'} />
       )}
 
       {/* ── Loading ───────────────────────────────────────────────────────── */}
@@ -234,19 +216,16 @@ export function PlannerPage() {
             boxShadow: '0 1px 8px rgba(0,0,0,0.04)',
           }}
         >
-          {/* Loading header */}
           <div className="bg-charcoal px-6 py-4 flex items-center gap-3">
             <Loader2 size={12} className="text-gold animate-spin" strokeWidth={1.5} />
             <span
-              className="label-caps"
-              style={{ color: 'var(--gold-light, #E8D5B0)', letterSpacing: '0.16em' }}
+              className="text-[0.62rem] font-medium uppercase"
+              style={{ letterSpacing: '0.16em', color: 'var(--gold-light, #E8D5B0)' }}
             >
               Crafting your event plan
             </span>
           </div>
-
-          {/* Steps + loading bar */}
-          <div className="p-7">
+          <div className="p-6 sm:p-7">
             <div className="space-y-3.5 mb-6">
               {loadingSteps.map((step: LoadingStep) => (
                 <div key={step.id} className="flex items-center gap-3">
@@ -262,10 +241,7 @@ export function PlannerPage() {
                 </div>
               ))}
             </div>
-
-            {/* Luxury loading indicator — thin gold bar */}
             <LoadingDots label="" />
-
             <p
               className="text-[0.7rem] text-muted/40 font-light mt-2 text-center italic"
               style={{ borderTop: 'var(--border-section)', paddingTop: '16px' }}
@@ -278,10 +254,7 @@ export function PlannerPage() {
 
       {/* ── Error ────────────────────────────────────────────────────────── */}
       {status === 'error' && error && currentFormData && (
-        <div
-          className="mt-7 rounded-sm overflow-hidden animate-fade-up"
-          style={{ border: '1px solid #FECACA', backgroundColor: '#FFF' }}
-        >
+        <div className="mt-7 rounded-sm overflow-hidden animate-fade-up border border-red-200">
           <div className="bg-red-50 px-5 py-3.5 flex items-center gap-2.5 border-b border-red-100">
             <AlertTriangle size={13} className="text-red-400 shrink-0" />
             <span className="text-[0.65rem] font-medium tracking-[0.12em] uppercase text-red-600">
@@ -289,14 +262,14 @@ export function PlannerPage() {
               {retryCount > 0 && ` · attempt ${retryCount + 1}`}
             </span>
           </div>
-          <div className="p-7 text-center">
+          <div className="p-7 text-center bg-white">
             <p className="text-[0.875rem] text-red-600 font-light mb-6 leading-relaxed">{error}</p>
-            <div className="flex items-center justify-center gap-3">
-              <Button variant="gold" size="sm" onClick={() => retry(currentFormData)}>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Button variant="gold" size="sm" className="w-full sm:w-auto" onClick={() => retry(currentFormData)}>
                 <RefreshCw size={12} className="mr-2" />
                 Try Again
               </Button>
-              <Button variant="outline" size="sm" onClick={() => { handleWizardReset(); setMode('entry') }}>
+              <Button variant="outline" size="sm" className="w-full sm:w-auto" onClick={() => { handleWizardReset(); setMode('entry') }}>
                 Start Over
               </Button>
             </div>
@@ -327,10 +300,12 @@ function ModeToggle({
   mode,
   onSwitch,
   disabled,
+  className,
 }: {
-  mode:     PlannerMode
-  onSwitch: (m: PlannerMode) => void
-  disabled: boolean
+  mode:      PlannerMode
+  onSwitch:  (m: PlannerMode) => void
+  disabled:  boolean
+  className?: string
 }) {
   const options: { value: PlannerMode; label: string }[] = [
     { value: 'templates', label: 'Templates' },
@@ -340,7 +315,7 @@ function ModeToggle({
 
   return (
     <div
-      className="flex items-center rounded-sm overflow-hidden shrink-0 mt-1.5"
+      className={cn('flex items-center rounded-sm overflow-hidden', className)}
       style={{ border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))' }}
     >
       {options.map(({ value, label }) => (
@@ -350,12 +325,12 @@ function ModeToggle({
           onClick={() => onSwitch(value)}
           disabled={disabled}
           className={cn(
-            'text-[0.62rem] font-medium tracking-[0.10em] uppercase px-3 py-1.5',
+            'text-[0.62rem] font-medium tracking-[0.10em] uppercase px-3 py-2 min-h-[36px]',
             'border-r last:border-r-0 transition-colors duration-150',
             'disabled:opacity-40 disabled:cursor-not-allowed',
             mode === value
               ? 'bg-charcoal text-gold-light border-charcoal'
-              : 'bg-[var(--card-bg,#FAFAF8)] text-[var(--stone)] hover:bg-warm-gray hover:text-charcoal border-[rgba(180,166,150,0.20)]'
+              : 'bg-[var(--card-bg,#FAFAF8)] text-[var(--stone,#8C8478)] hover:bg-warm-gray hover:text-charcoal border-[rgba(180,166,150,0.20)]'
           )}
         >
           {label}
@@ -364,8 +339,6 @@ function ModeToggle({
     </div>
   )
 }
-
-// ─── Step indicator ───────────────────────────────────────────────────────────
 
 function StepIndicator({ status }: { status: LoadingStep['status'] }) {
   if (status === 'done')   return <CheckCircle2 size={14} className="text-green-500 shrink-0" strokeWidth={1.5} />

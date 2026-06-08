@@ -62,7 +62,6 @@ export function EventDetailModal({
     }
   }
 
-  // Render a ↻ Regenerate button for a given section
   const RegenBtn = ({ section }: { section: RegenerableSection }) => {
     if (!onSectionRegenerate) return null
     const isThis = regeneratingSection === section
@@ -76,7 +75,8 @@ export function EventDetailModal({
         disabled={anyBusy}
         title={`Regenerate ${SECTION_LABELS[section]} with Claude`}
         className={cn(
-          'flex items-center gap-1 text-[0.67rem] font-medium px-1.5 py-0.5 rounded-sm border transition-all duration-150',
+          // Min tap target — 32px height ensures comfortable mobile tapping
+          'flex items-center gap-1 text-[0.67rem] font-medium px-2 py-1 min-h-[32px] rounded-sm border transition-all duration-150',
           'disabled:cursor-not-allowed',
           wasThis
             ? 'border-green-200 bg-green-50 text-green-700'
@@ -104,14 +104,14 @@ export function EventDetailModal({
           {event.tagline}
         </p>
 
-        {/* Flyer headline — editable + regeneratable */}
+        {/* Flyer headline */}
         <div className="flex items-center gap-2 bg-charcoal px-3 py-1.5 rounded-sm mb-4">
           <Megaphone size={12} strokeWidth={1.5} className="text-gold shrink-0" />
           <EditableText
             value={event.flyerHeadline}
             onSave={saver('flyer_headline')}
             placeholder="Add a flyer headline…"
-            className="flex-1"
+            className="flex-1 min-w-0"
             inputClassName="bg-charcoal-mid text-gold-light border-gold/40 text-[0.78rem]"
           />
           <RegenBtn section="flyer_headline" />
@@ -122,10 +122,13 @@ export function EventDetailModal({
           <p className="text-[0.72rem] text-red-500 mb-3 px-1">{regenError}</p>
         )}
 
-        {/* Status selector */}
+        {/* Status selector — horizontal scroll on mobile, wrap on sm+ */}
         <div className="flex items-center gap-3 mb-5 pb-5 border-b border-border flex-wrap">
-          <span className="text-[0.7rem] font-medium tracking-[0.1em] uppercase text-charcoal-light shrink-0">Status</span>
-          <div className="flex flex-wrap gap-1.5">
+          <span className="text-[0.7rem] font-medium tracking-[0.1em] uppercase text-charcoal-light shrink-0">
+            Status
+          </span>
+          {/* Scrollable row on mobile to prevent wrapping mess */}
+          <div className="flex gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin flex-nowrap sm:flex-wrap -mx-1 px-1">
             {WORKFLOW_STATUS_ORDER.map((s) => (
               <button
                 key={s}
@@ -133,7 +136,8 @@ export function EventDetailModal({
                 disabled={updatingStatus}
                 onClick={() => void handleStatusChange(s)}
                 className={cn(
-                  'text-[0.67rem] font-medium tracking-[0.08em] uppercase px-2.5 py-1 rounded-sm border transition-all duration-150',
+                  'shrink-0 text-[0.67rem] font-medium tracking-[0.08em] uppercase',
+                  'px-2.5 py-1.5 min-h-[32px] rounded-sm border transition-all duration-150',
                   'disabled:opacity-50 disabled:cursor-not-allowed',
                   event.workflowStatus === s
                     ? 'bg-charcoal text-gold-light border-charcoal'
@@ -157,7 +161,7 @@ export function EventDetailModal({
           <Badge variant="muted">{event.meta.alcohol}</Badge>
         </div>
 
-        {/* Concept + Theme — editable only */}
+        {/* Concept + Theme */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <PlanSection title="Event Concept">
             <EditableTextarea value={event.overview} onSave={saver('overview')} rows={4} />
@@ -167,26 +171,26 @@ export function EventDetailModal({
           </PlanSection>
         </div>
 
-        {/* Timeline — regeneratable */}
+        {/* Timeline */}
         {event.timeline?.length > 0 && (
-          <PlanSection
-            title="Timeline"
-            icon={<Clock size={13} />}
-            action={<RegenBtn section="timeline" />}
-          >
+          <PlanSection title="Timeline" icon={<Clock size={13} />} action={<RegenBtn section="timeline" />}>
             <div className="space-y-0 border border-border rounded-sm overflow-hidden">
               {event.timeline.map((item: TimelineItem, i: number) => (
-                <div key={i} className="flex gap-4 px-3 py-2.5 border-b border-border last:border-0 hover:bg-warm-gray">
-                  <span className="text-[0.72rem] font-medium text-gold shrink-0 w-14 tabular-nums pt-0.5">{item.time}</span>
+                <div key={i} className="flex gap-3 px-3 py-2.5 border-b border-border last:border-0 hover:bg-warm-gray">
+                  <span className="text-[0.72rem] font-medium text-gold shrink-0 w-14 tabular-nums pt-0.5">
+                    {item.time}
+                  </span>
                   <p className="text-[0.82rem] text-charcoal font-light flex-1">{item.activity}</p>
-                  <span className="text-[0.68rem] text-muted shrink-0 pt-0.5">{item.responsible}</span>
+                  <span className="text-[0.68rem] text-muted shrink-0 pt-0.5 hidden sm:block">
+                    {item.responsible}
+                  </span>
                 </div>
               ))}
             </div>
           </PlanSection>
         )}
 
-        {/* Catering + Entertainment — editable + regeneratable */}
+        {/* Catering + Entertainment */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <PlanSection title="Catering" action={<RegenBtn section="catering" />}>
             <EditableList items={event.catering} onSave={saver('catering')} />
@@ -196,14 +200,16 @@ export function EventDetailModal({
           </PlanSection>
         </div>
 
-        {/* Vendors — regeneratable */}
+        {/* Vendor Ideas */}
         {event.vendorIdeas?.length > 0 && (
           <PlanSection title="Vendor Ideas" icon={<Store size={13} />} action={<RegenBtn section="vendor_ideas" />}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {event.vendorIdeas.map((v: VendorIdea, i: number) => (
                 <div key={i} className="border border-border rounded-sm p-3 bg-warm-gray">
                   <div className="flex justify-between mb-1.5">
-                    <span className="text-[0.68rem] font-medium uppercase tracking-wider text-charcoal-light">{v.category}</span>
+                    <span className="text-[0.68rem] font-medium uppercase tracking-wider text-charcoal-light">
+                      {v.category}
+                    </span>
                     <span className="text-[0.7rem] text-gold font-medium">{v.estimatedCost}</span>
                   </div>
                   {v.suggestions.map((s: string, j: number) => (
@@ -215,13 +221,15 @@ export function EventDetailModal({
           </PlanSection>
         )}
 
-        {/* Staffing — regeneratable */}
+        {/* Staffing */}
         {event.staffing?.length > 0 && (
           <PlanSection title="Staffing" icon={<Users size={13} />} action={<RegenBtn section="staffing" />}>
             <div className="space-y-2">
               {event.staffing.map((r: StaffingRole, i: number) => (
                 <div key={i} className="flex gap-3 py-2 border-b border-border last:border-0">
-                  <span className="text-[0.72rem] font-medium bg-charcoal text-gold-light px-2 py-0.5 rounded-sm shrink-0">×{r.count}</span>
+                  <span className="text-[0.72rem] font-medium bg-charcoal text-gold-light px-2 py-0.5 rounded-sm shrink-0">
+                    ×{r.count}
+                  </span>
                   <div>
                     <p className="text-[0.82rem] font-medium text-charcoal">{r.role}</p>
                     <p className="text-[0.75rem] text-muted font-light">{r.notes}</p>
@@ -232,7 +240,7 @@ export function EventDetailModal({
           </PlanSection>
         )}
 
-        {/* Alcohol — read only */}
+        {/* Alcohol */}
         {event.alcoholEstimate && (
           <PlanSection title="Alcohol Estimate" icon={<Wine size={13} />}>
             <p className="text-[0.82rem] text-charcoal font-light mb-1">
@@ -259,7 +267,7 @@ export function EventDetailModal({
           </PlanSection>
         </div>
 
-        {/* Resident Email — editable + regeneratable */}
+        {/* Resident Email */}
         {event.residentEmail && (
           <PlanSection title="Resident Email" icon={<Mail size={13} />} action={<RegenBtn section="resident_email" />}>
             <div className="border border-border rounded-sm overflow-hidden">
@@ -284,11 +292,11 @@ export function EventDetailModal({
           </PlanSection>
         )}
 
-        {/* Pro Tip — editable + regeneratable */}
+        {/* Pro Tip */}
         <div className="bg-warm-gray border-l-2 border-gold px-4 py-3 flex gap-3 mt-2 mb-2">
           <Lightbulb size={14} className="text-gold shrink-0 mt-0.5" />
-          <div className="flex-1">
-            <div className="flex items-center justify-between mb-1">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between mb-1 gap-2">
               <p className="text-[0.67rem] font-medium tracking-[0.14em] uppercase text-gold">Pro Tip</p>
               <RegenBtn section="pro_tip" />
             </div>
@@ -311,7 +319,7 @@ export function EventDetailModal({
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between mt-5 pt-4 border-t border-border">
+        <div className="flex items-center justify-between mt-5 pt-4 border-t border-border flex-wrap gap-2">
           <p className="text-[0.72rem] text-muted/60">Saved on {formatDate(event.savedAt)}</p>
           <WorkflowBadge status={event.workflowStatus} />
         </div>

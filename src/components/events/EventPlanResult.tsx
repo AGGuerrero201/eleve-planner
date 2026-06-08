@@ -45,29 +45,30 @@ export function EventPlanResult({ plan, formData, onSave, onRegenerate, isSaved 
   return (
     <div className="bg-white border border-border rounded-sm overflow-hidden animate-fade-up">
       {/* Header */}
-      <div className="bg-charcoal px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="w-1.5 h-1.5 rounded-full bg-gold" />
-          <span className="text-[0.72rem] font-medium tracking-[0.14em] uppercase text-gold-light">
+      <div className="bg-charcoal px-6 py-4 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3 min-w-0">
+          <span className="w-1.5 h-1.5 rounded-full bg-gold shrink-0" />
+          <span className="text-[0.72rem] font-medium tracking-[0.14em] uppercase text-gold-light truncate">
             Your curated event plan
           </span>
         </div>
-        <Badge variant="gold">{formData.eventType}</Badge>
+        <Badge variant="gold" className="shrink-0">{formData.eventType}</Badge>
       </div>
 
-      <div className="p-6 sm:p-8">
+      <div className="p-5 sm:p-6 md:p-8">
         {/* Title block */}
         <div className="mb-7">
-          <h2 className="font-serif text-4xl font-light text-charcoal leading-tight mb-1">
+          {/* Responsive title — clamp at 2xl on mobile, 4xl on sm+ */}
+          <h2 className="font-serif text-2xl sm:text-4xl font-light text-charcoal leading-tight mb-1">
             {plan.title}
           </h2>
           <p className="text-[0.78rem] font-medium tracking-[0.12em] uppercase text-gold mb-3">
             {plan.tagline}
           </p>
           {/* Flyer headline pill */}
-          <div className="inline-flex items-center gap-2 bg-charcoal text-gold-light px-4 py-2 rounded-sm">
-            <Megaphone size={13} strokeWidth={1.5} />
-            <span className="text-[0.78rem] font-medium tracking-[0.06em]">{plan.flyerHeadline}</span>
+          <div className="inline-flex items-center gap-2 bg-charcoal text-gold-light px-4 py-2 rounded-sm max-w-full">
+            <Megaphone size={13} strokeWidth={1.5} className="shrink-0" />
+            <span className="text-[0.78rem] font-medium tracking-[0.06em] truncate">{plan.flyerHeadline}</span>
           </div>
         </div>
 
@@ -87,15 +88,17 @@ export function EventPlanResult({ plan, formData, onSave, onRegenerate, isSaved 
             {plan.timeline.map((item: TimelineItem, i: number) => (
               <div
                 key={i}
-                className="flex gap-4 px-4 py-3 border-b border-border last:border-0 hover:bg-warm-gray transition-colors"
+                className="flex gap-3 sm:gap-4 px-3 sm:px-4 py-3 border-b border-border last:border-0 hover:bg-warm-gray transition-colors"
               >
-                <span className="text-[0.75rem] font-medium text-gold shrink-0 w-16 pt-0.5 tabular-nums">
+                <span className="text-[0.72rem] sm:text-[0.75rem] font-medium text-gold shrink-0 w-14 pt-0.5 tabular-nums">
                   {item.time}
                 </span>
-                <div className="flex-1">
-                  <p className="text-[0.875rem] text-charcoal font-light">{item.activity}</p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[0.82rem] sm:text-[0.875rem] text-charcoal font-light">{item.activity}</p>
                 </div>
-                <span className="text-[0.7rem] text-muted shrink-0 pt-0.5">{item.responsible}</span>
+                <span className="text-[0.65rem] sm:text-[0.7rem] text-muted shrink-0 pt-0.5 hidden xs:block">
+                  {item.responsible}
+                </span>
               </div>
             ))}
           </div>
@@ -135,7 +138,7 @@ export function EventPlanResult({ plan, formData, onSave, onRegenerate, isSaved 
           </div>
         </PlanSection>
 
-        {/* Staffing + Alcohol side by side */}
+        {/* Staffing + Alcohol */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
           <PlanSection title="Staffing Plan" icon={<Users size={13} />}>
             <div className="space-y-2">
@@ -210,18 +213,32 @@ export function EventPlanResult({ plan, formData, onSave, onRegenerate, isSaved 
         {/* Vendor Recommendations */}
         <EventVendorPanel formData={formData} />
 
-        {/* Actions */}
-        <div className="flex flex-wrap items-center gap-3 pt-5 border-t border-border">
-          <Button variant="gold" size="sm" onClick={() => void handleSave()} disabled={isSaved || savedOk || saving}>
-            {saving ? <Loader2 size={13} className="mr-2 animate-spin" /> : <BookmarkPlus size={14} className="mr-2" />}
+        {/* Actions — stack on mobile, row on sm+ */}
+        <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2 sm:gap-3 pt-5 border-t border-border mt-5">
+          <Button
+            variant="gold"
+            size="sm"
+            className="w-full sm:w-auto justify-center"
+            onClick={() => void handleSave()}
+            disabled={isSaved || savedOk || saving}
+          >
+            {saving
+              ? <Loader2 size={13} className="mr-2 animate-spin" />
+              : <BookmarkPlus size={14} className="mr-2" />
+            }
             {saving ? 'Saving...' : savedOk ? 'Saved!' : 'Save Event'}
           </Button>
-          <Button variant="outline" size="sm" onClick={onRegenerate}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full sm:w-auto justify-center"
+            onClick={onRegenerate}
+          >
             <RefreshCw size={13} className="mr-2" />
             Regenerate
           </Button>
           {savedOk && (
-            <span className="flex items-center gap-1.5 text-[0.75rem] font-medium text-green-700 bg-green-50 border border-green-200 px-3 py-1.5 rounded-sm">
+            <span className="flex items-center justify-center gap-1.5 text-[0.75rem] font-medium text-green-700 bg-green-50 border border-green-200 px-3 py-1.5 rounded-sm">
               <CheckCircle2 size={13} />
               Saved to Supabase
             </span>
@@ -252,14 +269,14 @@ function ResidentEmailCard({ email }: { email: EventPlan['residentEmail'] }) {
   return (
     <PlanSection title="Resident Invitation Email" icon={<Mail size={13} />}>
       <div className="border border-border rounded-sm overflow-hidden">
-        <div className="bg-warm-gray px-4 py-2.5 flex items-center justify-between border-b border-border">
-          <div>
+        <div className="bg-warm-gray px-4 py-2.5 flex items-center justify-between gap-3 border-b border-border">
+          <div className="min-w-0">
             <span className="text-[0.68rem] text-muted font-light uppercase tracking-widest mr-2">Subject:</span>
             <span className="text-[0.82rem] font-medium text-charcoal">{email.subject}</span>
           </div>
           <button
             onClick={() => void copy()}
-            className="flex items-center gap-1.5 text-[0.72rem] text-muted hover:text-charcoal transition-colors px-2 py-1 rounded hover:bg-border"
+            className="flex items-center gap-1.5 text-[0.72rem] text-muted hover:text-charcoal transition-colors px-2 py-1 rounded hover:bg-border shrink-0"
           >
             {copied ? <Check size={12} className="text-green-600" /> : <Copy size={12} />}
             {copied ? 'Copied' : 'Copy'}

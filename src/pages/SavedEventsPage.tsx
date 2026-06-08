@@ -132,62 +132,72 @@ export function SavedEventsPage() {
 
       {/* ── Filter tabs ──────────────────────────────────────────────────── */}
       {status === 'success' && events.length > 0 && (
-        <div className="overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0 mb-8 pb-px">
+        <div className="mb-8 relative">
+          {/* Fade mask — signals scroll on mobile */}
           <div
-            className="flex items-center rounded-sm overflow-hidden w-fit min-w-full sm:min-w-0 sm:w-fit"
-            style={{ border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))' }}
-          >
-            {TABS.map((tab) => {
-              const count = counts[tab.value]
-              const isActive = activeFilter === tab.value
-              return (
-                <button
-                  key={tab.value}
-                  onClick={() => setActiveFilter(tab.value)}
-                  className={cn(
-                    'flex items-center gap-2 px-4 py-2.5',
-                    'text-[0.65rem] font-medium tracking-[0.10em] uppercase',
-                    'transition-colors duration-150 whitespace-nowrap',
-                    'border-r last:border-r-0',
-                    isActive
-                      ? 'bg-charcoal text-gold-light border-charcoal'
-                      : 'bg-[var(--card-bg,#FAFAF8)] text-[var(--stone)] hover:bg-warm-gray hover:text-charcoal border-[rgba(180,166,150,0.20)]'
-                  )}
-                >
-                  {tab.label}
-                  {count > 0 && (
-                    <span className={cn(
-                      'text-[0.6rem] px-1.5 py-px rounded-sm font-medium tabular-nums leading-none',
-                      isActive ? 'bg-white/15 text-gold-light' : 'bg-border/60 text-muted'
-                    )}>
-                      {count}
-                    </span>
-                  )}
-                </button>
-              )
-            })}
+            className="absolute right-0 top-0 bottom-0 w-8 pointer-events-none sm:hidden"
+            style={{
+              background: 'linear-gradient(to right, transparent, var(--warm-white, #FEFCFA))',
+              zIndex: 1,
+            }}
+            aria-hidden
+          />
+          <div className="overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0 pb-px scrollbar-thin">
+            <div
+              className="flex items-center rounded-sm overflow-hidden w-fit min-w-full sm:min-w-0 sm:w-fit"
+              style={{ border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))' }}
+            >
+              {TABS.map((tab) => {
+                const count = counts[tab.value]
+                const isActive = activeFilter === tab.value
+                return (
+                  <button
+                    key={tab.value}
+                    onClick={() => setActiveFilter(tab.value)}
+                    className={cn(
+                      'flex items-center gap-2 px-4 py-2.5',
+                      'text-[0.65rem] font-medium tracking-[0.10em] uppercase',
+                      'transition-colors duration-150 whitespace-nowrap',
+                      'border-r last:border-r-0',
+                      isActive
+                        ? 'bg-charcoal text-gold-light border-charcoal'
+                        : 'bg-[var(--card-bg,#FAFAF8)] text-[var(--stone,#8C8478)] hover:bg-warm-gray hover:text-charcoal border-[rgba(180,166,150,0.20)]'
+                    )}
+                  >
+                    {tab.label}
+                    {count > 0 && (
+                      <span className={cn(
+                        'text-[0.6rem] px-1.5 py-px rounded-sm font-medium tabular-nums leading-none',
+                        isActive ? 'bg-white/15 text-gold-light' : 'bg-border/60 text-muted'
+                      )}>
+                        {count}
+                      </span>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
           </div>
         </div>
       )}
 
       {/* ── Loading skeleton ─────────────────────────────────────────────── */}
       {isLoading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-[rgba(180,166,150,0.20)]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="p-7 border-r border-b border-[rgba(180,166,150,0.20)] animate-pulse"
-              style={{ backgroundColor: 'var(--card-bg, #FAFAF8)' }}
+              className="p-6 rounded-sm animate-pulse"
+              style={{
+                backgroundColor: 'var(--card-bg, #FAFAF8)',
+                border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))',
+              }}
             >
-              <div className="h-5 w-20 rounded-sm mb-5" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
-              <div className="h-2.5 w-24 rounded mb-2.5" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
-              <div className="h-6 w-3/4 rounded mb-2" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
-              <div className="h-4 w-full rounded mb-1.5" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
-              <div className="h-4 w-2/3 rounded mb-6" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
-              <div className="flex gap-1.5 mb-5">
-                <div className="h-5 w-14 rounded-sm" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
-                <div className="h-5 w-16 rounded-sm" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
-              </div>
+              <div className="h-5 w-20 rounded-sm mb-5" style={{ backgroundColor: 'var(--stone-pale,#E8E4E0)' }} />
+              <div className="h-2.5 w-24 rounded mb-2.5" style={{ backgroundColor: 'var(--stone-pale,#E8E4E0)' }} />
+              <div className="h-6 w-3/4 rounded mb-2" style={{ backgroundColor: 'var(--stone-pale,#E8E4E0)' }} />
+              <div className="h-4 w-full rounded mb-1.5" style={{ backgroundColor: 'var(--stone-pale,#E8E4E0)' }} />
+              <div className="h-4 w-2/3 rounded mb-6" style={{ backgroundColor: 'var(--stone-pale,#E8E4E0)' }} />
             </div>
           ))}
         </div>
@@ -210,20 +220,16 @@ export function SavedEventsPage() {
       {/* ── Empty — no events ────────────────────────────────────────────── */}
       {noEventsAtAll && (
         <div className="text-center py-28 px-6">
-          {/* Ornamental icon */}
           <div
             className="w-14 h-14 flex items-center justify-center mx-auto mb-7 rounded-sm"
             style={{
-              border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))',
+              border: 'var(--card-border)',
               backgroundColor: 'var(--gold-ghost, #FBF7F2)',
             }}
           >
-            <BookOpen size={18} strokeWidth={1.25} style={{ color: 'var(--gold, #B8955A)', opacity: 0.5 }} />
+            <BookOpen size={18} strokeWidth={1.25} style={{ color: 'var(--gold,#B8955A)', opacity: 0.5 }} />
           </div>
-
-          {/* Ornamental divider */}
           <div className="eleve-divider mb-6" />
-
           <h3 className="font-serif text-[1.6rem] font-light text-charcoal-light mb-3 leading-snug">
             Your library awaits
           </h3>
@@ -256,15 +262,20 @@ export function SavedEventsPage() {
       )}
 
       {/* ── Cards grid ───────────────────────────────────────────────────── */}
+      {/* 
+        Clean gap-based grid. Each card carries its own border via EventCard.
+        No background-color on the grid parent — eliminates the beige empty-cell bleed.
+        Cards wrap naturally; incomplete last rows leave transparent space, not a filled block.
+      */}
       {status === 'success' && filteredEvents.length > 0 && (
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-t border-l animate-fade-up"
-          style={{ borderColor: 'rgba(180, 166, 150, 0.20)' }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 animate-fade-up">
           {filteredEvents.map((event) => (
             <div key={event.id} className="relative">
               {deletingId === event.id && (
-                <div className="absolute inset-0 bg-white/80 z-10 flex items-center justify-center">
+                <div
+                  className="absolute inset-0 z-10 flex items-center justify-center rounded-sm"
+                  style={{ backgroundColor: 'rgba(250,250,248,0.85)' }}
+                >
                   <Loader2 size={16} className="text-gold animate-spin" />
                 </div>
               )}
