@@ -4,16 +4,72 @@
 
 @layer base {
   :root {
-    --gold: #B8955A;
-    --gold-light: #E8D5B0;
-    --gold-dark: #9A7A42;
-    --charcoal: #1C1C1E;
+    /* ── Existing tokens (unchanged) ───────────────────────── */
+    --gold:         #B8955A;
+    --gold-light:   #E8D5B0;
+    --gold-dark:    #9A7A42;
+    --charcoal:     #1C1C1E;
     --charcoal-mid: #2D2D30;
-    --charcoal-light: #4A4A50;
-    --off-white: #FAFAF8;
-    --warm-gray: #F5F3EF;
+    --charcoal-light:#4A4A50;
+    --off-white:    #FAFAF8;
+    --warm-gray:    #F5F3EF;
     --border-color: #E2DDD5;
-    --muted: #8A8580;
+    --muted:        #8A8580;
+
+    /* ── New: extended gold scale ───────────────────────────── */
+    --gold-pale:    #F5EFE6;
+    --gold-ghost:   #FBF7F2;
+    --gold-200:     #D4B896;
+    --gold-400:     #CEB48E;
+
+    /* ── New: stone scale (section labels, secondary text) ──── */
+    --stone:        #8C8478;
+    --stone-dark:   #5C5650;
+    --stone-light:  #B8B0A8;
+    --stone-pale:   #E8E4E0;
+
+    /* ── New: warm surface scale ────────────────────────────── */
+    --ivory:        #FAFAF8;   /* same as off-white — alias */
+    --warm-white:   #FEFCFA;   /* slightly warmer for sidebar/nav */
+    --surface:      #F5F3F0;   /* secondary surface */
+
+    /* ── New: card tokens ───────────────────────────────────── */
+    --card-bg:           #FAFAF8;
+    --card-border:       1px solid rgba(180, 166, 150, 0.28);
+    --card-border-hover: 1px solid rgba(184, 154, 106, 0.50);
+    --card-shadow:       none;
+    --card-shadow-hover: 0 2px 14px rgba(0, 0, 0, 0.055);
+    --card-radius:       10px;
+
+    /* ── New: status palette (muted, warm-toned) ────────────── */
+    --status-planning-bg:     #EDEAE3;
+    --status-planning-text:   #6B5F4A;
+    --status-planning-border: #D4CCBF;
+
+    --status-confirmed-bg:     #E5EDE5;
+    --status-confirmed-text:   #3D5C3A;
+    --status-confirmed-border: #BFCFBD;
+
+    --status-underway-bg:     #EAEAF0;
+    --status-underway-text:   #4A4870;
+    --status-underway-border: #C8C7DC;
+
+    --status-delivered-bg:     #EDE8E2;
+    --status-delivered-text:   #5C5040;
+    --status-delivered-border: #CEC5BA;
+
+    --status-archived-bg:     #EBEBEB;
+    --status-archived-text:   #6B6B6B;
+    --status-archived-border: #D0D0D0;
+
+    /* ── New: transition tokens ─────────────────────────────── */
+    --transition-card: 200ms ease;
+    --transition-fast: 150ms ease;
+    --transition-slow: 320ms ease;
+
+    /* ── New: border tokens ─────────────────────────────────── */
+    --border-section: 0.5px solid rgba(180, 166, 150, 0.30);
+    --border-subtle:  0.5px solid rgba(180, 166, 150, 0.20);
   }
 
   * {
@@ -50,27 +106,146 @@
     outline: 2px solid var(--gold);
     outline-offset: 2px;
   }
+
+  /* ── New: warm scrollbar ──────────────────────────────────── */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--stone-pale);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--stone-light);
+  }
+
+  /* ── New: warm text selection ─────────────────────────────── */
+  ::selection {
+    background-color: var(--gold-pale);
+    color: var(--charcoal);
+  }
 }
 
 @layer components {
+  /* ── Existing animations (unchanged) ───────────────────────── */
   .animate-fade-up {
     animation: fadeUp 0.4s ease both;
   }
-
   .animate-delay-100 { animation-delay: 100ms; }
   .animate-delay-200 { animation-delay: 200ms; }
   .animate-delay-300 { animation-delay: 300ms; }
   .animate-delay-400 { animation-delay: 400ms; }
 
-  .scrollbar-thin::-webkit-scrollbar {
-    width: 4px;
-  }
-  .scrollbar-thin::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .scrollbar-thin::-webkit-scrollbar-thumb {
+  .scrollbar-thin::-webkit-scrollbar       { width: 4px; }
+  .scrollbar-thin::-webkit-scrollbar-track  { background: transparent; }
+  .scrollbar-thin::-webkit-scrollbar-thumb  {
     background: var(--border-color);
     border-radius: 2px;
+  }
+
+  /* ── New: luxury card class ─────────────────────────────────
+     Apply .eleve-card to any card that should use the warm
+     hover treatment. Works alongside existing Tailwind classes.
+     ─────────────────────────────────────────────────────────── */
+  .eleve-card {
+    background-color: var(--card-bg);
+    border: var(--card-border);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    transition:
+      border-color var(--transition-card),
+      box-shadow   var(--transition-card);
+  }
+  .eleve-card:hover {
+    border: var(--card-border-hover);
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  /* ── New: section label class ───────────────────────────────
+     The most visible luxury signal. 10px tracked caps.
+     Use .label-caps on any section header element.
+     ─────────────────────────────────────────────────────────── */
+  .label-caps {
+    font-family: "DM Sans", system-ui, sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  /* ── New: status badge base + variants ──────────────────────
+     These are the luxury replacements for saturated SaaS badges.
+     Vocabulary: In Planning / Confirmed / Underway / Delivered / Archived
+     ─────────────────────────────────────────────────────────── */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    font-family: "DM Sans", system-ui, sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 4px;
+    white-space: nowrap;
+    line-height: 1.4;
+  }
+  .status-planning {
+    background-color: var(--status-planning-bg);
+    color:            var(--status-planning-text);
+    border:           0.5px solid var(--status-planning-border);
+  }
+  .status-confirmed {
+    background-color: var(--status-confirmed-bg);
+    color:            var(--status-confirmed-text);
+    border:           0.5px solid var(--status-confirmed-border);
+  }
+  .status-underway {
+    background-color: var(--status-underway-bg);
+    color:            var(--status-underway-text);
+    border:           0.5px solid var(--status-underway-border);
+  }
+  .status-delivered {
+    background-color: var(--status-delivered-bg);
+    color:            var(--status-delivered-text);
+    border:           0.5px solid var(--status-delivered-border);
+  }
+  .status-archived {
+    background-color: var(--status-archived-bg);
+    color:            var(--status-archived-text);
+    border:           0.5px solid var(--status-archived-border);
+  }
+
+  /* ── New: ornamental divider ────────────────────────────────
+     <div class="eleve-divider" /> — used in empty states,
+     section breaks, and modal headers.
+     ─────────────────────────────────────────────────────────── */
+  .eleve-divider {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--gold-200, #D4B896),
+      transparent
+    );
+    border: none;
+    margin: 0 auto;
+  }
+  .eleve-divider-left {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      var(--gold-200, #D4B896),
+      transparent
+    );
+    border: none;
   }
 }
 

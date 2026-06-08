@@ -98,7 +98,14 @@ export function PlannerWizard({
     (step === 4 && !!formData.budget && !!formData.attendance && !!formData.season)
 
   return (
-    <div className="bg-white border border-border rounded-sm overflow-hidden shadow-sm">
+    <div
+      className="border rounded-sm overflow-hidden"
+      style={{
+        backgroundColor: 'var(--card-bg, #FAFAF8)',
+        borderColor: 'rgba(180, 166, 150, 0.28)',
+        boxShadow: '0 1px 8px rgba(0,0,0,0.04)',
+      }}
+    >
 
       {/* ── Progress header ─────────────────────────────────────────────── */}
       <WizardHeader currentStep={step} />
@@ -147,21 +154,23 @@ export function PlannerWizard({
         )}
 
         {/* ── Navigation ──────────────────────────────────────────────── */}
-        <div className="flex items-center justify-between mt-auto pt-6 border-t border-border">
-
+        <div
+          className="flex items-center justify-between mt-auto pt-5"
+          style={{ borderTop: 'var(--border-section, 0.5px solid rgba(180,166,150,0.30))' }}
+        >
           <button
             type="button"
             onClick={back}
             disabled={step === 1 || isLoading}
             className={cn(
-              'flex items-center gap-1 text-[0.72rem] font-medium text-muted',
+              'flex items-center gap-1.5 text-[0.7rem] font-medium tracking-[0.06em]',
               'transition-colors duration-150 px-1 py-1',
               step === 1 || isLoading
                 ? 'opacity-0 pointer-events-none'
-                : 'hover:text-charcoal'
+                : 'text-[var(--stone)] hover:text-charcoal'
             )}
           >
-            <ChevronLeft size={13} />
+            <ChevronLeft size={12} strokeWidth={1.5} />
             Back
           </button>
 
@@ -172,15 +181,15 @@ export function PlannerWizard({
               disabled={isLoading || !canNext}
               title={!canNext ? 'Please complete all fields to continue' : undefined}
               className={cn(
-                'flex items-center gap-1 text-[0.72rem] font-medium px-1 py-1',
+                'flex items-center gap-1.5 text-[0.7rem] font-medium tracking-[0.06em] px-1 py-1',
                 'transition-colors duration-150',
                 canNext
                   ? 'text-charcoal hover:text-gold'
                   : 'text-muted/30 cursor-not-allowed'
               )}
             >
-              Next
-              <ChevronRight size={13} />
+              Continue
+              <ChevronRight size={12} strokeWidth={1.5} />
             </button>
           ) : (
             <span />
@@ -193,7 +202,7 @@ export function PlannerWizard({
             <button
               type="button"
               onClick={reset}
-              className="text-[0.6rem] text-muted/25 hover:text-muted/50 transition-colors duration-200"
+              className="text-[0.6rem] text-muted/25 hover:text-muted/50 transition-colors duration-200 tracking-wide"
             >
               Start over
             </button>
@@ -210,27 +219,43 @@ export function PlannerWizard({
 function WizardHeader({ currentStep }: { currentStep: number }) {
   return (
     <div className="bg-charcoal px-6 sm:px-8 py-4">
-      <div className="flex items-center justify-between mb-3.5">
-        <span className="text-[0.62rem] font-medium tracking-[0.16em] uppercase text-gold">
+
+      {/* Step label row */}
+      <div className="flex items-center justify-between mb-4">
+        {/* "Step N of 5" in luxury label-caps */}
+        <span
+          className="text-[0.6rem] font-medium uppercase"
+          style={{ letterSpacing: '0.14em', color: 'var(--gold, #B8955A)' }}
+        >
           Step {currentStep} of {WIZARD_STEP_COUNT}
         </span>
-        <span className="text-[0.72rem] font-light text-gold-light/80 truncate ml-4 max-w-[160px] sm:max-w-none text-right">
+        {/* Step name — light, editorial */}
+        <span className="text-[0.7rem] font-light text-white/50 truncate ml-4 max-w-[160px] sm:max-w-none text-right tracking-wide">
           {WIZARD_STEP_LABELS[currentStep]}
         </span>
       </div>
 
-      {/* Segmented progress bar */}
-      <div className="flex items-center gap-1">
-        {Array.from({ length: WIZARD_STEP_COUNT }, (_, i) => i + 1).map((s) => (
-          <div
-            key={s}
-            className={cn(
-              'h-px flex-1 transition-colors duration-300',
-              s <= currentStep ? 'bg-gold/60' : 'bg-white/10'
-            )}
-          />
-        ))}
+      {/* Progress dots — more refined than filled bars */}
+      <div className="flex items-center gap-1.5">
+        {Array.from({ length: WIZARD_STEP_COUNT }, (_, i) => i + 1).map((s) => {
+          const isDone    = s < currentStep
+          const isCurrent = s === currentStep
+          return (
+            <div
+              key={s}
+              className={cn(
+                'transition-all duration-300',
+                isCurrent
+                  ? 'w-5 h-[3px] rounded-full bg-gold'
+                  : isDone
+                  ? 'w-[3px] h-[3px] rounded-full bg-gold/40'
+                  : 'w-[3px] h-[3px] rounded-full bg-white/12'
+              )}
+            />
+          )
+        })}
       </div>
+
     </div>
   )
 }

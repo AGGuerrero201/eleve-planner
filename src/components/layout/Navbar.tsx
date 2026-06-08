@@ -20,7 +20,7 @@ export function Navbar() {
         </NavLink>
 
         {/* Nav links */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center">
           {NAV_ITEMS.map(({ label, to }) => (
             <NavLink
               key={to}
@@ -28,14 +28,28 @@ export function Navbar() {
               end={to === '/'}
               className={({ isActive }) =>
                 cn(
-                  'text-[0.68rem] font-medium tracking-[0.12em] uppercase px-4 py-2 transition-all duration-200',
+                  // Base: tracked caps, consistent sizing
+                  'relative text-[0.65rem] font-medium tracking-[0.14em] uppercase',
+                  'px-4 py-2 transition-colors duration-200',
+                  // Active: gold text + bottom dot indicator
                   isActive
                     ? 'text-gold'
                     : 'text-white/35 hover:text-white/65'
                 )
               }
             >
-              {label}
+              {({ isActive }) => (
+                <>
+                  {label}
+                  {/* Thin gold underline for active item — more refined than text alone */}
+                  {isActive && (
+                    <span
+                      className="absolute bottom-0 left-4 right-4 h-px bg-gold/50"
+                      aria-hidden
+                    />
+                  )}
+                </>
+              )}
             </NavLink>
           ))}
         </div>

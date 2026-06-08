@@ -7,9 +7,14 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col bg-off-white">
+    <div
+      className="min-h-screen flex flex-col"
+      style={{ backgroundColor: 'var(--warm-white, #FEFCFA)' }}
+    >
       <Navbar />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1">
+        {children}
+      </main>
     </div>
   )
 }

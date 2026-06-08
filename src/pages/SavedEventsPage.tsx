@@ -133,7 +133,10 @@ export function SavedEventsPage() {
       {/* ── Filter tabs ──────────────────────────────────────────────────── */}
       {status === 'success' && events.length > 0 && (
         <div className="overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0 mb-8 pb-px">
-          <div className="flex items-center border border-border rounded-sm overflow-hidden w-fit min-w-full sm:min-w-0 sm:w-fit">
+          <div
+            className="flex items-center rounded-sm overflow-hidden w-fit min-w-full sm:min-w-0 sm:w-fit"
+            style={{ border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))' }}
+          >
             {TABS.map((tab) => {
               const count = counts[tab.value]
               const isActive = activeFilter === tab.value
@@ -142,17 +145,19 @@ export function SavedEventsPage() {
                   key={tab.value}
                   onClick={() => setActiveFilter(tab.value)}
                   className={cn(
-                    'flex items-center gap-2 px-4 py-2.5 text-[0.68rem] font-medium tracking-[0.08em] uppercase',
-                    'transition-colors duration-150 border-r border-border last:border-r-0 whitespace-nowrap',
+                    'flex items-center gap-2 px-4 py-2.5',
+                    'text-[0.65rem] font-medium tracking-[0.10em] uppercase',
+                    'transition-colors duration-150 whitespace-nowrap',
+                    'border-r last:border-r-0',
                     isActive
-                      ? 'bg-charcoal text-gold-light'
-                      : 'bg-white text-muted hover:bg-warm-gray hover:text-charcoal'
+                      ? 'bg-charcoal text-gold-light border-charcoal'
+                      : 'bg-[var(--card-bg,#FAFAF8)] text-[var(--stone)] hover:bg-warm-gray hover:text-charcoal border-[rgba(180,166,150,0.20)]'
                   )}
                 >
                   {tab.label}
                   {count > 0 && (
                     <span className={cn(
-                      'text-[0.62rem] px-1.5 py-px rounded-sm font-medium tabular-nums leading-none',
+                      'text-[0.6rem] px-1.5 py-px rounded-sm font-medium tabular-nums leading-none',
                       isActive ? 'bg-white/15 text-gold-light' : 'bg-border/60 text-muted'
                     )}>
                       {count}
@@ -167,20 +172,22 @@ export function SavedEventsPage() {
 
       {/* ── Loading skeleton ─────────────────────────────────────────────── */}
       {isLoading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-border">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-[rgba(180,166,150,0.20)]">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white p-7 border-r border-b border-border animate-pulse">
-              <div className="h-5 w-20 bg-warm-gray rounded-sm mb-5" />
-              <div className="h-2.5 w-24 bg-warm-gray rounded mb-2.5" />
-              <div className="h-6 w-3/4 bg-warm-gray rounded mb-2" />
-              <div className="h-4 w-full bg-warm-gray rounded mb-1.5" />
-              <div className="h-4 w-2/3 bg-warm-gray rounded mb-6" />
+            <div
+              key={i}
+              className="p-7 border-r border-b border-[rgba(180,166,150,0.20)] animate-pulse"
+              style={{ backgroundColor: 'var(--card-bg, #FAFAF8)' }}
+            >
+              <div className="h-5 w-20 rounded-sm mb-5" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
+              <div className="h-2.5 w-24 rounded mb-2.5" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
+              <div className="h-6 w-3/4 rounded mb-2" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
+              <div className="h-4 w-full rounded mb-1.5" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
+              <div className="h-4 w-2/3 rounded mb-6" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
               <div className="flex gap-1.5 mb-5">
-                <div className="h-5 w-14 bg-warm-gray rounded-sm" />
-                <div className="h-5 w-16 bg-warm-gray rounded-sm" />
-                <div className="h-5 w-20 bg-warm-gray rounded-sm" />
+                <div className="h-5 w-14 rounded-sm" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
+                <div className="h-5 w-16 rounded-sm" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
               </div>
-              <div className="h-3 w-28 bg-warm-gray rounded" />
             </div>
           ))}
         </div>
@@ -203,17 +210,28 @@ export function SavedEventsPage() {
       {/* ── Empty — no events ────────────────────────────────────────────── */}
       {noEventsAtAll && (
         <div className="text-center py-28 px-6">
-          <div className="w-14 h-14 border border-border bg-warm-gray flex items-center justify-center mx-auto mb-7 rounded-sm">
-            <BookOpen size={20} className="text-muted/40" strokeWidth={1.25} />
+          {/* Ornamental icon */}
+          <div
+            className="w-14 h-14 flex items-center justify-center mx-auto mb-7 rounded-sm"
+            style={{
+              border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))',
+              backgroundColor: 'var(--gold-ghost, #FBF7F2)',
+            }}
+          >
+            <BookOpen size={18} strokeWidth={1.25} style={{ color: 'var(--gold, #B8955A)', opacity: 0.5 }} />
           </div>
-          <h3 className="font-serif text-[1.6rem] font-light text-charcoal-light mb-3">
-            No saved events yet
+
+          {/* Ornamental divider */}
+          <div className="eleve-divider mb-6" />
+
+          <h3 className="font-serif text-[1.6rem] font-light text-charcoal-light mb-3 leading-snug">
+            Your library awaits
           </h3>
           <p className="text-muted font-light text-[0.875rem] mb-9 max-w-xs mx-auto leading-relaxed">
-            Generate and save event plans to build your curated event library.
+            Event plans you generate and save will appear here, ready to refine and share.
           </p>
           <Button variant="gold" size="md" onClick={() => navigate('/planner')}>
-            Plan an Event
+            Plan Your First Event
           </Button>
         </div>
       )}
@@ -221,15 +239,16 @@ export function SavedEventsPage() {
       {/* ── Empty — filter has no results ────────────────────────────────── */}
       {isEmpty && (
         <div className="text-center py-20 px-6 animate-fade-up">
+          <div className="eleve-divider mb-6" />
           <p className="font-serif text-[1.4rem] font-light text-charcoal-light mb-2">
-            No {WORKFLOW_STATUS_LABELS[activeFilter as EventWorkflowStatus]} events
+            Nothing here yet
           </p>
           <p className="text-muted font-light text-[0.875rem] mb-6">
-            Change an event's status in the detail view to see it here.
+            Move an event to this status from its detail view.
           </p>
           <button
             onClick={() => setActiveFilter('all')}
-            className="text-[0.72rem] font-medium tracking-[0.1em] uppercase text-muted hover:text-charcoal underline underline-offset-4 transition-colors"
+            className="text-[0.68rem] font-medium tracking-[0.10em] uppercase text-muted hover:text-charcoal underline underline-offset-4 transition-colors"
           >
             View all events
           </button>
@@ -238,7 +257,10 @@ export function SavedEventsPage() {
 
       {/* ── Cards grid ───────────────────────────────────────────────────── */}
       {status === 'success' && filteredEvents.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-border animate-fade-up">
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-t border-l animate-fade-up"
+          style={{ borderColor: 'rgba(180, 166, 150, 0.20)' }}
+        >
           {filteredEvents.map((event) => (
             <div key={event.id} className="relative">
               {deletingId === event.id && (

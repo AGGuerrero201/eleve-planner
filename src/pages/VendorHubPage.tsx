@@ -21,8 +21,6 @@ export function VendorHubPage() {
   const [modalOpen, setModalOpen]     = useState(false)
   const [addMode, setAddMode]         = useState(false)
 
-  // ── Filtered + grouped vendors ───────────────────────────────────────────
-
   const filtered = useMemo(() => applyFilters(vendors, filters), [vendors, filters])
 
   const grouped = useMemo(() => {
@@ -34,10 +32,8 @@ export function VendorHubPage() {
     return map
   }, [filtered])
 
-  // ── Handlers ─────────────────────────────────────────────────────────────
-
-  const openAdd = () => { setSelected(null); setAddMode(true); setModalOpen(true) }
-  const openEdit = (vendor: Vendor) => { setSelected(vendor); setAddMode(false); setModalOpen(true) }
+  const openAdd   = () => { setSelected(null); setAddMode(true); setModalOpen(true) }
+  const openEdit  = (vendor: Vendor) => { setSelected(vendor); setAddMode(false); setModalOpen(true) }
   const closeModal = () => { setModalOpen(false); setSelected(null) }
 
   const handleSave = async (data: Omit<Vendor, 'id' | 'createdAt' | 'updatedAt'>) => {
@@ -84,12 +80,12 @@ export function VendorHubPage() {
           <button
             onClick={openAdd}
             className={cn(
-              'flex items-center gap-1.5 text-[0.72rem] font-medium tracking-[0.08em] uppercase',
+              'flex items-center gap-1.5 text-[0.65rem] font-medium tracking-[0.10em] uppercase',
               'bg-charcoal text-gold-light px-4 py-2.5 rounded-sm',
               'hover:bg-charcoal/90 transition-colors duration-150'
             )}
           >
-            <Plus size={12} />
+            <Plus size={11} />
             Add Vendor
           </button>
         </div>
@@ -108,13 +104,20 @@ export function VendorHubPage() {
       {isLoading && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white border border-border rounded-sm p-5 animate-pulse">
-              <div className="h-2.5 w-16 bg-warm-gray rounded mb-3" />
-              <div className="h-5 w-3/4 bg-warm-gray rounded mb-2" />
-              <div className="h-3 w-1/2 bg-warm-gray rounded mb-4" />
+            <div
+              key={i}
+              className="rounded-sm p-5 animate-pulse"
+              style={{
+                backgroundColor: 'var(--card-bg, #FAFAF8)',
+                border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))',
+              }}
+            >
+              <div className="h-2.5 w-16 rounded mb-3" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
+              <div className="h-5 w-3/4 rounded mb-2" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
+              <div className="h-3 w-1/2 rounded mb-4" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
               <div className="flex gap-2">
-                <div className="h-5 w-16 bg-warm-gray rounded" />
-                <div className="h-5 w-14 bg-warm-gray rounded" />
+                <div className="h-5 w-16 rounded" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
+                <div className="h-5 w-14 rounded" style={{ backgroundColor: 'var(--stone-pale, #E8E4E0)' }} />
               </div>
             </div>
           ))}
@@ -143,19 +146,29 @@ export function VendorHubPage() {
       {/* ── Empty — no vendors yet ──────────────────────────────────────── */}
       {status === 'success' && vendors.length === 0 && (
         <div className="text-center py-28 px-6">
-          <div className="w-14 h-14 border border-border bg-warm-gray flex items-center justify-center mx-auto mb-7 rounded-sm">
-            <Store size={20} className="text-muted/40" strokeWidth={1.25} />
+          <div
+            className="w-14 h-14 flex items-center justify-center mx-auto mb-7 rounded-sm"
+            style={{
+              border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))',
+              backgroundColor: 'var(--gold-ghost, #FBF7F2)',
+            }}
+          >
+            <Store size={18} strokeWidth={1.25} style={{ color: 'var(--gold, #B8955A)', opacity: 0.5 }} />
           </div>
-          <h3 className="font-serif text-[1.6rem] font-light text-charcoal-light mb-3">
-            No vendors yet
+
+          {/* Ornamental divider */}
+          <div className="eleve-divider mb-6" />
+
+          <h3 className="font-serif text-[1.6rem] font-light text-charcoal-light mb-3 leading-snug">
+            Your vendor directory
           </h3>
           <p className="text-muted font-light text-[0.875rem] mb-9 max-w-xs mx-auto leading-relaxed">
-            Build your vendor directory by adding caterers, bar services, entertainers, and more.
+            Add your preferred caterers, bar services, entertainment, and other partners to build a curated directory.
           </p>
           <button
             onClick={openAdd}
             className={cn(
-              'text-[0.72rem] font-medium tracking-[0.08em] uppercase',
+              'text-[0.65rem] font-medium tracking-[0.10em] uppercase',
               'bg-charcoal text-gold-light px-6 py-3 rounded-sm',
               'hover:bg-charcoal/90 transition-colors duration-150'
             )}
@@ -168,15 +181,16 @@ export function VendorHubPage() {
       {/* ── Empty — filters return nothing ─────────────────────────────── */}
       {status === 'success' && vendors.length > 0 && filtered.length === 0 && (
         <div className="text-center py-20">
+          <div className="eleve-divider mb-6" />
           <p className="font-serif text-[1.3rem] font-light text-charcoal-light mb-2">
             No vendors match your filters
           </p>
           <p className="text-muted font-light text-[0.875rem] mb-6">
-            Try adjusting your search or filters.
+            Try adjusting your search or clearing the filters.
           </p>
           <button
             onClick={() => setFilters(DEFAULT_FILTERS)}
-            className="text-[0.72rem] font-medium tracking-[0.08em] uppercase text-muted hover:text-charcoal underline underline-offset-2 transition-colors"
+            className="text-[0.68rem] font-medium tracking-[0.10em] uppercase text-muted hover:text-charcoal underline underline-offset-2 transition-colors"
           >
             Clear filters
           </button>
@@ -188,15 +202,24 @@ export function VendorHubPage() {
         <div className="space-y-10">
           {Array.from(grouped.entries()).map(([category, categoryVendors]) => (
             <div key={category}>
-              {/* Group header */}
+              {/* Group header — luxury label-caps with count + rule */}
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-[0.6rem] font-medium tracking-[0.18em] uppercase text-muted/50">
+                <span
+                  className="label-caps shrink-0"
+                  style={{ color: 'var(--stone, #8C8478)' }}
+                >
                   {VENDOR_CATEGORY_LABELS[category]}
                 </span>
-                <span className="text-[0.6rem] text-muted/35 font-light tabular-nums">
+                <span
+                  className="text-[0.6rem] font-light tabular-nums shrink-0"
+                  style={{ color: 'var(--stone-light, #B8B0A8)' }}
+                >
                   {categoryVendors.length}
                 </span>
-                <div className="flex-1 h-px bg-border" />
+                <div
+                  className="flex-1 h-px"
+                  style={{ backgroundColor: 'rgba(180, 166, 150, 0.25)' }}
+                />
               </div>
 
               {/* Cards grid */}
