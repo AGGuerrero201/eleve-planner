@@ -10,6 +10,7 @@ import { EditableText } from '@/components/ui/EditableText'
 import { EditableTextarea } from '@/components/ui/EditableTextarea'
 import { EditableList } from '@/components/ui/EditableList'
 import { formatDate, cn } from '@/lib/utils'
+import { EventVendorPanel } from '@/components/vendors/EventVendorPanel'
 import {
   Clock, Store, Users, Wine, Package, Mail,
   Megaphone, Lightbulb, Loader2, RefreshCw, CheckCircle2,
@@ -294,6 +295,20 @@ export function EventDetailModal({
             <EditableTextarea value={event.proTip} onSave={saver('pro_tip')} rows={3} textClassName="text-[0.82rem]" />
           </div>
         </div>
+
+        {/* Vendor Recommendations */}
+        {event && (
+          <EventVendorPanel formData={{
+            eventType:   event.meta.eventType,
+            budget:      event.meta.budget,
+            attendance:  event.meta.attendance,
+            season:      event.meta.season,
+            venue:       event.meta.venue,
+            alcohol:     event.meta.alcohol,
+            demographic: event.meta.demographic,
+            notes:       '',
+          }} compact />
+        )}
 
         {/* Footer */}
         <div className="flex items-center justify-between mt-5 pt-4 border-t border-border">

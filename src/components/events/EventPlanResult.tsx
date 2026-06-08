@@ -8,6 +8,7 @@ import type { EventPlan, EventFormData, SavedEvent, VendorIdea, StaffingRole, Ti
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
 import { generateTempId } from '@/lib/utils'
+import { EventVendorPanel } from '@/components/vendors/EventVendorPanel'
 
 interface EventPlanResultProps {
   plan: EventPlan
@@ -205,6 +206,9 @@ export function EventPlanResult({ plan, formData, onSave, onRegenerate, isSaved 
             <p className="text-[0.875rem] text-charcoal font-light leading-relaxed">{plan.proTip}</p>
           </div>
         </div>
+
+        {/* Vendor Recommendations */}
+        <EventVendorPanel formData={formData} />
 
         {/* Actions */}
         <div className="flex flex-wrap items-center gap-3 pt-5 border-t border-border">

@@ -3,9 +3,10 @@ import { cn } from '@/lib/utils'
 import { EleveWordmark } from '@/components/ui/EleveLogo'
 
 const NAV_ITEMS = [
-  { label: 'Overview', to: '/' },
-  { label: 'Plan Event', to: '/planner' },
+  { label: 'Overview',     to: '/' },
+  { label: 'Plan Event',   to: '/planner' },
   { label: 'Saved Events', to: '/saved' },
+  { label: 'Vendors',      to: '/vendors' },
 ]
 
 export function Navbar() {
@@ -27,7 +28,7 @@ export function Navbar() {
               end={to === '/'}
               className={({ isActive }) =>
                 cn(
-                  'text-[0.68rem] font-medium tracking-[0.12em] uppercase px-4 py-2 transition-all duration-200 relative',
+                  'text-[0.68rem] font-medium tracking-[0.12em] uppercase px-4 py-2 transition-all duration-200',
                   isActive
                     ? 'text-gold'
                     : 'text-white/35 hover:text-white/65'
