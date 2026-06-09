@@ -25,9 +25,6 @@ export function useEventPlanner() {
   const [loadingSteps, setLoadingSteps] = useState<LoadingStep[]>(initialSteps())
   const stepTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  // Tracks the hash of the last successfully completed generation.
-  // If generate() is called with identical inputs, we skip the API call
-  // and return the already-displayed plan immediately.
   const lastGeneratedHashRef = useRef<string | null>(null)
 
   const startStepAnimation = useCallback(() => {
@@ -55,10 +52,15 @@ export function useEventPlanner() {
     }
   }, [])
 
-  const generate = useCallback(async (data: EventFormData) => {
-    // Deduplication: build the same stable hash that api.ts uses.
-    // If status is already 'success' and inputs haven't changed, do nothing —
-    // the plan already on screen is the correct result for these inputs.
+  /**
+   * Phase 3: accepts an optional propertyContextBlock.
+   * When provided, it is forwarded to the Edge Function for property-aware generation.
+   * Passing null/undefined falls back to the original generic generation.
+   */
+  const generate = useCallback(async (
+    data: EventFormData,
+    propertyContextBlock?: string | null
+  ) => {
     const stableKey = JSON.stringify({
       eventType:   data.eventType,
       budget:      data.budget,
@@ -68,10 +70,11 @@ export function useEventPlanner() {
       alcohol:     data.alcohol,
       demographic: data.demographic,
       notes:       data.notes.trim(),
+      propertyCtx: propertyContextBlock ?? '',
     })
 
     if (status === 'success' && lastGeneratedHashRef.current === stableKey) {
-      return // already showing result for these exact inputs
+      return
     }
 
     setStatus('loading')
@@ -80,7 +83,7 @@ export function useEventPlanner() {
     startStepAnimation()
 
     try {
-      const result = await generateEventPlan(data)
+      const result = await generateEventPlan(data, propertyContextBlock)
       stopStepAnimation(true)
       setPlan(result)
       setStatus('success')
@@ -103,21 +106,17 @@ export function useEventPlanner() {
     lastGeneratedHashRef.current = null
   }, [])
 
-  const retry = useCallback((data: EventFormData) => {
+  const retry = useCallback((data: EventFormData, propertyContextBlock?: string | null) => {
     setRetryCount((c) => c + 1)
-    // Clear the hash so retry always fires even with same inputs
     lastGeneratedHashRef.current = null
-    void generate(data)
+    void generate(data, propertyContextBlock)
   }, [generate])
 
-  // Load a pre-written template plan instantly — no Claude call.
-  // Behaves identically to a successful generate() call from the UI's perspective.
   const loadTemplate = useCallback((templatePlan: EventPlan) => {
     setPlan(templatePlan)
     setStatus('success')
     setError(null)
     setRetryCount(0)
-    // Clear hash so "Enhance with AI" always fires after a template load
     lastGeneratedHashRef.current = null
   }, [])
 

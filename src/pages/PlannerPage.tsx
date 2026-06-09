@@ -3,6 +3,7 @@ import { AlertTriangle, RefreshCw, CheckCircle2, Loader2, ChevronDown, ChevronUp
 import type { EventFormData, SavedEvent, LoadingStep } from '@/types'
 import { useEventPlanner } from '@/hooks/useEventPlanner'
 import { useSavedEvents } from '@/hooks/useSavedEvents'
+import { useProperty } from '@/context/PropertyContext'
 import { EventPlannerForm } from '@/components/events/EventPlannerForm'
 import { EventPlanResult } from '@/components/events/EventPlanResult'
 import { PlannerWizard } from '@/components/events/PlannerWizard'
@@ -30,6 +31,9 @@ const DEFAULT_FORM: EventFormData = {
 export function PlannerPage() {
   const { status, plan, error, retryCount, loadingSteps, generate, retry, reset, loadTemplate } = useEventPlanner()
   const { save, isSaved } = useSavedEvents()
+  // Phase 3: read property context — nullable, generation works without it
+  const { contextBlock, isSufficient, profile } = useProperty()
+
   const [currentFormData, setCurrentFormData] = useState<EventFormData | null>(null)
   const [mode, setMode] = useState<PlannerMode>('entry')
 
@@ -48,22 +52,23 @@ export function PlannerPage() {
         document.getElementById('plan-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }, 50)
     } else {
-      void generate(template.formData!)
+      // Pass property context for template-triggered generation too
+      void generate(template.formData!, contextBlock)
       setTimeout(() => {
         document.getElementById('plan-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }, 200)
     }
-  }, [loadTemplate, generate])
+  }, [loadTemplate, generate, contextBlock])
 
   const handleWizardGenerate = useCallback((data: EventFormData) => {
     setCurrentFormData(data)
     setWizardFormData(data)
-    void generate(data)
+    void generate(data, contextBlock)
     setWizardCollapsed(true)
     setTimeout(() => {
       document.getElementById('plan-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, 300)
-  }, [generate])
+  }, [generate, contextBlock])
 
   const handleWizardTemplate = useCallback((template: LuxuryTemplate) => {
     setWizardCollapsed(true)
@@ -80,7 +85,7 @@ export function PlannerPage() {
 
   const handleClassicSubmit = (data: EventFormData) => {
     setCurrentFormData(data)
-    void generate(data)
+    void generate(data, contextBlock)
   }
 
   const handleEntrySelect = (selected: 'templates' | 'custom') => {
@@ -101,7 +106,31 @@ export function PlannerPage() {
 
       <SupabaseStatus />
 
-      {/* ── Page header — stacks on mobile, row on sm+ ─────────────────── */}
+      {/* Phase 3: property intelligence banner — shown only when profile is active */}
+      {isSufficient && profile && (
+        <div
+          className="flex items-center gap-3 px-4 py-2.5 rounded-sm mb-6"
+          style={{
+            backgroundColor: 'var(--charcoal)',
+            border: '0.5px solid rgba(184,149,90,0.25)',
+          }}
+        >
+          <span
+            className="text-[0.6rem] font-medium uppercase shrink-0"
+            style={{ letterSpacing: '0.14em', color: 'var(--gold)' }}
+          >
+            ✦ Property Intelligence Active
+          </span>
+          <span
+            className="text-[0.72rem] font-light truncate"
+            style={{ color: 'rgba(255,255,255,0.45)' }}
+          >
+            Generating for {profile.propertyName} · {profile.city}, {profile.state}
+          </span>
+        </div>
+      )}
+
+      {/* ── Page header ─────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-8 gap-3">
         <div>
           <h1 className="font-serif text-[2.25rem] font-light text-charcoal mb-2 leading-tight">
@@ -222,7 +251,7 @@ export function PlannerPage() {
               className="text-[0.62rem] font-medium uppercase"
               style={{ letterSpacing: '0.16em', color: 'var(--gold-light, #E8D5B0)' }}
             >
-              Crafting your event plan
+              {isSufficient ? `Crafting your event for ${profile?.propertyName ?? 'your property'}` : 'Crafting your event plan'}
             </span>
           </div>
           <div className="p-6 sm:p-7">
@@ -265,7 +294,7 @@ export function PlannerPage() {
           <div className="p-7 text-center bg-white">
             <p className="text-[0.875rem] text-red-600 font-light mb-6 leading-relaxed">{error}</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Button variant="gold" size="sm" className="w-full sm:w-auto" onClick={() => retry(currentFormData)}>
+              <Button variant="gold" size="sm" className="w-full sm:w-auto" onClick={() => retry(currentFormData, contextBlock)}>
                 <RefreshCw size={12} className="mr-2" />
                 Try Again
               </Button>
@@ -284,7 +313,7 @@ export function PlannerPage() {
             plan={plan}
             formData={currentFormData}
             onSave={handleSave}
-            onRegenerate={() => void generate(currentFormData)}
+            onRegenerate={() => void generate(currentFormData, contextBlock)}
             isSaved={planIsSaved}
           />
         </div>

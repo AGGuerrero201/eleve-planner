@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { useSavedEvents } from '@/hooks/useSavedEvents'
 import { useVendors } from '@/hooks/useVendors'
+import { PropertyProfileCard } from '@/components/property/PropertyProfileCard'
 import { WORKFLOW_STATUS_LABELS } from '@/lib/workflowStatus'
 import { ALL_VENDOR_CATEGORIES, VENDOR_CATEGORY_LABELS } from '@/types/vendor'
 import type { EventWorkflowStatus } from '@/types'
@@ -365,7 +366,19 @@ export function DashboardPage() {
       </div>
 
       {/* ══════════════════════════════════════════════════════
-          SECTION 5 — Quick actions
+          SECTION 5 — Property Intelligence
+          Phase 3: compact property profile card.
+      ══════════════════════════════════════════════════════ */}
+      <div className="mb-10">
+        <SectionHeader
+          label="Property profile"
+          action={{ text: 'Edit', onClick: () => navigate('/property') }}
+        />
+        <PropertyProfileCard />
+      </div>
+
+      {/* ══════════════════════════════════════════════════════
+          SECTION 6 — Quick actions
           3 primary CTA tiles — the most demo-critical flows.
       ══════════════════════════════════════════════════════ */}
       <div className="mb-10">

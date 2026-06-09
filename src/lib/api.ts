@@ -4,6 +4,12 @@
  * Phase 1 additions:
  * - Session cache: identical form inputs return instantly without a Claude call
  * - Notes truncation: enforced at 500 chars before sending to the Edge Function
+ *
+ * Phase 3 addition:
+ * - Accepts an optional propertyContextBlock string.
+ *   When provided, it is forwarded to the Edge Function and injected into
+ *   the system prompt before event parameters.
+ *   Falls back gracefully to the original behaviour when null/undefined.
  */
 
 import { supabase } from '@/lib/supabase'
@@ -24,15 +30,12 @@ async function sleep(ms: number) {
 }
 
 // ─── Session cache ────────────────────────────────────────────────────────────
-// Keyed by a stable JSON hash of EventFormData.
+// Keyed by a stable JSON hash of EventFormData + propertyContextBlock.
 // Lives only for the browser session — cleared on page refresh.
-// Prevents duplicate Claude calls when the user submits the same form twice.
 
 const sessionCache = new Map<string, EventPlan>()
 
-function hashFormData(data: EventFormData): string {
-  // Stable key: sort keys so object property order doesn't matter.
-  // Trim notes so minor whitespace differences don't bust the cache.
+function hashFormData(data: EventFormData, propertyContextBlock?: string | null): string {
   const stable = {
     eventType:   data.eventType,
     budget:      data.budget,
@@ -42,33 +45,44 @@ function hashFormData(data: EventFormData): string {
     alcohol:     data.alcohol,
     demographic: data.demographic,
     notes:       data.notes.trim(),
+    // Include property context in cache key so changing the profile busts the cache
+    propertyCtx: propertyContextBlock ?? '',
   }
   return JSON.stringify(stable)
 }
 
 // ─── Main function ────────────────────────────────────────────────────────────
 
-export async function generateEventPlan(data: EventFormData): Promise<EventPlan> {
-  // 1. Truncate notes before hashing or sending — enforces the 500-char limit
-  //    even if the form somehow bypasses the UI cap.
+export async function generateEventPlan(
+  data: EventFormData,
+  propertyContextBlock?: string | null
+): Promise<EventPlan> {
+  // 1. Truncate notes
   const safeData: EventFormData = {
     ...data,
     notes: data.notes.slice(0, 500),
   }
 
-  // 2. Return cached result if this exact form was already generated this session.
-  const cacheKey = hashFormData(safeData)
+  // 2. Return cached result if available
+  const cacheKey = hashFormData(safeData, propertyContextBlock)
   const cached = sessionCache.get(cacheKey)
   if (cached) return cached
 
-  // 3. Call the Edge Function.
+  // 3. Call the Edge Function
   let lastError: Error = new Error('Unknown error')
 
   for (let attempt = 1; attempt <= MAX_RETRIES + 1; attempt++) {
     try {
+      const body: Record<string, unknown> = { formData: safeData }
+
+      // Phase 3: attach property context if available
+      if (propertyContextBlock) {
+        body.propertyContext = propertyContextBlock
+      }
+
       const { data: responseData, error } = await supabase.functions.invoke<GenerateEventResponse>(
         'generate-event-plan',
-        { body: { formData: safeData } }
+        { body }
       )
 
       if (error) {
@@ -85,7 +99,6 @@ export async function generateEventPlan(data: EventFormData): Promise<EventPlan>
         throw new Error('Edge Function returned an empty response. Check function logs.')
       }
 
-      // 4. Store in cache before returning.
       sessionCache.set(cacheKey, responseData.plan)
       return responseData.plan
     } catch (err) {
