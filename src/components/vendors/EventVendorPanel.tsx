@@ -137,7 +137,7 @@ function CategoryBlock({
   rec,
   isExpanded,
   onToggleExpand,
-  compact,
+  _compact,
 }: {
   rec:            CategoryRecommendation
   isExpanded:     boolean

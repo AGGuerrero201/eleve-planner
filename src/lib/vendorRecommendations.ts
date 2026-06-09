@@ -183,7 +183,7 @@ function scoreVendor(vendor: Vendor, formData: EventFormData, priority: number):
   return Math.max(0, Math.min(100, score))
 }
 
-function reasonText(vendor: Vendor, formData: EventFormData): string {
+function reasonText(vendor: Vendor, _formData: EventFormData): string {
   if (vendor.favorite && vendor.previouslyUsed) return 'Favorite · Used before'
   if (vendor.favorite) return 'In your favorites'
   if (vendor.previouslyUsed) return 'Used for a previous event'

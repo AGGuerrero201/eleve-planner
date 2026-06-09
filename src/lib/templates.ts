@@ -10,7 +10,6 @@
  *   undefined = pre-fills form + calls Claude via Edge Function
  */
 
-import type { EventFormData, EventPlan } from '@/types'
 import type { LuxuryTemplate } from '@/types/templates'
 
 export type { LuxuryTemplate }

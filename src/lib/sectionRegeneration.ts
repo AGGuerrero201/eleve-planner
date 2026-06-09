@@ -56,13 +56,13 @@ export async function regenerateSection(
     section,
     eventContext: {
       title:       event.title,
-      eventType:   event.meta.eventType,
-      budget:      event.meta.budget,
-      attendance:  event.meta.attendance,
-      venue:       event.meta.venue,
-      alcohol:     event.meta.alcohol,
-      demographic: event.meta.demographic,
-      season:      event.meta.season,
+      eventType:   event.meta?.eventType ?? '',
+      budget:      event.meta?.budget ?? '',
+      attendance:  event.meta?.attendance ?? '',
+      venue:       event.meta?.venue ?? '',
+      alcohol:     event.meta?.alcohol ?? '',
+      demographic: event.meta?.demographic ?? '',
+      season:      event.meta?.season ?? '',
     },
   }
 

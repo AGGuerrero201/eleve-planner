@@ -52,7 +52,7 @@ export function useVendors(): UseVendorsReturn {
     try {
       const { data, error: err } = await supabase
         .from('vendors')
-        .insert([vendorToRow(v)])
+        .insert([vendorToRow(v)] as any)
         .select()
         .single()
 
@@ -73,7 +73,7 @@ export function useVendors(): UseVendorsReturn {
     try {
       const { error: err } = await supabase
         .from('vendors')
-        .update(vendorToRow(patch))
+        .update(vendorToRow(patch) as any)
         .eq('id', id)
 
       if (err) throw new Error(err.message)

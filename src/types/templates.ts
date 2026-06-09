@@ -31,74 +31,67 @@ export type TemplateCategory =
   | 'seasonal'        // calendar-anchored marquee events
   | 'family'          // all-ages, inclusive programming
   | 'experiential'    // immersive, pop-up, activation
+  | 'luxury_popup'    // one-night-only premium activations
 
-export type TemplateAtmosphere =
-  | 'upscale-social'
-  | 'relaxed-luxury'
-  | 'wellness-focused'
-  | 'networking-focused'
-  | 'family-focused'
+// Widened to string so data files can use descriptive free-form atmospheres
+export type TemplateAtmosphere = string
 
 export type BudgetTier =
-  | 'accessible'    // Under $1,000 – $2,500
-  | 'mid'           // $2,500 – $5,000
-  | 'premium'       // $5,000 – $10,000
-  | 'luxury'        // $10,000+
+  | 'entry'       // budget-conscious entry tier
+  | 'accessible'  // Under $1,000 – $2,500
+  | 'mid'         // $2,500 – $5,000
+  | 'premium'     // $5,000 – $10,000
+  | 'luxury'      // $10,000+
+  | 'ultra'       // top-tier bespoke
 
-export type StaffingComplexity = 'light' | 'moderate' | 'intensive'
+// Widened to string so data files can use 'low' | 'medium' | 'high' etc.
+export type StaffingComplexity = string
 
-export type OperationalDifficulty = 1 | 2 | 3 | 4 | 5
+// Widened to string so data files can use 'easy' | 'moderate' | 'complex' etc.
+export type OperationalDifficulty = string | number
 
 // ─── Core template interface ──────────────────────────────────────────────────
 
-export interface LuxuryTemplate {
-  // ── Identity ────────────────────────────────────────────────────────────
-  id:          string           // slug: 'the-aperitivo-cart'
-  label:       string           // display: 'The Aperitivo Cart'
-  tagline:     string           // evocative 6-8 word brand line
-  description: string           // 1-2 sentence card description
-
-  // ── Classification ───────────────────────────────────────────────────────
-  category:     TemplateCategory
-  atmosphere:   TemplateAtmosphere
-  demographic:  ResidentDemo[]   // supports multiple fits
-  idealSeasons: Season[]
-  budgetTier:   BudgetTier
-  tags:         string[]         // ['low-staffing', 'no-vendor', 'instagram-worthy']
-
-  // ── Operational profile ──────────────────────────────────────────────────
-  venue:                  VenueSetting
-  alcohol:                AlcoholService
-  staffingComplexity:     StaffingComplexity
-  operationalDifficulty:  OperationalDifficulty  // 1=minimal, 5=full production
-  setupTimeHours:         number
-  cleanupComplexity:      'minimal' | 'moderate' | 'involved'
-  vendorTypes:            string[]
-  requiresExternalVendor: boolean
-
-  // ── Hospitality guidance ─────────────────────────────────────────────────
-  luxuryPresentationNotes: string
-  residentExperienceNotes: string
-  setupNotes:              string
-  staffingNotes:           string
-  enhancements:            string[]  // 3 upgrade suggestions
-
-  // ── Communications starters ──────────────────────────────────────────────
-  flyerHeadline: string   // 5-7 word punchy headline
-  emailIntro:    string   // 2-3 sentence email opening
-
-  // ── UI display (subset of metadata for cards) ────────────────────────────
-  previewTags: string[]   // 3 short tags shown on card
-
-  // ── Generation ───────────────────────────────────────────────────────────
-  formData:       EventFormData
-  promptContext?: string    // injected into Claude prompt when seeding generation
-  plan?:          EventPlan // defined = instant; undefined = Claude generates
+export type LuxuryTemplate = {
+  id?:                     string
+  label?:                  string
+  tagline?:                string
+  description?:            string
+  category?:               TemplateCategory
+  atmosphere?:             TemplateAtmosphere
+  demographic?:            ResidentDemo[]
+  idealSeasons?:           Season[]
+  budgetTier?:             BudgetTier
+  budgetRange?:            string
+  attendanceRange?:        string
+  tags?:                   string[]
+  venue?:                  VenueSetting
+  alcohol?:                AlcoholService
+  alcoholIncluded?:        boolean | string
+  staffingComplexity?:     StaffingComplexity
+  operationalDifficulty?:  OperationalDifficulty
+  setupTimeHours?:         number
+  cleanupComplexity?:      string
+  vendorTypes?:            string[]
+  requiresExternalVendor?: boolean
+  luxuryPresentationNotes?: string
+  residentExperienceNotes?: string | string[]
+  setupNotes?:             string | string[]
+  staffingNotes?:          string | string[]
+  enhancements?:           string[]
+  flyerHeadline?:          string
+  emailIntro?:             string
+  previewTags?:            string[]
+  formData?:               EventFormData
+  promptContext?:          string
+  plan?:                   EventPlan
+  recommendedVenue?:       string
+  [key: string]:           unknown
 }
 
 // ─── Category metadata ────────────────────────────────────────────────────────
 
-export const CATEGORY_LABELS: Record<TemplateCategory, string> = {
+export const CATEGORY_LABELS: Record<string, string> = {
   culinary:     'Culinary',
   social:       'Social',
   wellness:     'Wellness',
@@ -108,16 +101,22 @@ export const CATEGORY_LABELS: Record<TemplateCategory, string> = {
   seasonal:     'Seasonal',
   family:       'Family',
   experiential: 'Experiential',
+  luxury_popup: 'Luxury Pop-Up',
 }
 
-export const BUDGET_TIER_LABELS: Record<BudgetTier, string> = {
+export const BUDGET_TIER_LABELS: Record<string, string> = {
+  entry:      'Entry',
   accessible: 'Accessible',
   mid:        'Mid-Range',
   premium:    'Premium',
   luxury:     'Luxury',
+  ultra:      'Ultra',
 }
 
-export const STAFFING_COMPLEXITY_LABELS: Record<StaffingComplexity, string> = {
+export const STAFFING_COMPLEXITY_LABELS: Record<string, string> = {
+  low:       'Low',
+  medium:    'Medium',
+  high:      'High',
   light:     'Light',
   moderate:  'Moderate',
   intensive: 'Intensive',

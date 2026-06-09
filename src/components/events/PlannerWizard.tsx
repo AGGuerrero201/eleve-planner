@@ -19,17 +19,6 @@ export const WIZARD_STEP_LABELS: Record<number, string> = {
   5: 'Your Plan',
 }
 
-const DEFAULT_FORM: EventFormData = {
-  eventType:   '',
-  budget:      '',
-  attendance:  '',
-  season:      '',
-  venue:       'Indoor',
-  alcohol:     'Full bar',
-  demographic: '' as EventFormData['demographic'],
-  notes:       '',
-}
-
 interface PlannerWizardProps {
   onGenerate:          (data: EventFormData) => void
   onLoadTemplate:      (template: LuxuryTemplate) => void
@@ -73,12 +62,12 @@ export function PlannerWizard({
   }, [formData, onFormChange])
 
   const next = useCallback(() => {
-    setStep((s) => Math.min(s + 1, WIZARD_STEP_COUNT))
-  }, [setStep])
+    setStep(Math.min(step + 1, WIZARD_STEP_COUNT))
+  }, [setStep, step])
 
   const back = useCallback(() => {
-    setStep((s) => Math.max(s - 1, 1))
-  }, [setStep])
+    setStep(Math.max(step - 1, 1))
+  }, [setStep, step])
 
   const reset = useCallback(() => { onReset() }, [onReset])
 

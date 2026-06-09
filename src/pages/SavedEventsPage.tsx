@@ -20,7 +20,7 @@ export function SavedEventsPage() {
   const [activeFilter, setActiveFilter] = useState<FilterValue>('all')
 
   const counts = useMemo(() => {
-    const map: Record<FilterValue, number> = {
+    const map: Partial<Record<FilterValue, number>> = {
       all: events.length,
       draft: 0,
       in_progress: 0,
@@ -28,7 +28,7 @@ export function SavedEventsPage() {
       archived: 0,
     }
     events.forEach((e) => {
-      map[e.workflowStatus] = (map[e.workflowStatus] ?? 0) + 1
+      if (e.workflowStatus) { map[e.workflowStatus] = (map[e.workflowStatus] ?? 0) + 1 }
     })
     return map
   }, [events])
@@ -84,7 +84,7 @@ export function SavedEventsPage() {
     if (!event) return 'Event not found'
     const result = await regenerateSection(event, section)
     if (result.error) return result.error
-    const patch = sectionToPatch(section, result.value)
+    const patch = sectionToPatch(section, result.value!)
     return handleFieldSave(id, patch)
   }, [events, handleFieldSave])
 
@@ -148,7 +148,7 @@ export function SavedEventsPage() {
               style={{ border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))' }}
             >
               {TABS.map((tab) => {
-                const count = counts[tab.value]
+                const count = (counts[tab.value ?? "all"] ?? 0)
                 const isActive = activeFilter === tab.value
                 return (
                   <button

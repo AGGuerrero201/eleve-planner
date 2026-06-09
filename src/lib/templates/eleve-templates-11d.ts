@@ -35,7 +35,7 @@ const NETWORKING_TEMPLATES: LuxuryTemplate[] = [
     },
 
     atmosphere:            'Professional, energised, purposeful',
-    demographicFit:        ['Young professionals (25–35)', 'Mature residents (50+)'],
+    demographic:        ['Young professionals (25–35)', 'Mature residents (50+)'],
     idealSeasons:          ['Fall / Autumn', 'Winter'],
     budgetTier:            'mid',
     budgetRange:           '$2,500 – $4,200',
@@ -102,7 +102,7 @@ const NETWORKING_TEMPLATES: LuxuryTemplate[] = [
     },
 
     atmosphere:            'Intellectual, intimate, conversational',
-    demographicFit:        ['Young professionals (25–35)', 'Mature residents (50+)'],
+    demographic:        ['Young professionals (25–35)', 'Mature residents (50+)'],
     idealSeasons:          ['Winter', 'Fall / Autumn'],
     budgetTier:            'entry',
     budgetRange:           '$900 – $2,000',
@@ -168,7 +168,7 @@ const NETWORKING_TEMPLATES: LuxuryTemplate[] = [
     },
 
     atmosphere:            'Relaxed, open, community-professional',
-    demographicFit:        ['Young professionals (25–35)', 'Mixed demographic', 'Mature residents (50+)'],
+    demographic:        ['Young professionals (25–35)', 'Mixed demographic', 'Mature residents (50+)'],
     idealSeasons:          ['Spring', 'Fall / Autumn'],
     budgetTier:            'entry',
     budgetRange:           '$1,000 – $2,000',
@@ -240,7 +240,7 @@ const WORKSHOP_TEMPLATES: LuxuryTemplate[] = [
     },
 
     atmosphere:            'Creative, focused, social',
-    demographicFit:        ['Young professionals (25–35)', 'Mixed demographic'],
+    demographic:        ['Young professionals (25–35)', 'Mixed demographic'],
     idealSeasons:          ['Fall / Autumn', 'Winter'],
     budgetTier:            'entry',
     budgetRange:           '$1,000 – $2,200',
@@ -306,7 +306,7 @@ const WORKSHOP_TEMPLATES: LuxuryTemplate[] = [
     },
 
     atmosphere:            'Active, social, skill-building',
-    demographicFit:        ['Young professionals (25–35)', 'Mixed demographic'],
+    demographic:        ['Young professionals (25–35)', 'Mixed demographic'],
     idealSeasons:          ['Spring', 'Summer'],
     budgetTier:            'mid',
     budgetRange:           '$2,200 – $4,000',
@@ -373,7 +373,7 @@ const WORKSHOP_TEMPLATES: LuxuryTemplate[] = [
     },
 
     atmosphere:            'Creative, tactile, unhurried',
-    demographicFit:        ['Young professionals (25–35)', 'Mixed demographic', 'Mature residents (50+)'],
+    demographic:        ['Young professionals (25–35)', 'Mixed demographic', 'Mature residents (50+)'],
     idealSeasons:          ['Fall / Autumn', 'Winter'],
     budgetTier:            'mid',
     budgetRange:           '$2,000 – $3,800',
@@ -446,7 +446,7 @@ const FAMILY_TEMPLATES: LuxuryTemplate[] = [
     },
 
     atmosphere:            'Warm, communal, all-ages relaxed',
-    demographicFit:        ['Mixed ages, family-oriented', 'Mixed demographic'],
+    demographic:        ['Mixed ages, family-oriented', 'Mixed demographic'],
     idealSeasons:          ['Summer', 'Spring'],
     budgetTier:            'mid',
     budgetRange:           '$2,000 – $4,000',
@@ -512,7 +512,7 @@ const FAMILY_TEMPLATES: LuxuryTemplate[] = [
     },
 
     atmosphere:            'Festive, casual, summer energy',
-    demographicFit:        ['Mixed ages, family-oriented', 'Mixed demographic'],
+    demographic:        ['Mixed ages, family-oriented', 'Mixed demographic'],
     idealSeasons:          ['Summer'],
     budgetTier:            'mid',
     budgetRange:           '$2,500 – $4,500',
@@ -586,7 +586,7 @@ const SEASONAL_TEMPLATES: LuxuryTemplate[] = [
     },
 
     atmosphere:            'Celebratory, resort-feeling, aspirational',
-    demographicFit:        ['Young professionals (25–35)', 'Mixed demographic'],
+    demographic:        ['Young professionals (25–35)', 'Mixed demographic'],
     idealSeasons:          ['Summer'],
     budgetTier:            'premium',
     budgetRange:           '$5,500 – $9,000',
@@ -654,7 +654,7 @@ const SEASONAL_TEMPLATES: LuxuryTemplate[] = [
     },
 
     atmosphere:            'Warm, celebratory, sophisticated seasonal',
-    demographicFit:        ['Mixed demographic', 'Young professionals (25–35)', 'Mature residents (50+)', 'Mixed ages, family-oriented'],
+    demographic:        ['Mixed demographic', 'Young professionals (25–35)', 'Mature residents (50+)', 'Mixed ages, family-oriented'],
     idealSeasons:          ['Winter'],
     budgetTier:            'ultra',
     budgetRange:           '$10,000 – $20,000',

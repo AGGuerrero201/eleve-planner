@@ -59,7 +59,7 @@ export function EventPlannerForm({ onSubmit, isLoading }: EventPlannerFormProps)
   }
 
   const set = <K extends keyof EventFormData>(key: K, val: EventFormData[K]) =>
-    setForm((prev) => ({ ...prev, [key]: val }))
+    setForm((prev: Parameters<typeof setForm>[0] extends (p: infer P) => unknown ? P : never) => ({ ...prev, [key]: val }) as typeof prev)
 
   const notesLen = form.notes.length
   const notesNearLimit = notesLen >= NOTES_MAX * 0.85  // warn at 85%

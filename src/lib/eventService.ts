@@ -33,10 +33,10 @@ function rowToSavedEvent(row: EventPlanRow): SavedEvent {
     // JSONB fields cast through unknown — validated at runtime by the Edge Function
     timeline: (row.timeline as SavedEvent['timeline']) ?? [],
     vendorIdeas: (row.vendor_ideas as SavedEvent['vendorIdeas']) ?? [],
-    staffing: (row.staffing as SavedEvent['staffing']) ?? [],
+    staffing: (row.staffing as unknown as SavedEvent['staffing']) ?? [],
     alcoholEstimate: (row.alcohol_estimate as SavedEvent['alcoholEstimate']) ?? null,
-    residentEmail: (row.resident_email as SavedEvent['residentEmail']) ?? { subject: '', body: '' },
-    meta: row.meta as EventFormData,
+    residentEmail: (row.resident_email as unknown as SavedEvent['residentEmail']) ?? { subject: '', body: '' },
+    meta: row.meta as unknown as EventFormData,
     workflowStatus: ((row as Record<string, unknown>).workflow_status as EventWorkflowStatus) ?? 'draft',
   }
 }
@@ -118,7 +118,7 @@ export async function createEventPlan(event: SavedEvent): Promise<ServiceResult<
     const payload = savedEventToInsert(event)
     const { data, error } = await supabase
       .from('event_plans')
-      .insert(payload)
+      .insert(payload as any)
       .select()
       .single()
 
@@ -132,7 +132,7 @@ export async function createEventPlan(event: SavedEvent): Promise<ServiceResult<
 
 export async function deleteEventPlan(id: string): Promise<ServiceResult<true>> {
   try {
-    const { error } = await supabase.from('event_plans').delete().eq('id', id)
+    const { error } = await (supabase.from('event_plans') as any).delete().eq('id', id)
     if (error) return { data: null, error: error.message }
     return { data: true, error: null }
   } catch (err) {
@@ -147,7 +147,7 @@ export async function updateEventPlanField(
   try {
     const { error } = await supabase
       .from('event_plans')
-      .update(patch)
+      .update(patch as any)
       .eq('id', id)
     if (error) return { data: null, error: error.message }
     return { data: true, error: null }
@@ -163,7 +163,7 @@ export async function updateEventPlanStatus(
   try {
     const { error } = await supabase
       .from('event_plans')
-      .update({ workflow_status: status })
+      .update({ workflow_status: status } as any)
       .eq('id', id)
     if (error) return { data: null, error: error.message }
     return { data: true, error: null }

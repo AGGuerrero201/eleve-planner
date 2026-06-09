@@ -183,7 +183,7 @@ export function EventPlanResult({ plan, formData, onSave, onRegenerate, isSaved 
           ) : (
             <PlanSection title="Beverage Service" icon={<Wine size={13} />}>
               <p className="text-[0.875rem] text-muted font-light italic">Non-alcoholic event</p>
-              <PlanList items={plan.catering.filter((_, i) => i < 3)} />
+              <PlanList items={plan.catering.filter((_: string, i: number) => i < 3)} />
             </PlanSection>
           )}
         </div>

@@ -127,7 +127,7 @@ function Eyebrow({ children, dark = false }: { children: string; dark?: boolean 
 }
 
 // Section heading — consistent size and weight
-function SectionHeading({ children, dark = false, className = '' }: { children: React.ReactNode; dark?: boolean; className?: string }) {
+function SectionHeading({ children, dark = false, className = '', style: _style }: { children: React.ReactNode; dark?: boolean; className?: string; style?: React.CSSProperties }) {
   return (
     <h2 className={cn('font-serif font-light leading-snug', className)}
         style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', color: dark ? C.offWhite : C.charcoal }}>

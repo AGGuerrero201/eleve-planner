@@ -18,14 +18,14 @@ import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   ArrowRight, BookOpen, Store, Zap, CalendarDays,
-  Users, Package, Sparkles, Shield, FileCheck,
+  Package, Sparkles, Shield,
 } from 'lucide-react'
 import { useSavedEvents } from '@/hooks/useSavedEvents'
 import { useVendors } from '@/hooks/useVendors'
 import { WORKFLOW_STATUS_LABELS } from '@/lib/workflowStatus'
 import { ALL_VENDOR_CATEGORIES, VENDOR_CATEGORY_LABELS } from '@/types/vendor'
 import type { EventWorkflowStatus } from '@/types'
-import { cn, formatDate } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -84,7 +84,7 @@ export function DashboardPage() {
   const recentEvents = useMemo(() => {
     if (!eventsLoaded) return []
     return [...events]
-      .sort((a, b) => new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime())
+      .sort((a, b) => new Date(b.savedAt ?? b.created_at).getTime() - new Date(a.savedAt ?? a.created_at).getTime())
       .slice(0, 3)
   }, [events, eventsLoaded])
 
@@ -243,10 +243,10 @@ export function DashboardPage() {
                   <span className={cn(
                     'inline-flex items-center gap-1.5 text-[0.62rem] font-medium tracking-[0.08em] uppercase',
                     'px-2 py-0.5 rounded-sm border shrink-0',
-                    STATUS_PILL[event.workflowStatus]
+                    STATUS_PILL[event.workflowStatus ?? "draft"]
                   )}>
-                    <span className={cn('w-1.5 h-1.5 rounded-full shrink-0', STATUS_DOT[event.workflowStatus])} />
-                    {WORKFLOW_STATUS_LABELS[event.workflowStatus]}
+                    <span className={cn('w-1.5 h-1.5 rounded-full shrink-0', STATUS_DOT[event.workflowStatus ?? "draft"])} />
+                    {WORKFLOW_STATUS_LABELS[event.workflowStatus ?? "draft"]}
                   </span>
 
                   {/* Event type */}
@@ -254,7 +254,7 @@ export function DashboardPage() {
                     className="text-[0.62rem] font-medium uppercase shrink-0 hidden sm:block"
                     style={{ letterSpacing: '0.14em', color: 'var(--gold, #B8955A)' }}
                   >
-                    {event.meta.eventType}
+                    {event.meta?.eventType ?? ''}
                   </span>
 
                   {/* Separator */}
@@ -267,8 +267,8 @@ export function DashboardPage() {
 
                   {/* Badges — desktop only */}
                   <span className="hidden md:flex items-center gap-1.5 shrink-0">
-                    <MetaBadge>{event.meta.season}</MetaBadge>
-                    <MetaBadge>{event.meta.budget}</MetaBadge>
+                    <MetaBadge>{event.meta?.season ?? ''}</MetaBadge>
+                    <MetaBadge>{event.meta?.budget ?? ''}</MetaBadge>
                   </span>
 
                   {/* Arrow */}

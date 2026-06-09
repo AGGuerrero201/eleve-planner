@@ -1,4 +1,4 @@
-import { type ElementType, type HTMLAttributes } from 'react'
+import { type HTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 
 type SectionLabelTag = 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span' | 'div'

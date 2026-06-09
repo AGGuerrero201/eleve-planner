@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect } from 'react'
-import { X, Plus, Trash2 } from 'lucide-react'
+import { X, Plus } from 'lucide-react'
 import type { Vendor, VendorCategory, VendorPriceTier, CoiStatus } from '@/types/vendor'
 import {
   VENDOR_CATEGORY_LABELS, ALL_VENDOR_CATEGORIES,

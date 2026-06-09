@@ -41,14 +41,14 @@ export function PlannerPage() {
   const handleSave = async (event: SavedEvent): Promise<SavedEvent | null> => save(event)
 
   const handleSelectTemplate = useCallback((template: LuxuryTemplate) => {
-    setCurrentFormData(template.formData)
+    setCurrentFormData(template.formData ?? null)
     if (template.plan) {
       loadTemplate(template.plan)
       setTimeout(() => {
         document.getElementById('plan-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }, 50)
     } else {
-      void generate(template.formData)
+      void generate(template.formData!)
       setTimeout(() => {
         document.getElementById('plan-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }, 200)

@@ -5,7 +5,7 @@
  * Two primary paths + Suggested Starting Points + Concierge Notes.
  */
 
-import { BookOpen, SlidersHorizontal, ArrowRight, Sparkles, Store, FileCheck, Users, Shield } from 'lucide-react'
+import { BookOpen, SlidersHorizontal, ArrowRight, Sparkles, Store, FileCheck, Shield } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export type PlannerMode = 'templates' | 'custom'

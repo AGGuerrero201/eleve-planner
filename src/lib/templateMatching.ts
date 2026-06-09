@@ -48,17 +48,17 @@ function scoreTemplate(template: LuxuryTemplate, formData: EventFormData): numbe
   let score = 0
 
   // Event type exact match (highest weight)
-  if (formData.eventType && template.formData.eventType === formData.eventType) {
+  if (formData.eventType && template.formData?.eventType === formData.eventType) {
     score += 4
   }
 
   // Season match
-  if (formData.season && template.idealSeasons.includes(formData.season)) {
+  if (formData.season && (template.idealSeasons ?? []).includes(formData.season as any)) {
     score += 3
   }
 
   // Demographic match (template supports multiple demographics)
-  if (formData.demographic && template.demographic.includes(formData.demographic)) {
+  if (formData.demographic && (template.demographic ?? []).includes(formData.demographic)) {
     score += 2
   }
 
