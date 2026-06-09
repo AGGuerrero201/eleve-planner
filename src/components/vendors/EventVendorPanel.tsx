@@ -137,12 +137,11 @@ function CategoryBlock({
   rec,
   isExpanded,
   onToggleExpand,
-  _compact,
 }: {
   rec:            CategoryRecommendation
   isExpanded:     boolean
   onToggleExpand: () => void
-  compact:        boolean
+  compact?:       boolean
 }) {
   const visible = isExpanded ? rec.vendors : rec.vendors.slice(0, MAX_VISIBLE)
   const hasMore = rec.vendors.length > MAX_VISIBLE

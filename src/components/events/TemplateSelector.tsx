@@ -143,7 +143,7 @@ function TemplateCard({ template, onSelect, disabled }: {
       {/* Category + instant badge */}
       <div className="flex items-center justify-between mb-2">
         <p className="text-[0.58rem] font-medium tracking-[0.16em] uppercase text-gold">
-          {CATEGORY_LABELS[template.category]}
+          {CATEGORY_LABELS[template.category ?? 'social']}
         </p>
         {isInstant && (
           <span className="text-[0.55rem] font-semibold tracking-[0.08em] uppercase text-green-600 bg-green-50 border border-green-200 px-1.5 py-px rounded-sm">
@@ -164,7 +164,7 @@ function TemplateCard({ template, onSelect, disabled }: {
 
       {/* Tags */}
       <div className="flex flex-wrap gap-1">
-        {template.previewTags.map((tag) => (
+        {(template.previewTags ?? []).map((tag) => (
           <span
             key={tag}
             className="text-[0.58rem] font-medium tracking-[0.04em] bg-warm-gray border border-border text-charcoal-light px-1.5 py-px rounded-sm"

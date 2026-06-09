@@ -139,9 +139,9 @@ export function StepRoute({ formData, isLoading, onGenerate, onLoadTemplate }: S
                   </p>
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="text-[0.58rem] text-gold/70 uppercase tracking-[0.1em] font-medium">
-                      {CATEGORY_LABELS[t.category]}
+                      {CATEGORY_LABELS[t.category ?? 'social']}
                     </span>
-                    {t.previewTags.slice(0, 2).map((tag) => (
+                    {(t.previewTags ?? []).slice(0, 2).map((tag) => (
                       <span key={tag} className="text-[0.58rem] text-muted bg-warm-gray border border-border px-1.5 py-px rounded-sm">
                         {tag}
                       </span>

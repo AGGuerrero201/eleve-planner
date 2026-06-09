@@ -153,12 +153,12 @@ export function EventDetailModal({
 
         {/* Meta badges */}
         <div className="flex flex-wrap gap-1.5 mb-6">
-          <Badge variant="muted">{event.meta.eventType}</Badge>
-          <Badge variant="muted">{event.meta.season}</Badge>
-          <Badge variant="muted">{event.meta.venue}</Badge>
-          <Badge variant="muted">{event.meta.budget}</Badge>
-          <Badge variant="muted">{event.meta.attendance}</Badge>
-          <Badge variant="muted">{event.meta.alcohol}</Badge>
+          <Badge variant="muted">{event.meta?.eventType ?? ''}</Badge>
+          <Badge variant="muted">{event.meta?.season ?? ''}</Badge>
+          <Badge variant="muted">{event.meta?.venue ?? ''}</Badge>
+          <Badge variant="muted">{event.meta?.budget ?? ''}</Badge>
+          <Badge variant="muted">{event.meta?.attendance ?? ''}</Badge>
+          <Badge variant="muted">{event.meta?.alcohol ?? ''}</Badge>
         </div>
 
         {/* Concept + Theme */}
@@ -307,21 +307,21 @@ export function EventDetailModal({
         {/* Vendor Recommendations */}
         {event && (
           <EventVendorPanel formData={{
-            eventType:   event.meta.eventType,
-            budget:      event.meta.budget,
-            attendance:  event.meta.attendance,
-            season:      event.meta.season,
-            venue:       event.meta.venue,
-            alcohol:     event.meta.alcohol,
-            demographic: event.meta.demographic,
+            eventType:   event.meta?.eventType ?? '',
+            budget:      event.meta?.budget ?? '',
+            attendance:  event.meta?.attendance ?? '',
+            season:      event.meta?.season ?? '',
+            venue:       event.meta?.venue ?? '',
+            alcohol:     event.meta?.alcohol ?? '',
+            demographic: (event.meta?.demographic ?? '') as import('@/types').ResidentDemo | '',
             notes:       '',
           }} compact />
         )}
 
         {/* Footer */}
         <div className="flex items-center justify-between mt-5 pt-4 border-t border-border flex-wrap gap-2">
-          <p className="text-[0.72rem] text-muted/60">Saved on {formatDate(event.savedAt)}</p>
-          <WorkflowBadge status={event.workflowStatus} />
+          <p className="text-[0.72rem] text-muted/60">Saved on {formatDate(event.savedAt ?? event.created_at ?? new Date().toISOString())}</p>
+          <WorkflowBadge status={event.workflowStatus ?? 'draft'} />
         </div>
       </div>
     </Modal>

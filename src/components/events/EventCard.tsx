@@ -54,12 +54,12 @@ export function EventCard({ event, onClick, onDelete }: EventCardProps) {
 
       {/* Workflow status badge */}
       <div className="mb-2.5">
-        <WorkflowBadge status={event.workflowStatus} />
+        <WorkflowBadge status={event.workflowStatus ?? 'draft'} />
       </div>
 
       {/* Event type */}
       <p className="text-[0.67rem] font-medium tracking-[0.15em] uppercase text-gold mb-1.5">
-        {event.meta.eventType}
+        {event.meta?.eventType ?? 'Event'}
       </p>
 
       {/* Title */}
@@ -74,14 +74,14 @@ export function EventCard({ event, onClick, onDelete }: EventCardProps) {
 
       {/* Meta tags */}
       <div className="flex flex-wrap gap-1.5 mb-3">
-        <Badge variant="muted">{event.meta.season}</Badge>
-        <Badge variant="muted">{event.meta.venue}</Badge>
-        <Badge variant="muted">{event.meta.budget}</Badge>
+        <Badge variant="muted">{event.meta?.season ?? ''}</Badge>
+        <Badge variant="muted">{event.meta?.venue ?? ''}</Badge>
+        <Badge variant="muted">{event.meta?.budget ?? ''}</Badge>
       </div>
 
       {/* Date */}
       <p className="text-[0.72rem] text-muted/70 font-light mt-3">
-        Saved {formatDate(event.savedAt)}
+        Saved {formatDate(event.savedAt ?? event.created_at ?? new Date().toISOString())}
       </p>
     </article>
   )

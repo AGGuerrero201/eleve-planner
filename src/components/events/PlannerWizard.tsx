@@ -124,9 +124,9 @@ export function PlannerWizard({
         )}
         {step === 4 && (
           <StepBudget
-            budget={formData.budget}
-            attendance={formData.attendance}
-            season={formData.season}
+            budget={formData.budget as import('@/types').Budget | ''}
+            attendance={formData.attendance as import('@/types').Attendance | ''}
+            season={formData.season as import('@/types').Season | ''}
             onBudget={(v)     => updateForm('budget', v)}
             onAttendance={(v) => updateForm('attendance', v)}
             onSeason={(v)     => updateForm('season', v)}

@@ -405,7 +405,7 @@ function TemplateRow({
           {/* Category + instant badge */}
           <div className="flex items-center gap-2 mb-1.5">
             <span className="text-[0.58rem] font-medium tracking-[0.14em] uppercase text-gold/75">
-              {CATEGORY_LABELS[template.category]}
+              {CATEGORY_LABELS[template.category ?? 'social']}
             </span>
             {isInstant && (
               <span className="text-[0.55rem] font-semibold tracking-[0.08em] uppercase text-green-600 bg-green-50 border border-green-200 px-1.5 py-px rounded-sm">
@@ -433,7 +433,7 @@ function TemplateRow({
             className="text-muted/25 group-hover:text-gold/50 transition-colors duration-150"
           />
           <div className="flex flex-col items-end gap-1">
-            {template.previewTags.slice(0, 2).map((tag) => (
+            {(template.previewTags ?? []).slice(0, 2).map((tag) => (
               <span
                 key={tag}
                 className="text-[0.58rem] font-medium tracking-[0.06em] uppercase px-1.5 py-px border border-border bg-warm-gray text-muted/70 rounded-sm whitespace-nowrap"

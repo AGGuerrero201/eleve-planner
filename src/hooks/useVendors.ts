@@ -71,7 +71,7 @@ export function useVendors(): UseVendorsReturn {
     patch: Partial<Vendor>
   ): Promise<string | null> => {
     try {
-      const { error: err } = await supabase
+      const { error: err } = await (supabase as any)
         .from('vendors')
         .update(vendorToRow(patch) as any)
         .eq('id', id)

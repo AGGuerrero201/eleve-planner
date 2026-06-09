@@ -84,7 +84,7 @@ export function DashboardPage() {
   const recentEvents = useMemo(() => {
     if (!eventsLoaded) return []
     return [...events]
-      .sort((a, b) => new Date(b.savedAt ?? b.created_at).getTime() - new Date(a.savedAt ?? a.created_at).getTime())
+      .sort((a, b) => new Date(b.savedAt ?? b.created_at ?? new Date().toISOString()).getTime() - new Date(a.savedAt ?? a.created_at ?? new Date().toISOString()).getTime())
       .slice(0, 3)
   }, [events, eventsLoaded])
 

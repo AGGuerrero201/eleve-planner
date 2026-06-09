@@ -22,19 +22,25 @@ export type ResidentDemo  =
   | 'Mixed'
   | 'Mixed demographic'
   | 'Mixed ages, family-oriented'
-export type Season     = 'Spring' | 'Summer' | 'Fall' | 'Winter' | 'Fall / Autumn'
+export type Season     = 'Spring' | 'Summer' | 'Fall / Autumn' | 'Winter'
 export type Budget     =
   | 'Under $1,000'
   | '$1,000 – $2,500'
   | '$2,500 – $5,000'
   | '$5,000 – $10,000'
-  | '$10,000+'
+  | '$10,000 – $25,000'
+  | '$25,000+'
 export type Attendance =
   | 'Under 20'
   | '20 – 40'
   | '40 – 75'
   | '75 – 150'
   | '150+'
+  | '10 – 25 residents'
+  | '25 – 50 residents'
+  | '50 – 100 residents'
+  | '100 – 200 residents'
+  | '200+ residents'
 
 export interface EventFormData {
   eventType:   string
@@ -108,7 +114,7 @@ export interface GenerateEventResponse {
 
 export interface EdgeFunctionError {
   error:     string
-  code:      string
+  code?:     string
   retryable: boolean
 }
 
@@ -148,8 +154,8 @@ export type EventWorkflowStatus =
 
 export interface SavedEvent extends EventPlan {
   id:              string
-  created_at:      string
-  savedAt:         string
+  created_at?:     string
+  savedAt?:        string
   workflowStatus?: EventWorkflowStatus
   meta?: {
     eventType:   string
@@ -168,8 +174,8 @@ export type GenerationStatus = 'idle' | 'loading' | 'success' | 'error'
 export type AsyncStatus      = 'idle' | 'loading' | 'success' | 'error'
 
 export interface LoadingStep {
-  id:     string
-  label:  string
-  done:   boolean
-  status: 'pending' | 'active' | 'done'
+  id:      string
+  label:   string
+  done?:   boolean
+  status:  'pending' | 'active' | 'done'
 }

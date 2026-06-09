@@ -31,13 +31,13 @@ function rowToSavedEvent(row: EventPlanRow): SavedEvent {
     setupLogistics: row.setup_logistics ?? [],
     flyerHeadline: row.flyer_headline ?? '',
     // JSONB fields cast through unknown — validated at runtime by the Edge Function
-    timeline: (row.timeline as SavedEvent['timeline']) ?? [],
-    vendorIdeas: (row.vendor_ideas as SavedEvent['vendorIdeas']) ?? [],
+    timeline: (row.timeline as unknown as SavedEvent['timeline']) ?? [],
+    vendorIdeas: (row.vendor_ideas as unknown as SavedEvent['vendorIdeas']) ?? [],
     staffing: (row.staffing as unknown as SavedEvent['staffing']) ?? [],
     alcoholEstimate: (row.alcohol_estimate as SavedEvent['alcoholEstimate']) ?? null,
     residentEmail: (row.resident_email as unknown as SavedEvent['residentEmail']) ?? { subject: '', body: '' },
     meta: row.meta as unknown as EventFormData,
-    workflowStatus: ((row as Record<string, unknown>).workflow_status as EventWorkflowStatus) ?? 'draft',
+    workflowStatus: (((row as Record<string, unknown>).workflow_status as EventWorkflowStatus | undefined) ?? 'draft') as EventWorkflowStatus,
   }
 }
 
@@ -145,7 +145,7 @@ export async function updateEventPlanField(
   patch: Record<string, unknown>
 ): Promise<ServiceResult<true>> {
   try {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('event_plans')
       .update(patch as any)
       .eq('id', id)
@@ -161,7 +161,7 @@ export async function updateEventPlanStatus(
   status: EventWorkflowStatus
 ): Promise<ServiceResult<true>> {
   try {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('event_plans')
       .update({ workflow_status: status } as any)
       .eq('id', id)
