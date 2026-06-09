@@ -40,10 +40,10 @@ const PROPERTY_TYPES = [
 ]
 
 const FEATURES = [
-  { icon: Zap,         title: 'AI-Generated Plans',    body: 'Describe your event parameters and receive a complete plan in under 60 seconds — timeline, catering, staffing, budget breakdown, and a resident email draft.' },
-  { icon: Store,       title: 'Vendor Hub',             body: 'Maintain a curated directory with COI tracking, price tiers, and category tags. Vendor recommendations surface automatically for every event.' },
-  { icon: ClipboardList, title: 'Template Library',    body: '30 curated event templates organised by season, occasion, and resident profile. Launch a complete plan instantly, then refine it to match your property.' },
-  { icon: Building2,   title: 'Workflow Management',   body: 'Move events from In Planning through Confirmed, Underway, and Delivered. Edit every section in place. Regenerate any element with one click.' },
+  { icon: Zap,           title: 'AI-Generated Plans',    body: 'Describe your event parameters and receive a complete plan in under 60 seconds — timeline, catering, staffing, budget breakdown, and a resident email draft.' },
+  { icon: Building2,     title: 'Property Intelligence', body: 'Create a property profile once. Elevé learns your amenities, resident demographics, community personality, and event spaces to generate events tailored specifically to your community.' },
+  { icon: Store,         title: 'Vendor Hub',             body: 'Maintain a curated directory with COI tracking, price tiers, and category tags. Vendor recommendations surface automatically for every event.' },
+  { icon: ClipboardList, title: 'Template Library',      body: '30 curated event templates organised by season, occasion, and resident profile. Launch a complete plan instantly, then refine it to match your property.' },
 ]
 
 const PERSONAS = [
@@ -442,9 +442,10 @@ export function LandingPage() {
                 From idea to resident-ready event plan in under 60 seconds.
               </SectionHeading>
               <p className="font-light leading-[1.9] mb-8" style={{ fontSize: '0.875rem', color: C.muted }}>
-                Tell Elevé your event type, resident demographic, budget, and season.
-                The AI generates a plan calibrated to your brief — not a generic template,
-                but a structured document ready to act on.
+                Elevé combines your event requirements with your property's profile, amenities,
+                resident demographics, and community personality to generate event plans designed
+                specifically for your community — not a generic template, but a structured document
+                ready to act on.
               </p>
               <ul className="space-y-2.5">
                 {AI_POINTS.map((pt) => (
@@ -491,6 +492,27 @@ export function LandingPage() {
                   <p className="font-serif font-light italic" style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.45)' }}>
                     "Join us on the rooftop this Saturday — cocktails as the city lights up."
                   </p>
+                </div>
+                {/* Property Intelligence callout */}
+                <div className="mt-5 pt-4" style={{ borderTop: `0.5px solid rgba(255,255,255,0.05)` }}>
+                  <p className="text-[0.58rem] font-medium uppercase mb-3" style={{ letterSpacing: '0.12em', color: 'rgba(184,149,90,0.50)' }}>
+                    Property Intelligence
+                  </p>
+                  <div className="flex items-start gap-3">
+                    <div className="flex-1 rounded-sm px-3 py-2.5" style={{ backgroundColor: 'rgba(255,255,255,0.04)', border: '0.5px solid rgba(184,149,90,0.12)' }}>
+                      <p className="text-[0.55rem] font-medium uppercase mb-1.5" style={{ letterSpacing: '0.10em', color: 'rgba(184,149,90,0.45)' }}>Profile</p>
+                      <p className="font-serif font-light mb-1" style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.70)' }}>99 Hudson</p>
+                      <p className="font-light" style={{ fontSize: '0.60rem', color: 'rgba(255,255,255,0.28)', lineHeight: 1.6 }}>Luxury Waterfront · Rooftop Terrace · Pool Deck · Resident Lounge</p>
+                    </div>
+                    <div className="flex items-center self-center shrink-0 px-1" style={{ color: 'rgba(184,149,90,0.35)' }}>
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </div>
+                    <div className="flex-1 rounded-sm px-3 py-2.5" style={{ backgroundColor: 'rgba(184,149,90,0.06)', border: '0.5px solid rgba(184,149,90,0.18)' }}>
+                      <p className="text-[0.55rem] font-medium uppercase mb-1.5" style={{ letterSpacing: '0.10em', color: 'rgba(184,149,90,0.55)' }}>Generated</p>
+                      <p className="font-serif font-light mb-1" style={{ fontSize: '0.72rem', color: 'rgba(232,213,176,0.85)' }}>Hudson Golden Hour</p>
+                      <p className="font-light" style={{ fontSize: '0.60rem', color: 'rgba(255,255,255,0.28)', lineHeight: 1.6 }}>Waterfront Cocktail Experience · Sunset Networking Lounge</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
