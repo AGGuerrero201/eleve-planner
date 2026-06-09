@@ -1,30 +1,15 @@
 /**
- * src/pages/LandingPage.tsx
- *
- * Elevé public marketing page — /
- * Designed for: property managers, lifestyle teams,
- * resident experience managers, luxury residential operators.
- *
- * Sections:
- *   1.  Nav-level hero         — headline, sub, dual CTA
- *   2.  Social proof strip     — property types
- *   3.  Problem statement      — what event planning costs today
- *   4.  Product preview        — styled UI preview cards
- *   5.  Core features (4-up)   — what it does
- *   6.  Who it's for           — 3 personas
- *   7.  AI planning benefits   — deep dive on generation
- *   8.  Vendor hub benefits    — directory + recommendations
- *   9.  Workflow benefits      — status, editing, saving
- *  10.  Pull-quote             — editorial moment
- *  11.  Pricing teaser         — no Stripe, placeholder only
- *  12.  Final CTA              — Enter Demo + Book Demo
- *  13.  Footer                 — minimal
+ * src/pages/LandingPage.tsx — Elevé marketing page
+ * Enhanced with: Planning Impact, Built for Multifamily,
+ * Why Elevé Is Different comparison, updated AI headline.
  */
 
 import { useNavigate } from 'react-router-dom'
 import {
   Sunrise, ReceiptText, Building2, ClipboardList,
   Zap, Store, CheckCircle2, Users, ArrowRight, Star,
+  Wine, Heart, Dumbbell, Music, Briefcase, Leaf, UtensilsCrossed,
+  Sun, BookOpen, Gift, PartyPopper, Waves,
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
@@ -140,6 +125,56 @@ const PRICING_TIERS = [
   },
 ]
 
+// ─── NEW: Planning Impact cards ───────────────────────────────────────────────
+
+const IMPACT_STATS = [
+  {
+    stat:  '80%',
+    label: 'Faster Planning',
+    desc:  'Reduce event planning from hours to minutes.',
+    glyph: '◆',
+  },
+  {
+    stat:  '30+',
+    label: 'Curated Templates',
+    desc:  'Launch proven event formats instantly.',
+    glyph: '◇',
+  },
+  {
+    stat:  '100%',
+    label: 'Reusable Event Library',
+    desc:  'Every event saved and ready to use again.',
+    glyph: '○',
+  },
+]
+
+// ─── NEW: Event category grid ─────────────────────────────────────────────────
+
+const EVENT_CATEGORIES = [
+  { label: 'Resident Socials',        icon: Users },
+  { label: 'Holiday Celebrations',    icon: PartyPopper },
+  { label: 'Pool Events',             icon: Waves },
+  { label: 'Wine Tastings',           icon: Wine },
+  { label: 'Family Programming',      icon: Heart },
+  { label: 'Educational Workshops',   icon: BookOpen },
+  { label: 'Wellness Events',         icon: Dumbbell },
+  { label: 'Cultural Celebrations',   icon: Music },
+  { label: 'Networking Mixers',       icon: Briefcase },
+  { label: 'Seasonal Events',         icon: Leaf },
+  { label: 'Cooking Demonstrations',  icon: UtensilsCrossed },
+  { label: 'Resident Appreciation',   icon: Gift },
+]
+
+// ─── NEW: Comparison rows ─────────────────────────────────────────────────────
+
+const COMPARISON_ROWS = [
+  { traditional: 'Manages registrations',     eleve: 'Creates the event' },
+  { traditional: 'Tracks attendees',          eleve: 'Generates complete plans' },
+  { traditional: 'Stores event data',         eleve: 'Builds timelines and budgets' },
+  { traditional: 'Requires manual planning',  eleve: 'AI-powered planning' },
+  { traditional: 'Generic event tools',       eleve: 'Built for multifamily' },
+]
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function LandingPage() {
@@ -182,14 +217,8 @@ export function LandingPage() {
             tracking, status workflows, and ready-to-send communications built in.
           </p>
 
-          {/* Dual CTA */}
           <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 animate-fade-up animate-delay-300">
-            <Button
-              variant="gold"
-              size="lg"
-              className="w-full sm:w-auto"
-              onClick={() => navigate('/dashboard')}
-            >
+            <Button variant="gold" size="lg" className="w-full sm:w-auto" onClick={() => navigate('/dashboard')}>
               Enter Demo
             </Button>
             <button
@@ -200,10 +229,7 @@ export function LandingPage() {
                 'px-8 py-3.5 rounded-sm border transition-all duration-200',
                 'border-white/15 text-white/55 hover:border-gold/40 hover:text-gold-light',
               )}
-              onClick={() => {
-                // Book Demo — placeholder for calendar/Calendly integration
-                window.open('mailto:demo@eleve.app?subject=Demo Request', '_blank')
-              }}
+              onClick={() => window.open('mailto:demo@eleve.app?subject=Demo Request', '_blank')}
             >
               Book a Demo
             </button>
@@ -220,10 +246,7 @@ export function LandingPage() {
       {/* ══════════════════════════════════════════════════════════════
           SECTION 2 — Social proof strip
       ══════════════════════════════════════════════════════════════ */}
-      <section
-        className="border-b"
-        style={{ borderColor: 'rgba(180,166,150,0.25)' }}
-      >
+      <section className="border-b" style={{ borderColor: 'rgba(180,166,150,0.25)' }}>
         <div className="max-w-5xl mx-auto px-6 py-5 overflow-x-auto">
           <div className="flex items-center justify-start sm:justify-center gap-x-8 gap-y-2 flex-nowrap sm:flex-wrap">
             {PROPERTY_TYPES.map((type, i) => (
@@ -263,14 +286,9 @@ export function LandingPage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          SECTION 4 — Product preview (styled UI cards)
+          SECTION 4 — Product preview
       ══════════════════════════════════════════════════════════════ */}
-      <section
-        className="py-16 sm:py-20"
-        style={{ backgroundColor: 'var(--charcoal, #1C1C1E)' }}
-      >
-        <div className="absolute top-0 inset-x-0 h-px" style={{ backgroundColor: 'rgba(184,149,90,0.12)' }} />
-
+      <section className="py-16 sm:py-20" style={{ backgroundColor: 'var(--charcoal, #1C1C1E)' }}>
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
             <p className="text-[0.6rem] font-medium uppercase mb-4"
@@ -283,10 +301,8 @@ export function LandingPage() {
             </h2>
           </div>
 
-          {/* Preview cards — 3 styled UI mockups */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
-            {/* Card 1: Generated plan preview */}
             <PreviewCard label="Generated event plan">
               <div className="space-y-2.5">
                 <div className="flex items-center gap-2 mb-3">
@@ -304,9 +320,7 @@ export function LandingPage() {
                 <div className="pt-2 space-y-1.5">
                   {['6:45 PM  Vendor & staff arrival', '7:00 PM  Doors open, welcome drinks', '7:30 PM  Passed appetisers begin', '9:30 PM  Last call', '10:00 PM Close'].map((line) => (
                     <div key={line} className="flex gap-3 text-[0.65rem]">
-                      <span style={{ color: 'var(--gold, #B8955A)', opacity: 0.7, fontVariantNumeric: 'tabular-nums', minWidth: 52 }}>
-                        {line.split('  ')[0]}
-                      </span>
+                      <span style={{ color: 'var(--gold, #B8955A)', opacity: 0.7, minWidth: 52 }}>{line.split('  ')[0]}</span>
                       <span style={{ color: 'rgba(255,255,255,0.45)' }}>{line.split('  ')[1]}</span>
                     </div>
                   ))}
@@ -314,7 +328,6 @@ export function LandingPage() {
               </div>
             </PreviewCard>
 
-            {/* Card 2: Vendor hub preview */}
             <PreviewCard label="Vendor directory">
               <div className="space-y-2">
                 <p className="text-[0.6rem] uppercase font-medium mb-3" style={{ letterSpacing: '0.12em', color: 'rgba(184,149,90,0.65)' }}>
@@ -330,43 +343,22 @@ export function LandingPage() {
                     <span className="w-1.5 h-1.5 rounded-full bg-gold/40 shrink-0" />
                     <span className="flex-1 text-[0.72rem] font-light text-white/75 truncate">{v.name}</span>
                     <span className="text-[0.58rem] font-medium uppercase text-white/30" style={{ letterSpacing: '0.06em' }}>{v.tier}</span>
-                    <span className={cn(
-                      'text-[0.55rem] font-medium px-1.5 py-0.5 rounded-sm',
-                      v.coi === 'COI ✓'
-                        ? 'text-green-400' : 'text-amber-400/70'
-                    )}>
+                    <span className={cn('text-[0.55rem] font-medium px-1.5 py-0.5 rounded-sm', v.coi === 'COI ✓' ? 'text-green-400' : 'text-amber-400/70')}>
                       {v.coi}
                     </span>
                   </div>
                 ))}
-                <div className="pt-1">
-                  <p className="text-[0.6rem] uppercase font-medium mt-3 mb-2" style={{ letterSpacing: '0.12em', color: 'rgba(184,149,90,0.65)' }}>
-                    Bar Service · 2 vendors
-                  </p>
-                  {[
-                    { name: 'Craft Bar Events',  tier: 'Premium', coi: 'COI ✓' },
-                    { name: 'Pour Society',       tier: 'Luxury',  coi: 'COI ✓' },
-                  ].map((v) => (
-                    <div key={v.name} className="flex items-center gap-2 px-3 py-2 rounded-sm mb-1.5"
-                         style={{ backgroundColor: 'rgba(255,255,255,0.04)', border: '0.5px solid rgba(180,166,150,0.12)' }}>
-                      <span className="w-1.5 h-1.5 rounded-full bg-gold/40 shrink-0" />
-                      <span className="flex-1 text-[0.72rem] font-light text-white/75 truncate">{v.name}</span>
-                      <span className="text-[0.55rem] font-medium text-green-400">{v.coi}</span>
-                    </div>
-                  ))}
-                </div>
               </div>
             </PreviewCard>
 
-            {/* Card 3: Saved events preview */}
             <PreviewCard label="Saved event library">
               <div className="space-y-2">
                 {[
-                  { title: 'Rooftop Social at Dusk',    status: 'Confirmed',   type: 'Cocktail Reception' },
-                  { title: 'Summer Pool Party',          status: 'In Planning', type: 'Pool Party' },
-                  { title: 'Wine & Cheese Evening',      status: 'Delivered',   type: 'Wine Tasting' },
-                  { title: 'Wellness Morning',           status: 'In Planning', type: 'Yoga & Wellness' },
-                  { title: 'Holiday Resident Gala',      status: 'Confirmed',   type: 'Holiday Party' },
+                  { title: 'Rooftop Social at Dusk',  status: 'Confirmed',   type: 'Cocktail Reception' },
+                  { title: 'Summer Pool Party',        status: 'In Planning', type: 'Pool Party' },
+                  { title: 'Wine & Cheese Evening',    status: 'Delivered',   type: 'Wine Tasting' },
+                  { title: 'Wellness Morning',         status: 'In Planning', type: 'Yoga & Wellness' },
+                  { title: 'Holiday Resident Gala',    status: 'Confirmed',   type: 'Holiday Party' },
                 ].map((e) => (
                   <div key={e.title} className="px-3 py-2.5 rounded-sm"
                        style={{ backgroundColor: 'rgba(255,255,255,0.04)', border: '0.5px solid rgba(180,166,150,0.12)' }}>
@@ -420,16 +412,55 @@ export function LandingPage() {
                    style={{ borderColor: 'rgba(184,149,90,0.25)' }}>
                 <Icon size={17} className="text-gold" strokeWidth={1.5} />
               </div>
-              <h3 className="font-serif font-light text-charcoal mb-3 leading-snug"
-                  style={{ fontSize: '1.1rem' }}>
-                {title}
-              </h3>
-              <p className="font-light leading-[1.75]"
-                 style={{ fontSize: '0.825rem', color: 'var(--muted, #8A8580)' }}>
-                {body}
-              </p>
+              <h3 className="font-serif font-light text-charcoal mb-3 leading-snug" style={{ fontSize: '1.1rem' }}>{title}</h3>
+              <p className="font-light leading-[1.75]" style={{ fontSize: '0.825rem', color: 'var(--muted, #8A8580)' }}>{body}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════
+          NEW — Planning Impact Section
+          (between "Built for the Full Event Lifecycle" and "Who It's For")
+      ══════════════════════════════════════════════════════════════ */}
+      <section className="py-16 sm:py-20" style={{ backgroundColor: 'var(--charcoal, #1C1C1E)', borderTop: '0.5px solid rgba(184,149,90,0.10)' }}>
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <p className="text-[0.6rem] font-medium uppercase mb-4"
+               style={{ letterSpacing: '0.22em', color: 'rgba(184,149,90,0.60)' }}>
+              The impact
+            </p>
+            <h2 className="font-serif font-light text-off-white"
+                style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>
+              Built to save time at every step.
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {IMPACT_STATS.map(({ stat, label, desc, glyph }) => (
+              <div
+                key={label}
+                className="rounded-sm px-6 py-7 transition-colors duration-200"
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.04)',
+                  border: '0.5px solid rgba(184,149,90,0.18)',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)')}
+                onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.04)')}
+              >
+                <div className="flex items-center gap-2.5 mb-4">
+                  <span className="text-[0.85rem]" style={{ color: 'rgba(184,149,90,0.45)' }} aria-hidden>{glyph}</span>
+                  <span className="font-serif font-light text-gold-light" style={{ fontSize: '2rem' }}>{stat}</span>
+                </div>
+                <p className="font-serif font-light text-off-white mb-2 leading-snug" style={{ fontSize: '1rem' }}>
+                  {label}
+                </p>
+                <p className="font-light leading-relaxed" style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.35)' }}>
+                  {desc}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -442,8 +473,7 @@ export function LandingPage() {
              style={{ letterSpacing: '0.22em', color: 'var(--gold, #B8955A)', opacity: 0.7 }}>
             Who it's for
           </p>
-          <h2 className="font-serif font-light text-charcoal"
-              style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>
+          <h2 className="font-serif font-light text-charcoal" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>
             Designed for the people who run the programme
           </h2>
         </div>
@@ -453,37 +483,22 @@ export function LandingPage() {
             <div
               key={role}
               className="rounded-sm px-6 py-6"
-              style={{
-                backgroundColor: 'var(--card-bg, #FAFAF8)',
-                border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))',
-              }}
+              style={{ backgroundColor: 'var(--off-white, #FAFAF8)', border: '1px solid rgba(180,166,150,0.28)' }}
             >
               <div className="flex items-center gap-2.5 mb-5">
                 <span className="text-[0.9rem]" style={{ color: 'var(--gold, #B8955A)' }} aria-hidden>{glyph}</span>
                 <h3 className="font-serif font-light text-charcoal" style={{ fontSize: '1rem' }}>{role}</h3>
               </div>
-              <div
-                className="mb-4 px-3 py-3 rounded-sm"
-                style={{ backgroundColor: 'var(--warm-gray, #F5F3EF)', border: '0.5px solid rgba(180,166,150,0.20)' }}
-              >
+              <div className="mb-4 px-3 py-3 rounded-sm"
+                   style={{ backgroundColor: 'var(--warm-gray, #F5F3EF)', border: '0.5px solid rgba(180,166,150,0.20)' }}>
                 <p className="text-[0.62rem] font-medium uppercase mb-1.5"
-                   style={{ letterSpacing: '0.10em', color: 'var(--muted, #8A8580)' }}>
-                  Before Elevé
-                </p>
-                <p className="font-light leading-relaxed"
-                   style={{ fontSize: '0.78rem', color: 'var(--charcoal-light, #4A4A50)' }}>
-                  {pain}
-                </p>
+                   style={{ letterSpacing: '0.10em', color: 'var(--muted, #8A8580)' }}>Before Elevé</p>
+                <p className="font-light leading-relaxed" style={{ fontSize: '0.78rem', color: 'var(--charcoal-light, #4A4A50)' }}>{pain}</p>
               </div>
               <div>
                 <p className="text-[0.62rem] font-medium uppercase mb-1.5"
-                   style={{ letterSpacing: '0.10em', color: 'var(--gold, #B8955A)', opacity: 0.8 }}>
-                  With Elevé
-                </p>
-                <p className="font-light leading-relaxed"
-                   style={{ fontSize: '0.78rem', color: 'var(--charcoal, #1C1C1E)' }}>
-                  {gain}
-                </p>
+                   style={{ letterSpacing: '0.10em', color: 'var(--gold, #B8955A)', opacity: 0.8 }}>With Elevé</p>
+                <p className="font-light leading-relaxed" style={{ fontSize: '0.78rem', color: 'var(--charcoal, #1C1C1E)' }}>{gain}</p>
               </div>
             </div>
           ))}
@@ -491,7 +506,7 @@ export function LandingPage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          SECTION 7 — AI planning benefits
+          SECTION 7 — AI planning benefits (headline updated)
       ══════════════════════════════════════════════════════════════ */}
       <section
         className="py-16 sm:py-20"
@@ -504,12 +519,12 @@ export function LandingPage() {
                  style={{ letterSpacing: '0.22em', color: 'var(--gold, #B8955A)', opacity: 0.7 }}>
                 AI generation
               </p>
+              {/* UPDATED HEADLINE */}
               <h2 className="font-serif font-light text-charcoal mb-5 leading-snug"
                   style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>
-                A complete event plan in under 60 seconds.
+                From idea to resident-ready event plan in under 60 seconds.
               </h2>
-              <p className="font-light leading-[1.85] mb-8"
-                 style={{ fontSize: '0.875rem', color: 'var(--muted, #8A8580)' }}>
+              <p className="font-light leading-[1.85] mb-8" style={{ fontSize: '0.875rem', color: 'var(--muted, #8A8580)' }}>
                 Tell Elevé your event type, resident demographic, budget, and season.
                 The AI generates a plan calibrated to your brief — not a generic template,
                 but a structured document ready to act on.
@@ -518,22 +533,14 @@ export function LandingPage() {
                 {AI_POINTS.map((point) => (
                   <li key={point} className="flex items-start gap-3">
                     <CheckCircle2 size={14} strokeWidth={1.5} className="shrink-0 mt-0.5 text-gold/60" />
-                    <span className="font-light" style={{ fontSize: '0.82rem', color: 'var(--charcoal-light, #4A4A50)' }}>
-                      {point}
-                    </span>
+                    <span className="font-light" style={{ fontSize: '0.82rem', color: 'var(--charcoal-light, #4A4A50)' }}>{point}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* AI feature detail card */}
-            <div
-              className="rounded-sm p-5 sm:p-7"
-              style={{
-                backgroundColor: 'var(--charcoal, #1C1C1E)',
-                border: '1px solid rgba(184,149,90,0.20)',
-              }}
-            >
+            <div className="rounded-sm p-5 sm:p-7"
+                 style={{ backgroundColor: 'var(--charcoal, #1C1C1E)', border: '1px solid rgba(184,149,90,0.20)' }}>
               <div className="flex items-center gap-2.5 mb-5">
                 <Zap size={13} className="text-gold" strokeWidth={1.5} />
                 <span className="text-[0.62rem] font-medium uppercase"
@@ -541,9 +548,7 @@ export function LandingPage() {
                   AI-generated plan
                 </span>
               </div>
-              <p className="font-serif font-light text-off-white mb-1" style={{ fontSize: '1.15rem' }}>
-                Summer Rooftop Social
-              </p>
+              <p className="font-serif font-light text-off-white mb-1" style={{ fontSize: '1.15rem' }}>Summer Rooftop Social</p>
               <p className="text-[0.7rem] font-medium uppercase mb-5"
                  style={{ letterSpacing: '0.10em', color: 'var(--gold, #B8955A)' }}>
                 Cocktails & skyline views
@@ -563,9 +568,7 @@ export function LandingPage() {
               ))}
               <div className="mt-4 pt-3" style={{ borderTop: '0.5px solid rgba(255,255,255,0.06)' }}>
                 <p className="text-[0.62rem] font-medium uppercase mb-1.5"
-                   style={{ letterSpacing: '0.10em', color: 'rgba(184,149,90,0.55)' }}>
-                  Resident email subject
-                </p>
+                   style={{ letterSpacing: '0.10em', color: 'rgba(184,149,90,0.55)' }}>Resident email subject</p>
                 <p className="font-serif font-light text-white/50 italic" style={{ fontSize: '0.85rem' }}>
                   "Join us on the rooftop this Saturday — cocktails as the city lights up."
                 </p>
@@ -581,38 +584,26 @@ export function LandingPage() {
       <section className="max-w-5xl mx-auto px-6 py-16 sm:py-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 items-center">
 
-          {/* Vendor category breakdown visual */}
-          <div
-            className="rounded-sm p-5 sm:p-7 order-2 sm:order-1"
-            style={{
-              backgroundColor: 'var(--card-bg, #FAFAF8)',
-              border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))',
-            }}
-          >
+          <div className="rounded-sm p-5 sm:p-7 order-2 sm:order-1"
+               style={{ backgroundColor: 'var(--off-white, #FAFAF8)', border: '1px solid rgba(180,166,150,0.28)' }}>
             <div className="flex items-center justify-between mb-5">
               <p className="text-[0.62rem] font-medium uppercase"
-                 style={{ letterSpacing: '0.14em', color: 'var(--stone, #8C8478)' }}>
-                Vendor directory
-              </p>
+                 style={{ letterSpacing: '0.14em', color: 'var(--stone, #8C8478)' }}>Vendor directory</p>
               <span className="font-serif font-light text-charcoal" style={{ fontSize: '1.4rem' }}>12</span>
             </div>
             {[
-              { cat: 'Catering',       n: 3, coi: 2 },
-              { cat: 'Bar & Beverage', n: 2, coi: 2 },
-              { cat: 'Entertainment',  n: 2, coi: 1 },
-              { cat: 'Staffing',       n: 2, coi: 2 },
-              { cat: 'Décor & Floral', n: 2, coi: 1 },
-              { cat: 'AV & Production',n: 1, coi: 1 },
+              { cat: 'Catering',        n: 3, coi: 2 },
+              { cat: 'Bar & Beverage',  n: 2, coi: 2 },
+              { cat: 'Entertainment',   n: 2, coi: 1 },
+              { cat: 'Staffing',        n: 2, coi: 2 },
+              { cat: 'Décor & Floral',  n: 2, coi: 1 },
+              { cat: 'AV & Production', n: 1, coi: 1 },
             ].map(({ cat, n, coi }) => (
               <div key={cat} className="flex items-center gap-3 py-2.5"
                    style={{ borderBottom: '0.5px solid rgba(180,166,150,0.18)' }}>
                 <span className="flex-1 text-[0.75rem] font-light text-charcoal-light">{cat}</span>
-                <span className="text-[0.68rem] font-medium tabular-nums"
-                      style={{ color: 'var(--gold, #B8955A)' }}>
-                  {n}
-                </span>
-                <span className="text-[0.6rem] font-light"
-                      style={{ color: 'var(--muted, #8A8580)', minWidth: 48, textAlign: 'right' }}>
+                <span className="text-[0.68rem] font-medium tabular-nums" style={{ color: 'var(--gold, #B8955A)' }}>{n}</span>
+                <span className="text-[0.6rem] font-light" style={{ color: 'var(--muted, #8A8580)', minWidth: 48, textAlign: 'right' }}>
                   {coi}/{n} COI
                 </span>
               </div>
@@ -621,15 +612,10 @@ export function LandingPage() {
 
           <div className="order-1 sm:order-2">
             <p className="text-[0.6rem] font-medium uppercase mb-4"
-               style={{ letterSpacing: '0.22em', color: 'var(--gold, #B8955A)', opacity: 0.7 }}>
-              Vendor hub
-            </p>
+               style={{ letterSpacing: '0.22em', color: 'var(--gold, #B8955A)', opacity: 0.7 }}>Vendor hub</p>
             <h2 className="font-serif font-light text-charcoal mb-5 leading-snug"
-                style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>
-              Your vendor directory, always ready.
-            </h2>
-            <p className="font-light leading-[1.85] mb-8"
-               style={{ fontSize: '0.875rem', color: 'var(--muted, #8A8580)' }}>
+                style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>Your vendor directory, always ready.</h2>
+            <p className="font-light leading-[1.85] mb-8" style={{ fontSize: '0.875rem', color: 'var(--muted, #8A8580)' }}>
               Stop searching your inbox for the caterer's contact. Elevé maintains
               your entire vendor directory — with COI tracking, price tiers, and
               automatic matching to every event you generate.
@@ -638,9 +624,7 @@ export function LandingPage() {
               {VENDOR_POINTS.map((point) => (
                 <li key={point} className="flex items-start gap-3">
                   <CheckCircle2 size={14} strokeWidth={1.5} className="shrink-0 mt-0.5 text-gold/60" />
-                  <span className="font-light" style={{ fontSize: '0.82rem', color: 'var(--charcoal-light, #4A4A50)' }}>
-                    {point}
-                  </span>
+                  <span className="font-light" style={{ fontSize: '0.82rem', color: 'var(--charcoal-light, #4A4A50)' }}>{point}</span>
                 </li>
               ))}
             </ul>
@@ -662,44 +646,153 @@ export function LandingPage() {
                style={{ letterSpacing: '0.22em', color: 'var(--gold, #B8955A)', opacity: 0.7 }}>
               Workflow management
             </p>
-            <h2 className="font-serif font-light text-charcoal"
-                style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>
+            <h2 className="font-serif font-light text-charcoal" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>
               From draft to delivered — tracked every step.
             </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {WORKFLOW_POINTS.map(({ status, desc }, i) => (
-              <div
-                key={status}
-                className="rounded-sm px-5 py-5"
-                style={{
-                  backgroundColor: 'var(--card-bg, #FAFAF8)',
-                  border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))',
-                }}
-              >
+              <div key={status} className="rounded-sm px-5 py-5"
+                   style={{ backgroundColor: 'var(--off-white, #FAFAF8)', border: '1px solid rgba(180,166,150,0.28)' }}>
                 <div className="flex items-center gap-2 mb-3">
-                  <span
-                    className="w-2 h-2 rounded-full shrink-0"
-                    style={{ backgroundColor: ['#CEB48E', '#3D7FCC', '#B8955A', '#5A8A5A'][i] }}
-                  />
+                  <span className="w-2 h-2 rounded-full shrink-0"
+                        style={{ backgroundColor: ['#CEB48E', '#3D7FCC', '#B8955A', '#5A8A5A'][i] }} />
                   <span className="text-[0.6rem] font-medium uppercase"
                         style={{ letterSpacing: '0.10em', color: 'var(--stone, #8C8478)' }}>
                     {status}
                   </span>
                 </div>
-                <p className="font-light leading-relaxed"
-                   style={{ fontSize: '0.78rem', color: 'var(--charcoal-light, #4A4A50)' }}>
+                <p className="font-light leading-relaxed" style={{ fontSize: '0.78rem', color: 'var(--charcoal-light, #4A4A50)' }}>
                   {desc}
                 </p>
               </div>
             ))}
           </div>
 
-          <p className="text-center mt-8 font-light"
-             style={{ fontSize: '0.8rem', color: 'var(--muted, #8A8580)' }}>
+          <p className="text-center mt-8 font-light" style={{ fontSize: '0.8rem', color: 'var(--muted, #8A8580)' }}>
             Every section of every plan is editable and regeneratable in place — timeline, catering, budget, email, and more.
           </p>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════
+          NEW — Built for Multifamily
+          (inserted above "Why Elevé Is Different")
+      ══════════════════════════════════════════════════════════════ */}
+      <section className="py-16 sm:py-20" style={{ backgroundColor: 'var(--charcoal, #1C1C1E)', borderTop: '0.5px solid rgba(184,149,90,0.10)' }}>
+        <div className="max-w-5xl mx-auto px-6">
+        <div className="text-center mb-4">
+          <p className="text-[0.6rem] font-medium uppercase mb-4"
+             style={{ letterSpacing: '0.22em', color: 'rgba(184,149,90,0.60)' }}>
+            Event programming
+          </p>
+          <h2 className="font-serif font-light text-off-white mb-4"
+              style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>
+            Every event format, covered.
+          </h2>
+          <p className="font-light max-w-xl mx-auto leading-[1.85]"
+             style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.40)' }}>
+            Designed specifically for luxury condominiums, multifamily communities, branded residences, and mixed-use developments.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-[1px] mt-10"
+             style={{ backgroundColor: 'rgba(184,149,90,0.12)' }}>
+          {EVENT_CATEGORIES.map(({ label, icon: Icon }) => (
+            <div
+              key={label}
+              className="flex flex-col items-center justify-center gap-3 py-7 px-4 text-center transition-colors duration-200"
+              style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}
+              onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)')}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.03)')}
+            >
+              <div className="w-9 h-9 border flex items-center justify-center"
+                   style={{ borderColor: 'rgba(184,149,90,0.22)' }}>
+                <Icon size={15} className="text-gold" strokeWidth={1.25} />
+              </div>
+              <span className="font-light leading-snug" style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.65)' }}>
+                {label}
+              </span>
+            </div>
+          ))}
+        </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════
+          NEW — Why Elevé Is Different (comparison)
+          (inserted directly above Pricing)
+      ══════════════════════════════════════════════════════════════ */}
+      <section
+        className="py-16 sm:py-20"
+        style={{ backgroundColor: 'var(--warm-gray, #F5F3EF)', borderTop: '0.5px solid rgba(180,166,150,0.25)', borderBottom: '0.5px solid rgba(180,166,150,0.25)' }}
+      >
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-4">
+            <p className="text-[0.6rem] font-medium uppercase mb-4"
+               style={{ letterSpacing: '0.22em', color: 'var(--gold, #B8955A)', opacity: 0.7 }}>
+              The difference
+            </p>
+            <h2 className="font-serif font-light text-charcoal mb-3"
+                style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>
+              Why Elevé Is Different
+            </h2>
+            <p className="font-light max-w-lg mx-auto leading-[1.85]"
+               style={{ fontSize: '0.875rem', color: 'var(--muted, #8A8580)' }}>
+              Most event software helps manage events after they're planned.
+              <br />
+              Elevé helps create the event itself.
+            </p>
+          </div>
+
+          <div className="mt-12 rounded-sm overflow-hidden"
+               style={{ border: '1px solid rgba(180,166,150,0.28)' }}>
+
+            {/* Table header */}
+            <div className="grid grid-cols-2"
+                 style={{ backgroundColor: 'var(--charcoal, #1C1C1E)' }}>
+              <div className="px-6 py-4 border-r" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+                <p className="text-[0.6rem] font-medium uppercase"
+                   style={{ letterSpacing: '0.14em', color: 'rgba(255,255,255,0.30)' }}>
+                  Traditional Event Software
+                </p>
+              </div>
+              <div className="px-6 py-4">
+                <p className="text-[0.6rem] font-medium uppercase"
+                   style={{ letterSpacing: '0.14em', color: 'var(--gold, #B8955A)', opacity: 0.85 }}>
+                  Elevé
+                </p>
+              </div>
+            </div>
+
+            {/* Comparison rows */}
+            {COMPARISON_ROWS.map(({ traditional, eleve }, i) => (
+              <div
+                key={traditional}
+                className="grid grid-cols-2"
+                style={{
+                  backgroundColor: i % 2 === 0 ? 'var(--off-white, #FAFAF8)' : '#fff',
+                  borderTop: '0.5px solid rgba(180,166,150,0.20)',
+                }}
+              >
+                <div className="px-6 py-4 flex items-center gap-3 border-r"
+                     style={{ borderColor: 'rgba(180,166,150,0.20)' }}>
+                  <span className="w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: 'rgba(180,166,150,0.40)' }} />
+                  <span className="font-light" style={{ fontSize: '0.82rem', color: 'var(--muted, #8A8580)' }}>
+                    {traditional}
+                  </span>
+                </div>
+                <div className="px-6 py-4 flex items-center gap-3">
+                  <CheckCircle2 size={13} strokeWidth={1.5} className="shrink-0 text-gold/55" />
+                  <span className="font-light text-charcoal" style={{ fontSize: '0.82rem' }}>
+                    {eleve}
+                  </span>
+                </div>
+              </div>
+            ))}
+
+          </div>
         </div>
       </section>
 
@@ -732,7 +825,7 @@ export function LandingPage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          SECTION 11 — Pricing teaser
+          SECTION 11 — Pricing
       ══════════════════════════════════════════════════════════════ */}
       <section className="max-w-5xl mx-auto px-6 py-16 sm:py-24">
         <div className="text-center mb-12">
@@ -740,8 +833,7 @@ export function LandingPage() {
              style={{ letterSpacing: '0.22em', color: 'var(--gold, #B8955A)', opacity: 0.7 }}>
             Pricing
           </p>
-          <h2 className="font-serif font-light text-charcoal mb-3"
-              style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>
+          <h2 className="font-serif font-light text-charcoal mb-3" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>
             Simple, transparent pricing.
           </h2>
           <p className="font-light" style={{ fontSize: '0.875rem', color: 'var(--muted, #8A8580)' }}>
@@ -758,8 +850,8 @@ export function LandingPage() {
                 backgroundColor: 'var(--charcoal, #1C1C1E)',
                 border: '1px solid rgba(184,149,90,0.35)',
               } : {
-                backgroundColor: 'var(--card-bg, #FAFAF8)',
-                border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))',
+                backgroundColor: 'var(--off-white, #FAFAF8)',
+                border: '1px solid rgba(180,166,150,0.28)',
               }}
             >
               {featured && (
@@ -768,29 +860,18 @@ export function LandingPage() {
                   Most popular
                 </span>
               )}
-
               <p className="text-[0.62rem] font-medium uppercase mb-2"
                  style={{ letterSpacing: '0.12em', color: featured ? 'rgba(184,149,90,0.70)' : 'var(--stone, #8C8478)' }}>
                 {name}
               </p>
-
               <div className="flex items-baseline gap-1 mb-3">
-                <span className="font-serif font-light"
-                      style={{ fontSize: '2rem', color: featured ? 'var(--off-white, #FAFAF8)' : 'var(--charcoal, #1C1C1E)' }}>
-                  {price}
-                </span>
-                {period && (
-                  <span className="font-light" style={{ fontSize: '0.78rem', color: featured ? 'rgba(255,255,255,0.35)' : 'var(--muted, #8A8580)' }}>
-                    {period}
-                  </span>
-                )}
+                <span className="font-serif font-light" style={{ fontSize: '2rem', color: featured ? 'var(--off-white, #FAFAF8)' : 'var(--charcoal, #1C1C1E)' }}>{price}</span>
+                {period && <span className="font-light" style={{ fontSize: '0.78rem', color: featured ? 'rgba(255,255,255,0.35)' : 'var(--muted, #8A8580)' }}>{period}</span>}
               </div>
-
               <p className="font-light mb-6 leading-relaxed"
                  style={{ fontSize: '0.78rem', color: featured ? 'rgba(255,255,255,0.45)' : 'var(--muted, #8A8580)' }}>
                 {desc}
               </p>
-
               <ul className="space-y-2 mb-8 flex-1">
                 {features.map((f) => (
                   <li key={f} className="flex items-start gap-2.5">
@@ -803,14 +884,9 @@ export function LandingPage() {
                   </li>
                 ))}
               </ul>
-
-              {/* Pricing CTA — placeholder, no Stripe yet */}
               <button
                 type="button"
-                className={cn(
-                  'w-full text-[0.72rem] font-medium uppercase py-2.5 rounded-sm border transition-all duration-200',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40',
-                )}
+                className={cn('w-full text-[0.72rem] font-medium uppercase py-2.5 rounded-sm border transition-all duration-200')}
                 style={featured ? {
                   letterSpacing: '0.08em',
                   backgroundColor: 'var(--gold, #B8955A)',
@@ -822,10 +898,7 @@ export function LandingPage() {
                   borderColor: 'rgba(180,166,150,0.40)',
                   color: 'var(--charcoal-light, #4A4A50)',
                 }}
-                onClick={() => {
-                  // Placeholder — connect Stripe or Calendly here
-                  window.open('mailto:demo@eleve.app?subject=' + encodeURIComponent(cta + ' — ' + name), '_blank')
-                }}
+                onClick={() => window.open('mailto:demo@eleve.app?subject=' + encodeURIComponent(cta + ' — ' + name), '_blank')}
               >
                 {cta}
               </button>
@@ -833,8 +906,7 @@ export function LandingPage() {
           ))}
         </div>
 
-        <p className="text-center mt-8 font-light"
-           style={{ fontSize: '0.72rem', color: 'var(--muted, #8A8580)' }}>
+        <p className="text-center mt-8 font-light" style={{ fontSize: '0.72rem', color: 'var(--muted, #8A8580)' }}>
           Pricing is indicative. Contact us for enterprise or multi-property arrangements.
         </p>
       </section>
@@ -855,18 +927,12 @@ export function LandingPage() {
               style={{ fontSize: 'clamp(1.6rem, 4vw, 2.25rem)' }}>
             Ready to see Elevé in action?
           </h2>
-          <p className="font-light mb-10 leading-[1.85]"
-             style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.40)' }}>
+          <p className="font-light mb-10 leading-[1.85]" style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.40)' }}>
             Explore the full platform with seeded demo data — no account required.
             Or book a 20-minute walkthrough with the team.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3">
-            <Button
-              variant="gold"
-              size="lg"
-              className="w-full sm:w-auto"
-              onClick={() => navigate('/dashboard')}
-            >
+            <Button variant="gold" size="lg" className="w-full sm:w-auto" onClick={() => navigate('/dashboard')}>
               Enter Demo
             </Button>
             <button
@@ -888,42 +954,23 @@ export function LandingPage() {
       {/* ══════════════════════════════════════════════════════════════
           SECTION 13 — Footer
       ══════════════════════════════════════════════════════════════ */}
-      <footer
-        className="py-8 px-6"
-        style={{ borderTop: '0.5px solid rgba(180,166,150,0.20)' }}
-      >
+      <footer className="py-8 px-6" style={{ borderTop: '0.5px solid rgba(180,166,150,0.20)' }}>
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="font-serif font-light text-charcoal" style={{ fontSize: '1rem', letterSpacing: '0.04em' }}>
-            Elevé
-          </p>
+          <p className="font-serif font-light text-charcoal" style={{ fontSize: '1rem', letterSpacing: '0.04em' }}>Elevé</p>
           <div className="flex items-center gap-6">
-            <button
-              type="button"
-              onClick={() => navigate('/dashboard')}
-              className="text-[0.65rem] font-light transition-colors duration-150 hover:text-charcoal"
-              style={{ color: 'var(--muted, #8A8580)', letterSpacing: '0.08em' }}
-            >
-              Dashboard
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate('/planner')}
-              className="text-[0.65rem] font-light transition-colors duration-150 hover:text-charcoal"
-              style={{ color: 'var(--muted, #8A8580)', letterSpacing: '0.08em' }}
-            >
-              Plan Event
-            </button>
-            <button
-              type="button"
-              onClick={() => window.open('mailto:demo@eleve.app', '_blank')}
-              className="text-[0.65rem] font-light transition-colors duration-150 hover:text-charcoal"
-              style={{ color: 'var(--muted, #8A8580)', letterSpacing: '0.08em' }}
-            >
-              Contact
-            </button>
+            {[
+              { label: 'Dashboard', onClick: () => navigate('/dashboard') },
+              { label: 'Plan Event', onClick: () => navigate('/planner') },
+              { label: 'Contact', onClick: () => window.open('mailto:demo@eleve.app', '_blank') },
+            ].map(({ label, onClick }) => (
+              <button key={label} type="button" onClick={onClick}
+                className="text-[0.65rem] font-light transition-colors duration-150 hover:text-charcoal"
+                style={{ color: 'var(--muted, #8A8580)', letterSpacing: '0.08em' }}>
+                {label}
+              </button>
+            ))}
           </div>
-          <p className="text-[0.62rem] font-light"
-             style={{ color: 'rgba(138,133,128,0.50)', letterSpacing: '0.04em' }}>
+          <p className="text-[0.62rem] font-light" style={{ color: 'rgba(138,133,128,0.50)', letterSpacing: '0.04em' }}>
             © {new Date().getFullYear()} Elevé Event Operations
           </p>
         </div>
@@ -935,36 +982,19 @@ export function LandingPage() {
 
 // ─── PreviewCard ──────────────────────────────────────────────────────────────
 
-function PreviewCard({
-  label,
-  children,
-}: {
-  label:    string
-  children: React.ReactNode
-}) {
+function PreviewCard({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div
-      className="rounded-sm overflow-hidden"
-      style={{ border: '0.5px solid rgba(184,149,90,0.18)' }}
-    >
-      {/* Card header bar */}
-      <div
-        className="px-4 py-2.5 flex items-center gap-2"
-        style={{ backgroundColor: 'rgba(255,255,255,0.04)', borderBottom: '0.5px solid rgba(184,149,90,0.12)' }}
-      >
+    <div className="rounded-sm overflow-hidden" style={{ border: '0.5px solid rgba(184,149,90,0.18)' }}>
+      <div className="px-4 py-2.5 flex items-center gap-2"
+           style={{ backgroundColor: 'rgba(255,255,255,0.04)', borderBottom: '0.5px solid rgba(184,149,90,0.12)' }}>
         <div className="flex gap-1.5">
-          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
-          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
-          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
+          {[0,1,2].map(i => <span key={i} className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />)}
         </div>
-        <span className="text-[0.58rem] font-light ml-1"
-              style={{ color: 'rgba(255,255,255,0.25)', letterSpacing: '0.08em' }}>
+        <span className="text-[0.58rem] font-light ml-1" style={{ color: 'rgba(255,255,255,0.25)', letterSpacing: '0.08em' }}>
           {label}
         </span>
       </div>
-      {/* Card content */}
-      <div className="p-4 sm:p-5"
-           style={{ backgroundColor: 'rgba(255,255,255,0.02)' }}>
+      <div className="p-4 sm:p-5" style={{ backgroundColor: 'rgba(255,255,255,0.02)' }}>
         {children}
       </div>
     </div>
