@@ -201,7 +201,7 @@ export function PropertySettingsPage() {
       <button
         type="button"
         onClick={() => navigate('/dashboard')}
-        className="flex items-center gap-1.5 mb-8 transition-colors duration-150"
+        className="flex items-center gap-1.5 mb-8 py-2 -my-2 transition-colors duration-150"
         style={{ color: 'var(--stone)', fontSize: '0.75rem' }}
       >
         <ArrowLeft size={13} strokeWidth={1.5} />
@@ -341,7 +341,7 @@ export function PropertySettingsPage() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Select
               label="Typical attendance"
               value={form.typicalAttendance}
@@ -388,18 +388,47 @@ export function PropertySettingsPage() {
         />
       </FormSection>
 
-      {/* ── Save ────────────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between pt-2">
-        {error && (
-          <p className="text-[0.78rem] font-light text-red-500">{error}</p>
-        )}
+      {/* ── Error banner (shown above sticky bar when error occurs) ── */}
+      {error && (
+        <div
+          className="rounded-sm px-4 py-3 mb-4 flex items-start gap-3"
+          style={{
+            backgroundColor: '#FEF2F2',
+            border: '0.5px solid #FCA5A5',
+          }}
+        >
+          <span className="text-red-500 text-[0.7rem] shrink-0 mt-0.5">✕</span>
+          <div>
+            <p className="text-[0.78rem] font-medium text-red-700 mb-0.5">Save failed</p>
+            <p className="text-[0.72rem] font-light text-red-600 leading-relaxed">{error}</p>
+            {error.toLowerCase().includes('relation') || error.toLowerCase().includes('does not exist') ? (
+              <p className="text-[0.68rem] text-red-500 mt-1.5 font-light">
+                The property_profiles table may not exist yet. Run the migration SQL in your Supabase dashboard.
+              </p>
+            ) : error.toLowerCase().includes('row-level') || error.toLowerCase().includes('rls') || error.toLowerCase().includes('policy') ? (
+              <p className="text-[0.68rem] text-red-500 mt-1.5 font-light">
+                Row-level security is blocking this write. Check your Supabase RLS policies for property_profiles.
+              </p>
+            ) : null}
+          </div>
+        </div>
+      )}
+
+      {/* ── Save bar — sticky on mobile so it's always reachable ─── */}
+      <div
+        className="sticky bottom-0 -mx-5 sm:mx-0 px-5 sm:px-0 py-4 sm:py-2 flex items-center justify-between gap-4 sm:pt-2 sm:bg-transparent sm:border-0"
+        style={{
+          backgroundColor: 'var(--off-white, #FAFAF8)',
+          borderTop: '0.5px solid rgba(180,166,150,0.28)',
+        }}
+      >
         {!error && saved && (
           <span className="flex items-center gap-1.5 text-[0.78rem] font-light" style={{ color: 'var(--gold)' }}>
             <Check size={13} strokeWidth={1.5} />
             Saved
           </span>
         )}
-        {!error && !saved && <span />}
+        {(!saved || error) && <span />}
 
         <Button
           variant="gold"

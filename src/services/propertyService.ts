@@ -128,8 +128,27 @@ export async function upsertPropertyProfile(
 }
 
 function extractMessage(err: unknown): string {
-  if (err && typeof err === 'object' && 'message' in err) {
-    return String((err as { message: unknown }).message)
+  if (!err) return 'An unexpected error occurred'
+
+  // Supabase error objects
+  if (typeof err === 'object') {
+    const e = err as Record<string, unknown>
+
+    // Postgres error code surfaced by Supabase JS
+    if (e.code === '42P01' || String(e.message ?? '').includes('does not exist')) {
+      return 'Table not found: property_profiles does not exist. Run the Phase 3 migration SQL in your Supabase dashboard.'
+    }
+    if (e.code === '42501' || String(e.message ?? '').includes('row-level security')) {
+      return 'Row-level security policy rejected this write. Check RLS policies on property_profiles in Supabase.'
+    }
+    if (e.code === 'PGRST301') {
+      return 'Supabase returned no data after insert — check that the table exists and RLS allows INSERT.'
+    }
+    if ('message' in e && typeof e.message === 'string') {
+      return e.message
+    }
   }
+
+  if (typeof err === 'string') return err
   return 'An unexpected error occurred'
 }

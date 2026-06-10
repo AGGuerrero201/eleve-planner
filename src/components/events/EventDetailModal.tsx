@@ -17,10 +17,10 @@ import {
 } from 'lucide-react'
 
 interface EventDetailModalProps {
-  event: SavedEvent | null
-  onClose: () => void
-  onStatusChange?: (id: string, status: EventWorkflowStatus) => Promise<void>
-  onFieldSave?: (id: string, patch: Record<string, unknown>) => Promise<string | null>
+  event:                SavedEvent | null
+  onClose:              () => void
+  onStatusChange?:      (id: string, status: EventWorkflowStatus) => Promise<void>
+  onFieldSave?:         (id: string, patch: Record<string, unknown>) => Promise<string | null>
   onSectionRegenerate?: (id: string, section: RegenerableSection) => Promise<string | null>
 }
 
@@ -31,10 +31,10 @@ export function EventDetailModal({
   onFieldSave,
   onSectionRegenerate,
 }: EventDetailModalProps) {
-  const [updatingStatus, setUpdatingStatus] = useState(false)
+  const [updatingStatus, setUpdatingStatus]           = useState(false)
   const [regeneratingSection, setRegeneratingSection] = useState<RegenerableSection | null>(null)
   const [recentlyRegenerated, setRecentlyRegenerated] = useState<RegenerableSection | null>(null)
-  const [regenError, setRegenError] = useState<string | null>(null)
+  const [regenError, setRegenError]                   = useState<string | null>(null)
 
   const handleStatusChange = async (newStatus: EventWorkflowStatus) => {
     if (!event || !onStatusChange || newStatus === event.workflowStatus) return
@@ -62,9 +62,11 @@ export function EventDetailModal({
     }
   }
 
+  // ── Regen button — contextual, placed inline with each section ────────────
+  // Improved: larger touch target, clearer label, less cryptic
   const RegenBtn = ({ section }: { section: RegenerableSection }) => {
     if (!onSectionRegenerate) return null
-    const isThis = regeneratingSection === section
+    const isThis  = regeneratingSection === section
     const wasThis = recentlyRegenerated === section
     const anyBusy = regeneratingSection !== null
 
@@ -73,22 +75,28 @@ export function EventDetailModal({
         type="button"
         onClick={() => void handleRegenerate(section)}
         disabled={anyBusy}
-        title={`Regenerate ${SECTION_LABELS[section]} with Claude`}
+        title={`Regenerate ${SECTION_LABELS[section]} with AI`}
         className={cn(
-          // Min tap target — 32px height ensures comfortable mobile tapping
-          'flex items-center gap-1 text-[0.67rem] font-medium px-2 py-1 min-h-[32px] rounded-sm border transition-all duration-150',
-          'disabled:cursor-not-allowed',
+          // Touch target: min 36px height, comfortable horizontal padding
+          'flex items-center gap-1.5 text-[0.65rem] font-medium px-2.5 py-1.5 min-h-[36px] rounded-sm border',
+          'transition-all duration-150 disabled:cursor-not-allowed whitespace-nowrap',
           wasThis
             ? 'border-green-200 bg-green-50 text-green-700'
             : 'border-border bg-white text-muted hover:border-gold hover:text-gold disabled:opacity-40'
         )}
       >
         {isThis
-          ? <Loader2 size={10} className="animate-spin" />
+          ? <Loader2 size={11} className="animate-spin shrink-0" />
           : wasThis
-          ? <CheckCircle2 size={10} />
-          : <RefreshCw size={10} />}
-        {isThis ? 'Regenerating…' : wasThis ? 'Updated' : '↻ AI'}
+          ? <CheckCircle2 size={11} className="shrink-0" />
+          : <RefreshCw size={11} className="shrink-0" />}
+        {/* Full label on sm+, short label on mobile */}
+        <span className="hidden sm:inline">
+          {isThis ? 'Regenerating…' : wasThis ? 'Updated' : 'Regenerate'}
+        </span>
+        <span className="sm:hidden">
+          {isThis ? '…' : wasThis ? '✓' : 'Regen'}
+        </span>
       </button>
     )
   }
@@ -122,12 +130,11 @@ export function EventDetailModal({
           <p className="text-[0.72rem] text-red-500 mb-3 px-1">{regenError}</p>
         )}
 
-        {/* Status selector — horizontal scroll on mobile, wrap on sm+ */}
+        {/* Status selector */}
         <div className="flex items-center gap-3 mb-5 pb-5 border-b border-border flex-wrap">
           <span className="text-[0.7rem] font-medium tracking-[0.1em] uppercase text-charcoal-light shrink-0">
             Status
           </span>
-          {/* Scrollable row on mobile to prevent wrapping mess */}
           <div className="flex gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin flex-nowrap sm:flex-wrap -mx-1 px-1">
             {WORKFLOW_STATUS_ORDER.map((s) => (
               <button
@@ -137,7 +144,7 @@ export function EventDetailModal({
                 onClick={() => void handleStatusChange(s)}
                 className={cn(
                   'shrink-0 text-[0.67rem] font-medium tracking-[0.08em] uppercase',
-                  'px-2.5 py-1.5 min-h-[32px] rounded-sm border transition-all duration-150',
+                  'px-2.5 py-1.5 min-h-[36px] rounded-sm border transition-all duration-150',
                   'disabled:opacity-50 disabled:cursor-not-allowed',
                   event.workflowStatus === s
                     ? 'bg-charcoal text-gold-light border-charcoal'
@@ -323,6 +330,7 @@ export function EventDetailModal({
           <p className="text-[0.72rem] text-muted/60">Saved on {formatDate(event.savedAt ?? event.created_at ?? new Date().toISOString())}</p>
           <WorkflowBadge status={event.workflowStatus ?? 'draft'} />
         </div>
+
       </div>
     </Modal>
   )
