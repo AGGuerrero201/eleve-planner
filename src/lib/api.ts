@@ -80,10 +80,51 @@ export async function generateEventPlan(
         body.propertyContext = propertyContextBlock
       }
 
-      const { data: responseData, error } = await supabase.functions.invoke<GenerateEventResponse>(
-        'generate-event-plan',
-        { body }
-      )
+      let responseData: GenerateEventResponse | null = null
+      let invokeError: unknown = null
+
+      try {
+        const result = await supabase.functions.invoke<GenerateEventResponse>(
+          'generate-event-plan',
+          { body }
+        )
+        responseData = result.data
+        invokeError  = result.error
+      } catch (rawErr) {
+        // supabase-js throws when it can't parse the response as JSON.
+        // Attempt to recover the raw text and repair it ourselves.
+        const msg = rawErr instanceof Error ? rawErr.message : String(rawErr)
+        const isJsonError = msg.includes('JSON') || msg.includes('Unexpected token') || msg.includes('position')
+
+        if (!isJsonError) throw rawErr
+
+        // Re-fetch the Edge Function directly to get the raw text
+        try {
+          const supabaseUrl = (supabase as any).supabaseUrl as string
+          const supabaseKey = (supabase as any).supabaseKey as string
+          const res = await fetch(
+            `${supabaseUrl}/functions/v1/generate-event-plan`,
+            {
+              method:  'POST',
+              headers: {
+                'Content-Type':  'application/json',
+                'Authorization': `Bearer ${supabaseKey}`,
+                'apikey':        supabaseKey,
+              },
+              body: JSON.stringify(body),
+            }
+          )
+          const rawText  = await res.text()
+          const repaired = repairJson(rawText)
+          const parsed   = JSON.parse(repaired) as GenerateEventResponse
+          responseData   = parsed
+        } catch {
+          // Repair failed — surface the original error
+          throw new Error(`JSON parse error from Edge Function: ${msg}`)
+        }
+      }
+
+      const error = invokeError
 
       if (error) {
         const edgeError = await parseEdgeFunctionError(error)
@@ -117,6 +158,46 @@ export async function generateEventPlan(
   }
 
   throw lastError
+}
+
+// ─── JSON repair ──────────────────────────────────────────────────────────────
+// The Edge Function occasionally returns truncated or trailing-comma JSON
+// when the AI response is cut off. This attempts lightweight fixes before
+// passing the error back to the user.
+
+function repairJson(raw: string): string {
+  let s = raw.trim()
+
+  // Strip markdown code fences if the AI wrapped the response
+  s = s.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim()
+
+  // Remove trailing commas before } or ]
+  s = s.replace(/,\s*([}\]])/g, '$1')
+
+  // If the string is truncated mid-object, attempt to close open structures
+  // Count unmatched braces/brackets
+  let braces   = 0
+  let brackets = 0
+  let inString = false
+  let escape   = false
+
+  for (const ch of s) {
+    if (escape)          { escape = false; continue }
+    if (ch === '\\' && inString) { escape = true; continue }
+    if (ch === '"')      { inString = !inString; continue }
+    if (inString)        continue
+    if (ch === '{')      braces++
+    if (ch === '}')      braces--
+    if (ch === '[')      brackets++
+    if (ch === ']')      brackets--
+  }
+
+  // Close any unclosed strings, then close structures
+  if (inString) s += '"'
+  while (brackets > 0) { s += ']'; brackets-- }
+  while (braces > 0)   { s += '}'; braces-- }
+
+  return s
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────

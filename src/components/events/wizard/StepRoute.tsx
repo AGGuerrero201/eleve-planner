@@ -90,7 +90,7 @@ export function StepRoute({ formData, isLoading, onGenerate, onLoadTemplate }: S
                 }
               </button>
               <p className="text-[0.62rem] text-muted/40 font-light text-center">
-                Takes 20–40 seconds
+                Usually takes under a minute
               </p>
             </div>
           </div>

@@ -7,17 +7,7 @@ import { PlannerPage } from '@/pages/PlannerPage'
 import { SavedEventsPage } from '@/pages/SavedEventsPage'
 import { VendorHubPage } from '@/pages/VendorHubPage'
 import { PropertySettingsPage } from '@/pages/PropertySettingsPage'
-
-// ─── Routing ──────────────────────────────────────────────────────────────────
-//
-//  /            → LandingPage
-//  /dashboard   → DashboardPage
-//  /planner     → PlannerPage
-//  /saved       → SavedEventsPage
-//  /vendors     → VendorHubPage
-//  /property    → PropertySettingsPage   (Phase 3)
-//
-// ─────────────────────────────────────────────────────────────────────────────
+import { SampleEventPage } from '@/pages/SampleEventPage'
 
 function App() {
   return (
@@ -30,6 +20,7 @@ function App() {
           <Route path="/saved"     element={<SavedEventsPage />} />
           <Route path="/vendors"   element={<VendorHubPage />} />
           <Route path="/property"  element={<PropertySettingsPage />} />
+          <Route path="/sample"    element={<SampleEventPage />} />
           <Route path="*"          element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>

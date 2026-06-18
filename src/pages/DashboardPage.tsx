@@ -23,6 +23,9 @@ import {
 import { useSavedEvents } from '@/hooks/useSavedEvents'
 import { useVendors } from '@/hooks/useVendors'
 import { PropertyProfileCard } from '@/components/property/PropertyProfileCard'
+import { useOnboarding } from '@/hooks/useOnboarding'
+import { OnboardingOverlay } from '@/components/onboarding/OnboardingOverlay'
+import { SampleEventBanner } from '@/components/onboarding/SampleEventBanner'
 import { WORKFLOW_STATUS_LABELS } from '@/lib/workflowStatus'
 import { ALL_VENDOR_CATEGORIES, VENDOR_CATEGORY_LABELS } from '@/types/vendor'
 import type { EventWorkflowStatus } from '@/types'
@@ -81,6 +84,18 @@ export function DashboardPage() {
   const eventsLoaded  = evStatus === 'success'
   const vendorsLoaded = vStatus  === 'success'
 
+  // Onboarding state
+  const { showOverlay, dismiss, lastChoice } = useOnboarding()
+
+  function handleSampleGenerate(eventType: string) {
+    navigate('/sample?type=' + encodeURIComponent(eventType))
+  }
+
+  function handleBannerGenerate() {
+    // Re-show the picker by navigating to sample with no type (defaults to Cocktail)
+    navigate('/sample?type=Cocktail+Reception')
+  }
+
   // Recent events — latest 3 by savedAt
   const recentEvents = useMemo(() => {
     if (!eventsLoaded) return []
@@ -110,7 +125,21 @@ export function DashboardPage() {
   const dateStr     = getFormattedDate()
 
   return (
-    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-0">
+    <>
+      {/* Onboarding overlay — first visit only */}
+      {showOverlay && (
+        <OnboardingOverlay
+          onDismiss={dismiss}
+          onGenerate={handleSampleGenerate}
+        />
+      )}
+
+      <div className="max-w-5xl mx-auto px-5 sm:px-8 py-0">
+
+      {/* Explorer banner — shown after "Explore on my own", dashboard only */}
+      {!showOverlay && lastChoice === 'explore' && (
+        <SampleEventBanner onGenerate={handleBannerGenerate} />
+      )}
 
       {/* ══════════════════════════════════════════════════════
           SECTION 1 — Greeting header
@@ -449,6 +478,7 @@ export function DashboardPage() {
       </div>
 
     </div>
+    </>
   )
 }
 

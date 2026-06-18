@@ -275,7 +275,7 @@ export function PlannerPage() {
               className="text-[0.7rem] text-muted/40 font-light mt-2 text-center italic"
               style={{ borderTop: 'var(--border-section)', paddingTop: '16px' }}
             >
-              Takes 20–40 seconds
+              Usually takes under a minute
             </p>
           </div>
         </div>
