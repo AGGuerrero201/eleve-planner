@@ -7,6 +7,14 @@ import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Vendor } from '@/types/vendor'
 import { rowToVendor, vendorToRow } from '@/types/vendor'
+import {
+  isExperienceActive,
+  expGetVendors,
+  expAddVendor,
+  expUpdateVendor,
+  expRemoveVendor,
+  onExperienceSignal,
+} from '@/experience/experienceStore'
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
@@ -29,6 +37,12 @@ export function useVendors(): UseVendorsReturn {
   const fetch = useCallback(async () => {
     setStatus('loading')
     setError(null)
+    // Experience Elevé: read from the isolated experience store
+    if (isExperienceActive()) {
+      setVendors(expGetVendors())
+      setStatus('success')
+      return
+    }
     try {
       const { data, error: err } = await supabase
         .from('vendors')
@@ -46,9 +60,21 @@ export function useVendors(): UseVendorsReturn {
 
   useEffect(() => { void fetch() }, [fetch])
 
+  // Experience Elevé: stay in sync when experience data is reseeded or reset.
+  useEffect(() => {
+    return onExperienceSignal((signal) => {
+      if (signal === 'data_changed') void fetch()
+    })
+  }, [fetch])
+
   const add = useCallback(async (
     v: Omit<Vendor, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<Vendor | null> => {
+    if (isExperienceActive()) {
+      const vendor = expAddVendor(v)
+      setVendors((prev) => [...prev, vendor].sort((a, b) => a.name.localeCompare(b.name)))
+      return vendor
+    }
     try {
       const { data, error: err } = await supabase
         .from('vendors')
@@ -70,6 +96,13 @@ export function useVendors(): UseVendorsReturn {
     id: string,
     patch: Partial<Vendor>
   ): Promise<string | null> => {
+    if (isExperienceActive()) {
+      expUpdateVendor(id, patch)
+      setVendors((prev) =>
+        prev.map((v) => v.id === id ? { ...v, ...patch } : v)
+      )
+      return null
+    }
     try {
       const { error: err } = await (supabase as any)
         .from('vendors')
@@ -87,6 +120,11 @@ export function useVendors(): UseVendorsReturn {
   }, [])
 
   const remove = useCallback(async (id: string): Promise<void> => {
+    if (isExperienceActive()) {
+      expRemoveVendor(id)
+      setVendors((prev) => prev.filter((v) => v.id !== id))
+      return
+    }
     try {
       await supabase.from('vendors').delete().eq('id', id)
       setVendors((prev) => prev.filter((v) => v.id !== id))

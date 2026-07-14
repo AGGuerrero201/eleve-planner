@@ -20,6 +20,15 @@ import {
   updateEventPlanField,
 } from '@/lib/eventService'
 import type { EventWorkflowStatus } from '@/types'
+import {
+  isExperienceActive,
+  expGetEvents,
+  expSaveEvent,
+  expRemoveEvent,
+  expUpdateEventStatus,
+  expUpdateEventField,
+  onExperienceSignal,
+} from '@/experience/experienceStore'
 
 interface UseSavedEventsReturn {
   events: SavedEvent[]
@@ -41,6 +50,12 @@ export function useSavedEvents(): UseSavedEventsReturn {
   const fetch = useCallback(async () => {
     setStatus('loading')
     setError(null)
+    // Experience Elevé: read from the isolated experience store
+    if (isExperienceActive()) {
+      setEvents(expGetEvents())
+      setStatus('success')
+      return
+    }
     const result = await fetchEventPlans()
     if (result.error) {
       setError(result.error)
@@ -55,7 +70,20 @@ export function useSavedEvents(): UseSavedEventsReturn {
     void fetch()
   }, [fetch])
 
+  // Experience Elevé: stay in sync when experience data is reseeded,
+  // reset, or changed elsewhere (e.g. the "Reset Experience Data" control).
+  useEffect(() => {
+    return onExperienceSignal((signal) => {
+      if (signal === 'data_changed') void fetch()
+    })
+  }, [fetch])
+
   const save = useCallback(async (event: SavedEvent): Promise<SavedEvent | null> => {
+    if (isExperienceActive()) {
+      const row = expSaveEvent(event)
+      setEvents((prev) => [row, ...prev])
+      return row
+    }
     const result = await createEventPlan(event)
     if (result.error || !result.data) {
       setError(result.error ?? 'Failed to save event')
@@ -67,6 +95,10 @@ export function useSavedEvents(): UseSavedEventsReturn {
 
   const remove = useCallback(async (id: string) => {
     setEvents((prev) => prev.filter((e) => e.id !== id))
+    if (isExperienceActive()) {
+      expRemoveEvent(id)
+      return
+    }
     const result = await deleteEventPlan(id)
     if (result.error) {
       setError(result.error)
@@ -85,6 +117,10 @@ export function useSavedEvents(): UseSavedEventsReturn {
     setEvents((prev) =>
       prev.map((e) => (e.id === id ? { ...e, workflowStatus: status } : e))
     )
+    if (isExperienceActive()) {
+      expUpdateEventStatus(id, status)
+      return
+    }
     const result = await updateEventPlanStatus(id, status)
     if (result.error) {
       setError(result.error)
@@ -120,6 +156,10 @@ export function useSavedEvents(): UseSavedEventsReturn {
         return { ...e, ...updates }
       })
     )
+    if (isExperienceActive()) {
+      expUpdateEventField(id, patch)
+      return null
+    }
     const result = await updateEventPlanField(id, patch)
     if (result.error) {
       setError(result.error)

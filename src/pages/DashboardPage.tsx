@@ -14,7 +14,7 @@
  *   6. Concierge insight strip
  */
 
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   ArrowRight, BookOpen, Store, Zap, CalendarDays,
@@ -24,6 +24,8 @@ import { useSavedEvents } from '@/hooks/useSavedEvents'
 import { useVendors } from '@/hooks/useVendors'
 import { PropertyProfileCard } from '@/components/property/PropertyProfileCard'
 import { useOnboarding } from '@/hooks/useOnboarding'
+import { useExperience } from '@/experience/ExperienceContext'
+import { getActivity, onExperienceSignal, type ActivityEntry } from '@/experience/experienceStore'
 import { OnboardingOverlay } from '@/components/onboarding/OnboardingOverlay'
 import { SampleEventBanner } from '@/components/onboarding/SampleEventBanner'
 import { WORKFLOW_STATUS_LABELS } from '@/lib/workflowStatus'
@@ -32,6 +34,19 @@ import type { EventWorkflowStatus } from '@/types'
 import { cn } from '@/lib/utils'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function timeAgo(iso: string): string {
+  const ms = Date.now() - new Date(iso).getTime()
+  const mins = Math.floor(ms / 60000)
+  if (mins < 1)  return 'Just now'
+  if (mins < 60) return `${mins}m ago`
+  const hours = Math.floor(mins / 60)
+  if (hours < 24) return `${hours}h ago`
+  const days = Math.floor(hours / 24)
+  if (days < 30) return `${days}d ago`
+  const months = Math.floor(days / 30)
+  return `${months}mo ago`
+}
 
 function getGreeting(): string {
   const h = new Date().getHours()
@@ -87,6 +102,18 @@ export function DashboardPage() {
   // Onboarding state
   const { showOverlay, dismiss, lastChoice } = useOnboarding()
 
+  // Experience Elevé — the walkthrough replaces first-run onboarding,
+  // and the dashboard gains a live activity feed while it's active.
+  const { active: experienceActive } = useExperience()
+  const [activity, setActivity] = useState<ActivityEntry[]>(() =>
+    experienceActive ? getActivity() : []
+  )
+  useEffect(() => {
+    if (!experienceActive) return
+    setActivity(getActivity())
+    return onExperienceSignal(() => setActivity(getActivity()))
+  }, [experienceActive])
+
   function handleSampleGenerate(eventType: string) {
     navigate('/sample?type=' + encodeURIComponent(eventType))
   }
@@ -126,8 +153,9 @@ export function DashboardPage() {
 
   return (
     <>
-      {/* Onboarding overlay — first visit only */}
-      {showOverlay && (
+      {/* Onboarding overlay — first visit only (suppressed during Experience Elevé,
+          which provides its own guided walkthrough) */}
+      {showOverlay && !experienceActive && (
         <OnboardingOverlay
           onDismiss={dismiss}
           onGenerate={handleSampleGenerate}
@@ -137,7 +165,7 @@ export function DashboardPage() {
       <div className="max-w-5xl mx-auto px-5 sm:px-8 py-0">
 
       {/* Explorer banner — shown after "Explore on my own", dashboard only */}
-      {!showOverlay && lastChoice === 'explore' && (
+      {!showOverlay && !experienceActive && lastChoice === 'explore' && (
         <SampleEventBanner onGenerate={handleBannerGenerate} />
       )}
 
@@ -249,7 +277,7 @@ export function DashboardPage() {
               <button
                 key={event.id}
                 type="button"
-                onClick={() => navigate('/saved')}
+                onClick={() => navigate('/saved', { state: { openEventId: event.id } })}
                 className={cn(
                   'w-full text-left rounded-sm px-4 py-3.5 group',
                   'transition-all duration-150',
@@ -427,7 +455,7 @@ export function DashboardPage() {
             icon={<BookOpen size={18} strokeWidth={1.5} />}
             label="Browse Templates"
             description="Launch from a curated seasonal template"
-            onClick={() => navigate('/planner')}
+            onClick={() => navigate('/planner', { state: { mode: 'templates' } })}
           />
 
           <QuickAction
@@ -439,6 +467,51 @@ export function DashboardPage() {
 
         </div>
       </div>
+
+      {/* ══════════════════════════════════════════════════════
+          SECTION 6b — Recent activity (Experience Elevé)
+          A live feed of the community's planning activity, so the
+          dashboard reflects every action taken during the experience.
+      ══════════════════════════════════════════════════════ */}
+      {experienceActive && activity.length > 0 && (
+        <div className="mb-10">
+          <SectionHeader label="Recent activity" />
+          <div
+            className="rounded-sm divide-y"
+            style={{
+              backgroundColor: 'var(--card-bg, #FAFAF8)',
+              border: 'var(--card-border, 1px solid rgba(180,166,150,0.28))',
+            }}
+          >
+            {activity.slice(0, 6).map((entry) => (
+              <div
+                key={entry.id}
+                className="flex items-baseline justify-between gap-4 px-4 py-3"
+                style={{ borderColor: 'rgba(180,166,150,0.18)' }}
+              >
+                <div className="flex items-baseline gap-3 min-w-0">
+                  <span
+                    aria-hidden="true"
+                    className="text-[0.55rem] shrink-0"
+                    style={{ color: 'rgba(184,149,90,0.65)' }}
+                  >
+                    ◆
+                  </span>
+                  <p className="text-[0.8rem] font-light text-charcoal-light truncate">
+                    {entry.text}
+                  </p>
+                </div>
+                <p
+                  className="text-[0.62rem] font-light shrink-0 tabular-nums"
+                  style={{ color: 'var(--muted, #8A8578)' }}
+                >
+                  {timeAgo(entry.ts)}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ══════════════════════════════════════════════════════
           SECTION 6 — Concierge insight strip

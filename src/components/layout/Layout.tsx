@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { Navbar } from './Navbar'
+import { ExperienceBar } from '@/experience/ExperienceBar'
 
 interface LayoutProps {
   children: ReactNode
@@ -12,6 +13,7 @@ export function Layout({ children }: LayoutProps) {
       style={{ backgroundColor: 'var(--warm-white, #FEFCFA)' }}
     >
       <Navbar />
+      <ExperienceBar />
       <main className="flex-1">
         {children}
       </main>

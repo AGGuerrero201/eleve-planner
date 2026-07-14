@@ -25,6 +25,7 @@ import {
   upsertPropertyProfile,
   getUserKey,
 } from '@/services/propertyService'
+import { onExperienceSignal } from '@/experience/experienceStore'
 
 // ─── Context shape ────────────────────────────────────────────────────────────
 
@@ -61,7 +62,7 @@ export function PropertyProvider({ children }: { children: ReactNode }) {
     setLoading(true)
     try {
       const result = await fetchPropertyProfile(userKey)
-      if (result.data) setProfile(result.data)
+      setProfile(result.data ?? null)
     } finally {
       setLoading(false)
     }
@@ -69,6 +70,14 @@ export function PropertyProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     void load()
+  }, [load])
+
+  // Reload whenever Experience Elevé activates, deactivates, or reseeds,
+  // so the active profile always reflects the current data source.
+  useEffect(() => {
+    return onExperienceSignal((signal) => {
+      if (signal === 'data_changed') void load()
+    })
   }, [load])
 
   const saveProfile = useCallback(

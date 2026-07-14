@@ -11,7 +11,9 @@ import { cn } from '@/lib/utils'
 export type PlannerMode = 'templates' | 'custom'
 
 interface PlannerEntryProps {
-  onSelect:  (mode: PlannerMode) => void
+  /** prefillEventType is set when a suggested starting point is chosen —
+      the parent pre-fills the wizard so the promised event actually loads. */
+  onSelect:  (mode: PlannerMode, prefillEventType?: string) => void
   disabled?: boolean
 }
 
@@ -23,28 +25,24 @@ const SUGGESTED = [
     type:     'Cocktail Reception',
     tags:     ['Rooftop', 'Full bar', 'Summer'],
     glyph:    '◆',
-    mode:     'templates' as PlannerMode,
   },
   {
     label:    'Rooftop Wine Tasting',
     type:     'Wine & Cheese Evening',
     tags:     ['Outdoor', 'Wine & beer', 'Social'],
     glyph:    '◇',
-    mode:     'templates' as PlannerMode,
   },
   {
     label:    'Wellness Morning',
     type:     'Wellness & Yoga Morning',
     tags:     ['Non-alcoholic', 'Morning', 'Mindful'],
     glyph:    '◎',
-    mode:     'custom' as PlannerMode,
   },
   {
     label:    'Family Movie Night',
     type:     'Movie Night',
     tags:     ['All-ages', 'Outdoor', 'Casual'],
     glyph:    '○',
-    mode:     'templates' as PlannerMode,
   },
 ]
 
@@ -118,7 +116,7 @@ export function PlannerEntry({ onSelect, disabled = false }: PlannerEntryProps) 
               key={s.label}
               {...s}
               disabled={disabled}
-              onClick={() => onSelect(s.mode)}
+              onClick={() => onSelect('custom', s.type)}
             />
           ))}
         </div>

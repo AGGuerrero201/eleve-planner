@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   CheckCircle2, RefreshCw, BookmarkPlus, Loader2,
   Mail, Megaphone, Users, Wine, Package, Clock, Lightbulb, Store,
@@ -19,9 +20,18 @@ interface EventPlanResultProps {
 }
 
 export function EventPlanResult({ plan, formData, onSave, onRegenerate, isSaved }: EventPlanResultProps) {
+  const navigate = useNavigate()
   const [saving, setSaving]       = useState(false)
   const [savedOk, setSavedOk]     = useState(false)
+  const [savedId, setSavedId]     = useState<string | null>(null)
   const [saveError, setSaveError] = useState<string | null>(null)
+
+  // A regenerated or newly loaded plan gets a fresh save state
+  useEffect(() => {
+    setSavedOk(false)
+    setSavedId(null)
+    setSaveError(null)
+  }, [plan])
 
   const handleSave = async () => {
     setSaving(true)
@@ -36,7 +46,7 @@ export function EventPlanResult({ plan, formData, onSave, onRegenerate, isSaved 
     setSaving(false)
     if (result) {
       setSavedOk(true)
-      setTimeout(() => setSavedOk(false), 4000)
+      setSavedId(result.id)
     } else {
       setSaveError('Could not save — please try again.')
     }
@@ -96,7 +106,7 @@ export function EventPlanResult({ plan, formData, onSave, onRegenerate, isSaved 
                 <div className="flex-1 min-w-0">
                   <p className="text-[0.82rem] sm:text-[0.875rem] text-charcoal font-light">{item.activity}</p>
                 </div>
-                <span className="text-[0.65rem] sm:text-[0.7rem] text-muted shrink-0 pt-0.5 hidden xs:block">
+                <span className="text-[0.65rem] sm:text-[0.7rem] text-muted shrink-0 pt-0.5 hidden sm:block">
                   {item.responsible}
                 </span>
               </div>
@@ -238,10 +248,28 @@ export function EventPlanResult({ plan, formData, onSave, onRegenerate, isSaved 
             Regenerate
           </Button>
           {savedOk && (
-            <span className="flex items-center justify-center gap-1.5 text-[0.75rem] font-medium text-green-700 bg-green-50 border border-green-200 px-3 py-1.5 rounded-sm">
-              <CheckCircle2 size={13} />
-              Saved to Supabase
-            </span>
+            <>
+              <span
+                className="flex items-center justify-center gap-1.5 text-[0.75rem] font-medium px-3 py-1.5 rounded-sm"
+                style={{
+                  color: 'var(--gold-dark, #9A7A42)',
+                  backgroundColor: 'var(--gold-ghost, #FBF7F2)',
+                  border: '1px solid rgba(184,149,90,0.30)',
+                }}
+                role="status"
+              >
+                <CheckCircle2 size={13} />
+                Saved to your library
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full sm:w-auto justify-center"
+                onClick={() => navigate('/saved', savedId ? { state: { openEventId: savedId } } : undefined)}
+              >
+                View in Library
+              </Button>
+            </>
           )}
           {saveError && (
             <span className="text-[0.75rem] text-red-600 bg-red-50 border border-red-200 px-3 py-1.5 rounded-sm">

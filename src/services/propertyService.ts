@@ -7,6 +7,7 @@
 
 import { supabase } from '@/lib/supabase'
 import type { PropertyProfile } from '@/types/property'
+import { isExperienceActive, expGetProfile, expSaveProfile } from '@/experience/experienceStore'
 
 // ─── User key ─────────────────────────────────────────────────────────────────
 // No auth yet — use a stable random key persisted in localStorage.
@@ -80,6 +81,10 @@ export interface ServiceResult<T> {
 export async function fetchPropertyProfile(
   userKey: string
 ): Promise<ServiceResult<PropertyProfile>> {
+  // Experience Elevé: serve the isolated experience profile
+  if (isExperienceActive()) {
+    return { data: expGetProfile(), error: null }
+  }
   try {
     const { data, error } = await (supabase as any)
       .from('property_profiles')
@@ -98,6 +103,10 @@ export async function fetchPropertyProfile(
 export async function upsertPropertyProfile(
   profile: PropertyProfile
 ): Promise<ServiceResult<PropertyProfile>> {
+  // Experience Elevé: persist to the isolated experience store
+  if (isExperienceActive()) {
+    return { data: expSaveProfile(profile), error: null }
+  }
   try {
     const row = profileToRow(profile)
 

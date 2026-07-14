@@ -9,6 +9,8 @@
  */
 
 import { supabase } from '@/lib/supabase'
+import { isExperienceActive } from '@/experience/experienceStore'
+import { composeSectionVariant } from '@/experience/localPlanEngine'
 import type {
   RegenerableSection,
   SectionRegenerationRequest,
@@ -51,6 +53,14 @@ export async function regenerateSection(
   event: SavedEvent,
   section: RegenerableSection
 ): Promise<{ value: SectionValue; error: null } | { value: null; error: string }> {
+  // Experience Elevé: regenerate from the local content engine — real
+  // alternative content, no network dependency, brief pause for pacing.
+  if (isExperienceActive()) {
+    await new Promise((resolve) => setTimeout(resolve, 1200 + Math.random() * 700))
+    const value = composeSectionVariant(event, section) as SectionValue
+    return { value, error: null }
+  }
+
   const request: SectionRegenerationRequest = {
     formData: event.meta as EventFormData,
     section,

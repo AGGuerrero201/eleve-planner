@@ -5,6 +5,7 @@
  */
 
 import { useNavigate } from 'react-router-dom'
+import { useExperience } from '@/experience/ExperienceContext'
 import {
   Building2, ClipboardList,
   Zap, Store, CheckCircle2,
@@ -168,6 +169,7 @@ function PreviewCard({ label, children }: { label: string; children: React.React
 
 export function LandingPage() {
   const navigate = useNavigate()
+  const { start: startExperience } = useExperience()
 
   return (
     <div style={{ backgroundColor: C.offWhite }}>
@@ -202,8 +204,8 @@ export function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 animate-fade-up animate-delay-300">
-            <Button variant="gold" size="lg" className="w-full sm:w-auto" onClick={() => navigate('/dashboard')}>
-              Enter Demo
+            <Button variant="gold" size="lg" className="w-full sm:w-auto" onClick={startExperience}>
+              Experience Elevé
             </Button>
             <button type="button"
               className="w-full sm:w-auto inline-flex items-center justify-center text-[0.78rem] font-medium tracking-[0.10em] uppercase px-9 py-3.5 rounded-sm border transition-all duration-200"
@@ -703,8 +705,8 @@ export function LandingPage() {
              style={{ fontSize: '0.68rem', letterSpacing: '0.22em', color: 'rgba(255,255,255,0.18)' }}>
             Until now.
           </p>
-          <Button variant="gold" size="lg" onClick={() => navigate('/dashboard')}>
-            Enter Demo
+          <Button variant="gold" size="lg" onClick={startExperience}>
+            Experience Elevé
           </Button>
         </div>
       </section>
@@ -790,12 +792,13 @@ export function LandingPage() {
           </SectionHeading>
           <p className="font-light mb-12 leading-[1.9]"
              style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.38)' }}>
-            Explore the full platform with seeded demo data — no account required.
-            Or book a 20-minute walkthrough with the team.
+            Step inside the live platform with a fully planned luxury community —
+            guided, interactive, and no account required. Or book a 20-minute
+            walkthrough with the team.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3">
-            <Button variant="gold" size="lg" className="w-full sm:w-auto" onClick={() => navigate('/dashboard')}>
-              Enter Demo
+            <Button variant="gold" size="lg" className="w-full sm:w-auto" onClick={startExperience}>
+              Experience Elevé
             </Button>
             <button type="button"
               className="w-full sm:w-auto inline-flex items-center justify-center text-[0.78rem] font-medium tracking-[0.10em] uppercase px-9 py-3.5 rounded-sm border transition-all duration-200"

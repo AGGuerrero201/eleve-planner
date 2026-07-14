@@ -1,5 +1,5 @@
-import { useState, useMemo, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { BookOpen, RefreshCw, AlertCircle, Loader2 } from 'lucide-react'
 import type { SavedEvent, EventWorkflowStatus, RegenerableSection } from '@/types'
 import { regenerateSection, sectionToPatch } from '@/lib/sectionRegeneration'
@@ -9,12 +9,14 @@ import { EventCard } from '@/components/events/EventCard'
 import { EventDetailModal } from '@/components/events/EventDetailModal'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
+import { isExperienceActive, emitExperienceSignal } from '@/experience/experienceStore'
 
 type FilterValue = 'all' | EventWorkflowStatus
 
 export function SavedEventsPage() {
   const { events, status, error, fetch, remove, updateStatus, updateField } = useSavedEvents()
   const navigate = useNavigate()
+  const location = useLocation()
   const [selectedEvent, setSelectedEvent] = useState<SavedEvent | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [activeFilter, setActiveFilter] = useState<FilterValue>('all')
@@ -38,8 +40,27 @@ export function SavedEventsPage() {
     [events, activeFilter]
   )
 
+  // Deep link: /saved can be opened with { state: { openEventId } } from the
+  // dashboard's recent-event rows or the post-save "View in Library" action —
+  // the referenced event opens directly instead of dead-ending at the grid.
+  const openEventId = (location.state as { openEventId?: string } | null)?.openEventId
+  useEffect(() => {
+    if (!openEventId || status !== 'success') return
+    const target = events.find((e) => e.id === openEventId)
+    if (target) {
+      setSelectedEvent(target)
+      if (isExperienceActive()) emitExperienceSignal('event_opened')
+    }
+    // Clear navigation state so refresh/back doesn't re-trigger the modal
+    navigate(location.pathname, { replace: true, state: null })
+  }, [openEventId, status, events, navigate, location.pathname])
+
+  const handleOpen = useCallback((event: SavedEvent) => {
+    setSelectedEvent(event)
+    if (isExperienceActive()) emitExperienceSignal('event_opened')
+  }, [])
+
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Delete this saved event?')) return
     setDeletingId(id)
     await remove(id)
     setDeletingId(null)
@@ -281,7 +302,7 @@ export function SavedEventsPage() {
               )}
               <EventCard
                 event={event}
-                onClick={() => setSelectedEvent(event)}
+                onClick={() => handleOpen(event)}
                 onDelete={() => void handleDelete(event.id)}
               />
             </div>

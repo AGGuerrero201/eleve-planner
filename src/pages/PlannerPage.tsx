@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
+import { useLocation } from 'react-router-dom'
 import { AlertTriangle, RefreshCw, CheckCircle2, Loader2, ChevronDown, ChevronUp } from 'lucide-react'
 import type { EventFormData, SavedEvent, LoadingStep } from '@/types'
 import { useEventPlanner } from '@/hooks/useEventPlanner'
@@ -14,6 +15,7 @@ import { Button } from '@/components/ui/Button'
 import { SupabaseStatus } from '@/components/ui/SupabaseStatus'
 import { cn } from '@/lib/utils'
 import type { LuxuryTemplate } from '@/lib/templates'
+import { isExperienceActive, emitExperienceSignal } from '@/experience/experienceStore'
 
 type PlannerMode = 'entry' | 'templates' | 'wizard' | 'classic'
 
@@ -34,8 +36,32 @@ export function PlannerPage() {
   // Phase 3: read property context — nullable, generation works without it
   const { contextBlock, isSufficient, profile } = useProperty()
 
+  // Deep links may open the planner directly in a specific mode
+  // (e.g. the dashboard's "Browse Templates" quick action).
+  const location = useLocation()
+  const requestedMode = (location.state as { mode?: PlannerMode } | null)?.mode
+
   const [currentFormData, setCurrentFormData] = useState<EventFormData | null>(null)
-  const [mode, setMode] = useState<PlannerMode>('entry')
+  const [mode, setModeRaw] = useState<PlannerMode>(
+    requestedMode === 'templates' || requestedMode === 'wizard' ? requestedMode : 'entry'
+  )
+
+  // A deep-linked mode (dashboard quick action) is itself a selection —
+  // let the walkthrough advance past the entry step.
+  useEffect(() => {
+    if ((requestedMode === 'templates' || requestedMode === 'wizard') && isExperienceActive()) {
+      emitExperienceSignal('planner_mode_selected')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Wrap mode changes so the Experience Elevé walkthrough can follow along.
+  const setMode = useCallback((m: PlannerMode) => {
+    setModeRaw(m)
+    if ((m === 'templates' || m === 'wizard' || m === 'classic') && isExperienceActive()) {
+      emitExperienceSignal('planner_mode_selected')
+    }
+  }, [])
 
   const [wizardFormData, setWizardFormData]         = useState<EventFormData>(DEFAULT_FORM)
   const [wizardStep, setWizardStep]                 = useState(1)
@@ -88,12 +114,30 @@ export function PlannerPage() {
     void generate(data, contextBlock)
   }
 
-  const handleEntrySelect = (selected: 'templates' | 'custom') => {
+  const handleEntrySelect = (selected: 'templates' | 'custom', prefillEventType?: string) => {
+    if (prefillEventType) {
+      // A suggested starting point carries a concrete event type —
+      // honor the promise by pre-filling the wizard with it.
+      setWizardFormData({ ...DEFAULT_FORM, eventType: prefillEventType })
+      setWizardStep(1)
+      setMode('wizard')
+      return
+    }
     setMode(selected === 'templates' ? 'templates' : 'wizard')
   }
 
   const planIsSaved = plan !== null ? isSaved(plan.title, plan.tagline) : false
   const showResult  = status === 'success' && plan && currentFormData
+
+  // Announce plan arrival to the walkthrough exactly once per plan
+  const lastAnnouncedPlan = useRef<string | null>(null)
+  useEffect(() => {
+    if (!showResult || !plan) return
+    const key = `${plan.title}::${plan.tagline}`
+    if (lastAnnouncedPlan.current === key) return
+    lastAnnouncedPlan.current = key
+    if (isExperienceActive()) emitExperienceSignal('plan_ready')
+  }, [showResult, plan])
 
   const subtitle =
     mode === 'entry'     ? 'Choose your planning approach below.' :
@@ -104,7 +148,7 @@ export function PlannerPage() {
   return (
     <div className="max-w-3xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
 
-      <SupabaseStatus />
+      {!isExperienceActive() && <SupabaseStatus />}
 
       {/* Phase 3: property intelligence banner — shown only when profile is active */}
       {isSufficient && profile && (
@@ -313,7 +357,7 @@ export function PlannerPage() {
             plan={plan}
             formData={currentFormData}
             onSave={handleSave}
-            onRegenerate={() => void generate(currentFormData, contextBlock)}
+            onRegenerate={() => void retry(currentFormData, contextBlock)}
             isSaved={planIsSaved}
           />
         </div>

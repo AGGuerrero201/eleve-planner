@@ -19,6 +19,8 @@ import type {
   GenerateEventResponse,
   EdgeFunctionError,
 } from '@/types'
+import { isExperienceActive, expGetProfile, logActivity } from '@/experience/experienceStore'
+import { composeExperiencePlan } from '@/experience/localPlanEngine'
 
 // ─── Retry config ─────────────────────────────────────────────────────────────
 
@@ -61,6 +63,17 @@ export async function generateEventPlan(
   const safeData: EventFormData = {
     ...data,
     notes: data.notes.slice(0, 500),
+  }
+
+  // Experience Elevé: compose the plan locally so the guided walkthrough
+  // never depends on network access or API keys. The pause lets the
+  // generation sequence play naturally; the session cache is bypassed so
+  // "Regenerate" always produces a visibly fresh take.
+  if (isExperienceActive()) {
+    await sleep(4200 + Math.random() * 1400)
+    const plan = composeExperiencePlan(safeData, expGetProfile())
+    logActivity('generated', `Generated \u201C${plan.title}\u201D with AI planning`)
+    return plan
   }
 
   // 2. Return cached result if available
