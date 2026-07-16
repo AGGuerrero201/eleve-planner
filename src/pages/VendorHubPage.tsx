@@ -13,6 +13,7 @@ import type { VendorFilterState } from '@/components/vendors/VendorFilters'
 import type { Vendor, VendorCategory } from '@/types/vendor'
 import { VENDOR_CATEGORY_LABELS, ALL_VENDOR_CATEGORIES } from '@/types/vendor'
 import { cn } from '@/lib/utils'
+import { MobileVendorHub } from '@/components/mobile/MobileVendorHub'
 
 export function VendorHubPage() {
   const { vendors, status, error, fetch, add, update, remove, toggle } = useVendors()
@@ -54,7 +55,8 @@ export function VendorHubPage() {
   const isLoading = status === 'loading'
 
   return (
-    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+    <>
+    <div className="hidden sm:block max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
 
       {/* ── Header ─────────────────────────────────────────────────────── */}
       <div className="flex items-start justify-between mb-8 gap-4">
@@ -238,15 +240,27 @@ export function VendorHubPage() {
         </div>
       )}
 
-      {/* ── Modal ──────────────────────────────────────────────────────── */}
-      <VendorModal
-        open={modalOpen}
-        vendor={addMode ? null : selectedVendor}
-        onClose={closeModal}
-        onSave={handleSave}
-        onDelete={addMode ? undefined : handleDelete}
-      />
-
     </div>
+
+    <div className="sm:hidden">
+      <MobileVendorHub
+        vendors={vendors}
+        status={status}
+        error={error}
+        fetch={fetch}
+        openAdd={openAdd}
+        openEdit={openEdit}
+      />
+    </div>
+
+    {/* Modal — shared between desktop and mobile, rendered once outside both trees */}
+    <VendorModal
+      open={modalOpen}
+      vendor={addMode ? null : selectedVendor}
+      onClose={closeModal}
+      onSave={handleSave}
+      onDelete={addMode ? undefined : handleDelete}
+    />
+    </>
   )
 }

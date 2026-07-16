@@ -32,6 +32,7 @@ import { WORKFLOW_STATUS_LABELS } from '@/lib/workflowStatus'
 import { ALL_VENDOR_CATEGORIES, VENDOR_CATEGORY_LABELS } from '@/types/vendor'
 import type { EventWorkflowStatus } from '@/types'
 import { cn } from '@/lib/utils'
+import { MobileDashboard } from '@/components/mobile/MobileDashboard'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -162,12 +163,12 @@ export function DashboardPage() {
         />
       )}
 
-      <div className="max-w-5xl mx-auto px-5 sm:px-8 py-0">
-
       {/* Explorer banner — shown after "Explore on my own", dashboard only */}
       {!showOverlay && !experienceActive && lastChoice === 'explore' && (
         <SampleEventBanner onGenerate={handleBannerGenerate} />
       )}
+
+      <div className="hidden sm:block max-w-5xl mx-auto px-5 sm:px-8 py-0">
 
       {/* ══════════════════════════════════════════════════════
           SECTION 1 — Greeting header
@@ -551,6 +552,21 @@ export function DashboardPage() {
       </div>
 
     </div>
+
+      <div className="sm:hidden">
+        <MobileDashboard
+          greeting={greeting}
+          dateStr={dateStr}
+          eventsLoaded={eventsLoaded}
+          vendorsLoaded={vendorsLoaded}
+          eventsCount={events.length}
+          vendorsCount={vendors.length}
+          inProgressCount={inProgressCount}
+          recentEvents={recentEvents}
+          vendorsByCategory={vendorsByCategory}
+          navigate={navigate}
+        />
+      </div>
     </>
   )
 }
