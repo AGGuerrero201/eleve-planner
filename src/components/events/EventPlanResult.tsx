@@ -48,7 +48,7 @@ export function EventPlanResult({ plan, formData, onSave, onRegenerate, isSaved 
       setSavedOk(true)
       setSavedId(result.id)
     } else {
-      setSaveError('Could not save — please try again.')
+      setSaveError('Could not save. Please try again.')
     }
   }
 
@@ -138,7 +138,7 @@ export function EventPlanResult({ plan, formData, onSave, onRegenerate, isSaved 
                 <ul className="space-y-1">
                   {vendor.suggestions.map((s: string, j: number) => (
                     <li key={j} className="flex gap-2 text-[0.82rem] text-charcoal font-light">
-                      <span className="text-gold shrink-0">—</span>
+                      <span className="text-gold shrink-0">-</span>
                       {s}
                     </li>
                   ))}
@@ -184,7 +184,7 @@ export function EventPlanResult({ plan, formData, onSave, onRegenerate, isSaved 
                 <ul className="space-y-1 pt-1">
                   {plan.alcoholEstimate.recommendations.map((r: string, i: number) => (
                     <li key={i} className="flex gap-2 text-[0.8rem] text-charcoal font-light">
-                      <span className="text-gold shrink-0">—</span>{r}
+                      <span className="text-gold shrink-0">-</span>{r}
                     </li>
                   ))}
                 </ul>
@@ -350,7 +350,7 @@ export function PlanList({ items }: { items: string[] }) {
     <ul className="space-y-1.5">
       {items.map((item, i) => (
         <li key={i} className="flex gap-3 text-[0.875rem] text-charcoal font-light leading-relaxed">
-          <span className="text-gold shrink-0 mt-0.5">—</span>
+          <span className="text-gold shrink-0 mt-0.5">-</span>
           <span>{item}</span>
         </li>
       ))}

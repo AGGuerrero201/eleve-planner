@@ -118,7 +118,7 @@ export function SampleEventPage() {
           className="text-[0.8rem] font-light leading-relaxed"
           style={{ color: 'var(--muted, #8A8580)' }}
         >
-          Generated using Elevé's AI planning engine.
+          Built with Elevé's planning engine.
         </p>
       </div>
 
@@ -257,7 +257,7 @@ function PropertyIntelCallout() {
         style={{ color: 'rgba(255,255,255,0.42)' }}
       >
         Set up your Property Profile and Elevé will generate events based on your
-        amenities, resident demographics, community personality, and event spaces —
+        amenities, resident demographics, community personality, and event spaces,
         producing names, themes, and activations specific to your property.
       </p>
 

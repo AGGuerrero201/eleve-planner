@@ -84,9 +84,9 @@ const STATUS_PILL: Record<EventWorkflowStatus, string> = {
 // ─── Concierge notes ──────────────────────────────────────────────────────────
 
 const INSIGHTS = [
-  { icon: Zap,       text: 'AI-generated plans are crafted to your brief — budget, season, and resident profile.' },
+  { icon: Zap,       text: 'Event plans are crafted to your brief: budget, season, and resident profile.' },
   { icon: Store,     text: 'Vendor matches pull live from your directory, with COI status included.' },
-  { icon: Sparkles,  text: 'Template-based plans load instantly — no generation wait required.' },
+  { icon: Sparkles,  text: 'Template-based plans load instantly, no generation wait required.' },
   { icon: Shield,    text: 'All vendor recommendations respect your COI and approval workflow.' },
 ]
 
@@ -215,19 +215,19 @@ export function DashboardPage() {
 
         <StatCard
           label="Events in library"
-          value={eventsLoaded ? String(events.length) : '—'}
+          value={eventsLoaded ? String(events.length) : '–'}
           icon={<BookOpen size={14} strokeWidth={1.5} />}
           loading={evStatus === 'loading'}
         />
         <StatCard
           label="Vendors on file"
-          value={vendorsLoaded ? String(vendors.length) : '—'}
+          value={vendorsLoaded ? String(vendors.length) : '–'}
           icon={<Store size={14} strokeWidth={1.5} />}
           loading={vStatus === 'loading'}
         />
         <StatCard
           label="Plans in progress"
-          value={eventsLoaded ? String(inProgressCount) : '—'}
+          value={eventsLoaded ? String(inProgressCount) : '–'}
           icon={<CalendarDays size={14} strokeWidth={1.5} />}
           loading={evStatus === 'loading'}
         />
@@ -267,7 +267,7 @@ export function DashboardPage() {
         {eventsLoaded && recentEvents.length === 0 && (
           <EmptyRow
             icon={<BookOpen size={16} strokeWidth={1.25} />}
-            text="No saved events yet — generate your first plan to get started."
+            text="No saved events yet. Create your first plan to get started."
             action={{ text: 'Plan an event', onClick: () => navigate('/planner') }}
           />
         )}
@@ -447,7 +447,7 @@ export function DashboardPage() {
           <QuickAction
             icon={<Zap size={18} strokeWidth={1.5} />}
             label="Plan New Event"
-            description="Generate a complete event plan with AI"
+            description="Build a complete event plan from your brief"
             primary
             onClick={() => navigate('/planner')}
           />

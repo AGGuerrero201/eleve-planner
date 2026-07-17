@@ -55,7 +55,7 @@ export function PropertyProfileCard() {
               className="text-[0.82rem] font-light leading-relaxed"
               style={{ color: 'var(--charcoal-light)' }}
             >
-              Set up your property profile to unlock AI-generated events tailored
+              Set up your property profile to unlock event plans personalized
               to your community.
             </p>
           </div>
@@ -169,7 +169,7 @@ export function PropertyProfileCard() {
           className="text-[0.65rem] font-medium mt-2"
           style={{ color: 'rgba(184,149,90,0.70)' }}
         >
-          ✦ AI generation active for this property
+          ✦ Personalized planning active for this property
         </p>
       )}
     </div>

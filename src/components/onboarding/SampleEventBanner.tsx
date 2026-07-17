@@ -56,7 +56,7 @@ export function SampleEventBanner({ onGenerate }: SampleEventBannerProps) {
         className="text-[0.78rem] font-light flex-1 leading-snug"
         style={{ color: 'var(--charcoal-light, #4A4A50)' }}
       >
-        When you're ready —
+        When you're ready:
         <button
           type="button"
           onClick={onGenerate}

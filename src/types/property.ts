@@ -53,8 +53,8 @@ export type LuxuryLevel       = 1 | 2 | 3 | 4 | 5
 
 export const PROPERTY_TYPE_LABELS: Record<PropertyType, string> = {
   luxury_highrise:     'Luxury High-Rise',
-  multifamily_family:  'Multifamily — Family',
-  multifamily_student: 'Multifamily — Student',
+  multifamily_family:  'Multifamily: Family',
+  multifamily_student: 'Multifamily: Student',
   active_adult:        'Active Adult (55+)',
   branded_residence:   'Branded Residence',
   mixed_use:           'Mixed-Use',

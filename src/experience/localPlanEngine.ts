@@ -110,16 +110,16 @@ const CONCEPTS: Record<string, TypeConcept> = {
     ],
     vendorCats: ['Bar Service', 'Catering'],
     proTips: [
-      'Schedule the event to begin 45 minutes before sunset — the golden-hour photos residents post are your best marketing for the next event.',
+      'Schedule the event to begin 45 minutes before sunset. The golden-hour photos residents post are your best marketing for the next event.',
       'Cap the signature cocktail list at two options. Shorter menus move lines faster and feel more curated, not less generous.',
-      'Station a greeter with a tray of the signature cocktail at the entrance — a drink in hand within 30 seconds sets the tone for the entire evening.',
+      'Station a greeter with a tray of the signature cocktail at the entrance. A drink in hand within 30 seconds sets the tone for the entire evening.',
     ],
   },
   'Rooftop Social': {
     titles:   ['Skyline Social', 'Up on the Roof', 'The Vantage Point Social'],
     taglines: ['Your best view, shared with your best neighbors', 'An open-air evening above it all', 'Community, elevated'],
     flyers:   ['Meet us on the roof', 'The best seat in the building is the roof', 'Sunset, snacks, and skyline'],
-    overview: 'A relaxed open-air social that turns the rooftop into the community\u2019s living room for an evening. Light bites, easy drinks, and unstructured mingling — the goal is simple: residents leave knowing three more neighbors than they arrived with.',
+    overview: 'A relaxed open-air social that turns the rooftop into the community\u2019s living room for an evening. Light bites, easy drinks, and unstructured mingling. The goal is simple: residents leave knowing three more neighbors than they arrived with.',
     theme:    'String lights, potted greenery, and warm wood tones. Casual-elevated: think linen napkins with paper-boat snacks, not tablecloths.',
     catering: [
       'Street-food inspired stations: gourmet taco bar and a flatbread oven',
@@ -131,12 +131,12 @@ const CONCEPTS: Record<string, TypeConcept> = {
     entertainment: [
       'Acoustic duo set against the skyline',
       'Oversized lawn games: cornhole and giant Jenga on the turf section',
-      'Community photo wall — best skyline shot wins a coffee gift card',
+      'Community photo wall. Best skyline shot wins a coffee gift card',
       'Fire-table lounge circles as the sun sets',
     ],
     vendorCats: ['Catering', 'Entertainment'],
     proTips: [
-      'Always hold a weather call at noon with an indoor fallback pre-staged — announcing a smooth relocation builds more trust than a perfect forecast.',
+      'Always hold a weather call at noon with an indoor fallback pre-staged. Announcing a smooth relocation builds more trust than a perfect forecast.',
       'Put the food stations at opposite ends of the roof. Traffic flow between them is where introductions actually happen.',
       'Wind kills paper goods. Weighted menu cards and clip-secured linens read as polish, not paranoia.',
     ],
@@ -145,7 +145,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     titles:   ['Vines & Vintages', 'The Cellar Evening', 'Pour Decisions: A Wine Evening'],
     taglines: ['Five pours, five pairings, one perfect evening', 'A guided tasting for the curious palate', 'Old-world wines, new neighbors'],
     flyers:   ['Uncork your evening with us', 'Five wines. Five cheeses. Zero pretension.', 'A tasting worth staying in for'],
-    overview: 'A structured yet convivial tasting that walks residents through five wine-and-cheese pairings, guided by a sommelier who keeps things approachable. Designed to feel like a private club benefit — the kind of programming residents mention when friends ask why they love living here.',
+    overview: 'A structured yet convivial tasting that walks residents through five wine-and-cheese pairings, guided by a sommelier who keeps things approachable. Designed to feel like a private club benefit. The kind of programming residents mention when friends ask why they love living here.',
     theme:    'Candlelit tablescapes with olive branches, aged-wood boards, and handwritten pairing cards. Intimate, warm, quietly indulgent.',
     catering: [
       'Five-pour flight: sparkling ros\u00e9, Sancerre, white Burgundy, Rioja Reserva, vintage port',
@@ -162,7 +162,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     ],
     vendorCats: ['Bar Service', 'Specialty'],
     proTips: [
-      'Seat residents at communal tables of six, not rows — the tasting is the excuse, the table conversation is the product.',
+      'Seat residents at communal tables of six, not rows. The tasting is the excuse, the table conversation is the product.',
       'Pre-pour the first flight before doors open. Starting on time with glasses already set signals a professionally run program.',
       'Photograph the tablescape before guests arrive; it becomes the invitation image for the next tasting.',
     ],
@@ -171,7 +171,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     titles:   ['The Winter Gala', 'Fireside & Festive', 'The Holiday Soir\u00e9e'],
     taglines: ['The season\u2019s most anticipated evening', 'Warmth, sparkle, and neighborly cheer', 'One night that feels like home for the holidays'],
     flyers:   ['The holidays begin at home', 'An evening of sparkle and cheer', 'Celebrate the season with your neighbors'],
-    overview: 'The signature event of the residential calendar — an elevated holiday celebration that rewards residents\u2019 loyalty and becomes the memory they associate with living here. Rich food, generous pours, live music, and thoughtful touches like a gift-wrap station make it feel like a gift, not an obligation.',
+    overview: 'The signature event of the residential calendar. An elevated holiday celebration that rewards residents\u2019 loyalty and becomes the memory they associate with living here. Rich food, generous pours, live music, and thoughtful touches like a gift-wrap station make it feel like a gift, not an obligation.',
     theme:    'Evergreen garlands with brass and cream accents, amber uplighting, and a real spruce centerpiece. Classic and warm rather than novelty-festive.',
     catering: [
       'Carving station: herb-crusted beef tenderloin with horseradish cr\u00e8me',
@@ -188,7 +188,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     ],
     vendorCats: ['Catering', 'AV & Production'],
     proTips: [
-      'Send the invitation five weeks out — holiday calendars fill early, and being residents\u2019 first commitment of the season maximizes turnout.',
+      'Send the invitation five weeks out: holiday calendars fill early, and being residents\u2019 first commitment of the season maximizes turnout.',
       'The team toast matters more than any d\u00e9cor line item: ninety seconds of genuine thanks is what residents remember in renewal season.',
       'Order 15% extra dessert. Holiday events run long, and a replenished sweets table at 9 PM feels remarkably generous.',
     ],
@@ -198,7 +198,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     taglines: ['Begin the weekend restored', 'An hour of calm before the city wakes', 'Move, breathe, and meet your neighbors'],
     flyers:   ['Your weekend starts with a deep breath', 'Sunrise yoga, cold brew after', 'Reset. Restore. Together.'],
     overview: 'A restorative morning session led by a certified instructor, followed by a light wellness caf\u00e9 so residents linger and connect. Wellness programming signals that the community invests in residents\u2019 daily lives, not just their occasional evenings.',
-    theme:    'Natural textures — cork, linen, eucalyptus stems — with soft instrumental sound. Unhurried, screen-free, and bright.',
+    theme:    'Natural textures (cork, linen, eucalyptus stems) with soft instrumental sound. Unhurried, screen-free, and bright.',
     catering: [
       'Cold brew and golden-milk latte bar',
       'A\u00e7a\u00ed and Greek-yogurt parfait station with house granola',
@@ -215,7 +215,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     vendorCats: ['Wellness', 'Catering'],
     proTips: [
       'Provide the mats. Removing the only barrier to attendance ("I don\u2019t own a mat") reliably lifts turnout by a third.',
-      'Schedule for 8:30 AM, not 7:00 — aspirational-but-achievable timing fills classes.',
+      'Schedule for 8:30 AM, not 7:00. Aspirational-but-achievable timing fills classes.',
       'The caf\u00e9 afterward is the real event; budget as much attention there as on the class itself.',
     ],
   },
@@ -223,7 +223,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     titles:   ['The Courtyard Market', 'Market Morning', 'The Grower\u2019s Pop-up'],
     taglines: ['Local growers, right downstairs', 'Your Saturday market, steps from home', 'Fresh, local, and neighborly'],
     flyers:   ['The market comes to you', 'Local goods, zero commute', 'Saturday market, home edition'],
-    overview: 'A curated pop-up market bringing local growers, bakers, and makers directly to the property. It converts an ordinary Saturday morning into a resident amenity — and gives the community a recurring ritual worth staying home for.',
+    overview: 'A curated pop-up market bringing local growers, bakers, and makers directly to the property. It converts an ordinary Saturday morning into a resident amenity. And gives the community a recurring ritual worth staying home for.',
     theme:    'Striped canopies, kraft-paper signage, and crate displays. Honest, sunlit, and unpolished in the best way.',
     catering: [
       'Complimentary drip coffee and fresh orange juice for residents',
@@ -240,7 +240,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     ],
     vendorCats: ['Specialty', 'Entertainment'],
     proTips: [
-      'Give every resident a branded tote at entry — it converts browsers into buyers and doubles as walking marketing for months.',
+      'Give every resident a branded tote at entry. It converts browsers into buyers and doubles as walking marketing for months.',
       'Invite eight vendors, not twenty. A tight, high-quality market beats a sparse-feeling large one.',
       'Run it monthly on a fixed Saturday; ritual, not novelty, is what builds attendance over time.',
     ],
@@ -249,7 +249,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     titles:   ['Cinema Under the Stars', 'The Screening Social', 'Reel & Relax'],
     taglines: ['A classic film, a perfect evening', 'Popcorn, blankets, and the big screen', 'Movie night, the way it should be'],
     flyers:   ['Lights down, stars up', 'Bring a blanket, we\u2019ll bring the rest', 'Tonight\u2019s feature: your community'],
-    overview: 'An outdoor screening that transforms shared space into a neighborhood cinema. Low effort for residents, high charm in execution — a family-friendly anchor event that photographs beautifully and costs modestly.',
+    overview: 'An outdoor screening that transforms shared space into a neighborhood cinema. Low effort for residents, high charm in execution. A family-friendly anchor event that photographs beautifully and costs modestly.',
     theme:    'Rows of lounge cushions and low-back chairs, string-lit perimeter, vintage concession signage, and a proper pre-show countdown reel.',
     catering: [
       'Gourmet popcorn bar: truffle-parmesan, classic butter, caramel-sea-salt',
@@ -266,7 +266,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     ],
     vendorCats: ['AV & Production', 'Catering'],
     proTips: [
-      'Let residents vote between two film options in the invitation email — the vote itself doubles as your attendance forecast.',
+      'Let residents vote between two film options in the invitation email. The vote itself doubles as your attendance forecast.',
       'Start the pre-show reel 20 minutes early; arriving to something already happening removes the awkward-first-guest feeling.',
       'Rent real projection and audio. A dim screen and thin sound undo every other dollar spent.',
     ],
@@ -274,8 +274,8 @@ const CONCEPTS: Record<string, TypeConcept> = {
   'Pool Party': {
     titles:   ['Midsummer Splash', 'The Deck Day Social', 'Solstice at the Pool'],
     taglines: ['The deck event of the season', 'Sun, spritzes, and a stocked grill', 'Summer, properly celebrated'],
-    flyers:   ['Meet us at the water', 'The pool is open — and so is the bar', 'Summer\u2019s biggest splash'],
-    overview: 'The flagship summer event: a full afternoon on the pool deck with a live grill, frozen drinks, and music that keeps energy high without overwhelming conversation. This is the event residents photograph most — production quality matters.',
+    flyers:   ['Meet us at the water', 'The pool is open. And so is the bar', 'Summer\u2019s biggest splash'],
+    overview: 'The flagship summer event: a full afternoon on the pool deck with a live grill, frozen drinks, and music that keeps energy high without overwhelming conversation. This is the event residents photograph most. Production quality matters.',
     theme:    'Cabana stripes, citrus accents, and market umbrellas. Riviera-casual with towel service that makes the property feel like a resort.',
     catering: [
       'Live grill station: smash burgers, citrus-marinated chicken skewers, grilled corn',
@@ -292,7 +292,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     ],
     vendorCats: ['Catering', 'Staffing'],
     proTips: [
-      'Book certified lifeguards and say so on the invitation — parents attend events they can relax at.',
+      'Book certified lifeguards and say so on the invitation. Parents attend events they can relax at.',
       'Frozen-drink machines take 90 minutes to reach temperature; have them running two hours before doors.',
       'Shade sells: every umbrella and cabana will be claimed in the first 20 minutes, so over-provision by half.',
     ],
@@ -301,7 +301,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     titles:   ['The Chef\u2019s Table Workshop', 'Knife Skills & Small Plates', 'The Supper Club Class'],
     taglines: ['Cook together, eat together', 'A hands-on evening with a professional chef', 'Dinner you make, memories included'],
     flyers:   ['Aprons on. Class is in session.', 'Learn it tonight, cook it forever', 'Your kitchen skills, elevated'],
-    overview: 'A hands-on culinary workshop where a professional chef guides small teams through a three-course menu they then sit down to enjoy together. Intimate by design — capped attendance turns scarcity into anticipation for the next session.',
+    overview: 'A hands-on culinary workshop where a professional chef guides small teams through a three-course menu they then sit down to enjoy together. Intimate by design. Capped attendance turns scarcity into anticipation for the next session.',
     theme:    'Butcher paper, copper cookware, herb bundles at each station. The demonstration kitchen as theater.',
     catering: [
       'Course one (taught): burrata with blistered tomatoes and basil oil',
@@ -319,7 +319,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     vendorCats: ['Catering', 'Staffing'],
     proTips: [
       'Cap the class at 16–20 and let the waitlist build; a sold-out series is worth more than a half-full room.',
-      'Prep all mise en place before guests arrive — the class should feel like cooking, never like chopping.',
+      'Prep all mise en place before guests arrive: the class should feel like cooking, never like chopping.',
       'Photograph each team with their finished plates; those photos fill next month\u2019s registration in a day.',
     ],
   },
@@ -327,7 +327,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     titles:   ['The Resident Gallery Walk', 'First Thursday: An Art Evening', 'Local Canvas'],
     taglines: ['Local art, at home', 'An evening among the works', 'Where the lobby becomes a gallery'],
     flyers:   ['Your building, reimagined as a gallery', 'Art, wine, and slow evenings', 'See something beautiful tonight'],
-    overview: 'A curated evening exhibition of local artists staged through the property\u2019s common spaces, with wine service and artist talks. Cultural programming distinguishes a luxury community more than any single amenity — this event is a statement of identity.',
+    overview: 'A curated evening exhibition of local artists staged through the property\u2019s common spaces, with wine service and artist talks. Cultural programming distinguishes a luxury community more than any single amenity. This event is a statement of identity.',
     theme:    'Gallery-white pedestals and picture lights against the building\u2019s architecture, with unhurried acoustic guitar and long-stem glassware.',
     catering: [
       'Passed wine service: a crisp white, a structured red, and a sparkling',
@@ -339,12 +339,12 @@ const CONCEPTS: Record<string, TypeConcept> = {
     entertainment: [
       'Exhibition of 15–20 works by four local artists, each with a story card',
       'Two short artist talks at 7:00 and 8:00 PM',
-      'Silent bid sheets — a portion of sales supports a neighborhood arts nonprofit',
+      'Silent bid sheets. A portion of sales supports a neighborhood arts nonprofit',
       'Classical guitarist stationed in the main gallery run',
     ],
     vendorCats: ['Entertainment', 'Bar Service'],
     proTips: [
-      'Partner with a local gallery to curate — borrowed credibility elevates the whole evening and halves your sourcing work.',
+      'Partner with a local gallery to curate. Borrowed credibility elevates the whole evening and halves your sourcing work.',
       'Story cards beside each work give shy guests something to do; art events live or die on removing that first-minute awkwardness.',
       'Announce the artists in the invitation with one image each; specific beats generic in every open-rate test.',
     ],
@@ -353,7 +353,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     titles:   ['The Exchange: A Resident Mixer', 'Cards & Cocktails', 'The Professional Social'],
     taglines: ['Your best professional connection lives down the hall', 'An evening for ambitious neighbors', 'Network without leaving home'],
     flyers:   ['Meet the professionals next door', 'Great careers, same address', 'Connections, poured neatly'],
-    overview: 'A professionally-framed mixer for a community of ambitious residents — structured enough that introductions happen naturally, relaxed enough that it never feels like a conference. The event that makes young professionals feel the building was designed for them.',
+    overview: 'A professionally-framed mixer for a community of ambitious residents: structured enough that introductions happen naturally, relaxed enough that it never feels like a conference. The event that makes young professionals feel the building was designed for them.',
     theme:    'Club chairs, brass table lamps, and espresso-toned accents. Executive lounge, not hotel ballroom.',
     catering: [
       'Manhattan and French-75 welcome pours with a zero-proof spritz option',
@@ -370,16 +370,16 @@ const CONCEPTS: Record<string, TypeConcept> = {
     ],
     vendorCats: ['Bar Service', 'Photography'],
     proTips: [
-      'The free professional headshot is the single highest-ROI draw for this format — lead the invitation with it.',
+      'The free professional headshot is the single highest-ROI draw for this format. Lead the invitation with it.',
       'Keep the lightning talk to five minutes, no slides; programming should spark conversation, not replace it.',
-      'Collect industries at RSVP and print them on name badges — you\u2019ve just done everyone\u2019s hardest networking work for them.',
+      'Collect industries at RSVP and print them on name badges. You\u2019ve just done everyone\u2019s hardest networking work for them.',
     ],
   },
   'Family Fun Day': {
     titles:   ['The Courtyard Carnival', 'Family Field Day', 'The Big Backyard Bash'],
     taglines: ['An afternoon the kids will talk about all week', 'Games, treats, and golden-hour picnics', 'Family time, community style'],
     flyers:   ['Bring the whole crew', 'Big fun for the smallest residents', 'The backyard bash of the season'],
-    overview: 'A festival-style afternoon built for households — carnival games, craft stations, and food that pleases every age. Family programming is retention programming: parents renew leases where their kids have friends.',
+    overview: 'A festival-style afternoon built for households: carnival games, craft stations, and food that pleases every age. Family programming is retention programming: parents renew leases where their kids have friends.',
     theme:    'Bunting, picnic blankets on the lawn, hand-painted game signage. Nostalgic county-fair charm with modern comfort.',
     catering: [
       'Picnic classics: sliders, corn dogs, fruit skewers, and a veggie-cup wall',
@@ -389,7 +389,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
       'Allergy-aware treat table, clearly labeled',
     ],
     entertainment: [
-      'Carnival game alley: ring toss, duck pond, beanbag ladder — prize tickets throughout',
+      'Carnival game alley: ring toss, duck pond, beanbag ladder, prize tickets throughout',
       'Face painter and balloon artist (two-hour bookings)',
       'Craft tent: build-a-birdhouse and friendship bracelets',
       'Golden-hour family photo station with instant prints',
@@ -397,7 +397,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     vendorCats: ['Entertainment', 'Catering'],
     proTips: [
       'Schedule 2–5 PM to end before dinner meltdowns; leaving on a high note is a feature, not a bug.',
-      'The prize table needs three restocks, not one — running out of prizes is the only bad review this event can earn.',
+      'The prize table needs three restocks, not one. Running out of prizes is the only bad review this event can earn.',
       'A quiet crafts tent gives overstimulated kids (and their parents) an exit ramp that keeps families onsite longer.',
     ],
   },
@@ -405,7 +405,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     titles:   ['The Weekend Table', 'Sunday Best Brunch', 'Late Morning Social'],
     taglines: ['Long tables, slow mornings', 'The brunch your Sunday deserves', 'Come hungry, stay talking'],
     flyers:   ['Brunch is served, neighbors', 'Waffles, mimosas, and good company', 'Sundays, done properly'],
-    overview: 'A leisurely late-morning gathering around long communal tables — the most naturally social meal of the week, put in service of the community. Brunch reliably draws residents who skip evening events, broadening who actually knows whom in the building.',
+    overview: 'A leisurely late-morning gathering around long communal tables: the most naturally social meal of the week, put in service of the community. Brunch reliably draws residents who skip evening events, broadening who actually knows whom in the building.',
     theme:    'White linen, citrus centerpieces, and morning light. Unfussy elegance with carafes of everything within arm\u2019s reach.',
     catering: [
       'Belgian waffle and omelet stations with a full toppings run',
@@ -415,14 +415,14 @@ const CONCEPTS: Record<string, TypeConcept> = {
       'Drip coffee, cold brew, and a proper tea service',
     ],
     entertainment: [
-      'Live acoustic brunch set — bossa nova and soft standards',
+      'Live acoustic brunch set. Bossa nova and soft standards',
       'Communal long-table seating with conversation-starter cards',
       'Bloody-mary garnish build-your-own bar as interactive theater',
       'Recipe-card takeaway of the kitchen\u2019s signature waffle',
     ],
     vendorCats: ['Catering', 'Entertainment'],
     proTips: [
-      'Seat at long tables and remove the option of standing apart — brunch works because it engineers proximity.',
+      'Seat at long tables and remove the option of standing apart. Brunch works because it engineers proximity.',
       'Stagger arrival windows on the RSVP (10:00 / 10:45) to keep the omelet line under five minutes.',
       'The tea service is disproportionately noticed: a real pot and real cups quietly say "luxury" better than any banner.',
     ],
@@ -431,7 +431,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     titles:   ['The Barrel Room Evening', 'Amber & Oak', 'The Gentleman\u2019s Hour (All Welcome)'],
     taglines: ['Slow pours and slower conversation', 'An evening aged to perfection', 'Small-batch everything'],
     flyers:   ['Neat, on the rocks, or on the terrace', 'An evening worth savoring', 'Pull up a chair by the fire'],
-    overview: 'A refined tasting evening built around small-batch bourbons, guided by a whiskey educator, with an optional open-air cigar lounge. Unapologetically premium programming for a community that appreciates craft — capped attendance keeps it intimate.',
+    overview: 'A refined tasting evening built around small-batch bourbons, guided by a whiskey educator, with an optional open-air cigar lounge. Unapologetically premium programming for a community that appreciates craft. Capped attendance keeps it intimate.',
     theme:    'Leather club seating, low amber lighting, fire tables on the terrace. A private-den atmosphere with white-glove pours.',
     catering: [
       'Guided flight of four small-batch bourbons with tasting notes cards',
@@ -449,7 +449,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     vendorCats: ['Bar Service', 'Specialty'],
     proTips: [
       'Keep cigars strictly outdoors and clearly opt-in on the invite; the format draws well but only when non-smokers feel considered.',
-      'Half-ounce tasting pours across four bourbons is the right liability posture — the bar afterward is where fuller pours belong.',
+      'Half-ounce tasting pours across four bourbons is the right liability posture. The bar afterward is where fuller pours belong.',
       'The engraved glass costs less than a centerpiece and becomes a permanent artifact of the community in fifty residences.',
     ],
   },
@@ -457,7 +457,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     titles:   ['The Yappy Hour', 'Paws on the Patio', 'The Dog Days Social'],
     taglines: ['For residents with four-legged roommates', 'Treats for them, drinks for you', 'The friendliest event on the calendar'],
     flyers:   ['Leashes required. Fun guaranteed.', 'Bring your best friend', 'Sit. Stay. Socialize.'],
-    overview: 'A patio social for residents and their dogs — the fastest icebreaker in residential programming, because every dog is an introduction waiting to happen. Pairs a human refreshment bar with a pup treat station and low-key contests.',
+    overview: 'A patio social for residents and their dogs: the fastest icebreaker in residential programming, because every dog is an introduction waiting to happen. Pairs a human refreshment bar with a pup treat station and low-key contests.',
     theme:    'Gingham blankets, galvanized water stations, and a balloon arch at the "pup check-in." Playful without being childish.',
     catering: [
       'Human bar: canned spritzers, local beer, and iced tea',
@@ -474,7 +474,7 @@ const CONCEPTS: Record<string, TypeConcept> = {
     ],
     vendorCats: ['Specialty', 'Photography'],
     proTips: [
-      'Require leashes and station one staffer as a calm "traffic manager" — one well-handled dog moment protects the event\u2019s reputation.',
+      'Require leashes and station one staffer as a calm "traffic manager". One well-handled dog moment protects the event\u2019s reputation.',
       'The pet photographer is the draw; those portraits get framed in units and shared everywhere with your community\u2019s name attached.',
       'Invite a rescue partner: the adoption corner turns a fun event into a story residents feel good telling.',
     ],
@@ -485,7 +485,7 @@ const FALLBACK_CONCEPT: TypeConcept = {
   titles:   ['The Signature Social', 'An Evening at Home', 'The Community Gathering'],
   taglines: ['A gathering designed around your community', 'Thoughtful details, effortless evening', 'Where neighbors become friends'],
   flyers:   ['You\u2019re invited', 'An evening designed for you', 'Save the date, neighbors'],
-  overview: 'A thoughtfully produced resident gathering designed to bring the community together in an elevated, unhurried setting — with food, drink, and programming calibrated to the residents who actually live here.',
+  overview: 'A thoughtfully produced resident gathering designed to bring the community together in an elevated, unhurried setting: with food, drink, and programming calibrated to the residents who actually live here.',
   theme:    'Warm neutrals, candlelight, and greenery. Understated luxury that lets conversation take center stage.',
   catering: [
     'Passed seasonal hors d\u2019oeuvres from a local caterer',
@@ -502,7 +502,7 @@ const FALLBACK_CONCEPT: TypeConcept = {
   ],
   vendorCats: ['Catering', 'Entertainment'],
   proTips: [
-    'Greet each resident by name within the first minute — the roster review before doors is the highest-leverage 15 minutes of the event.',
+    'Greet each resident by name within the first minute. The roster review before doors is the highest-leverage 15 minutes of the event.',
     'End the event 30 minutes after its natural peak; leaving residents wanting more is the setup for the next RSVP.',
   ],
 }
@@ -515,10 +515,10 @@ function conceptFor(eventType: string): TypeConcept {
 
 const TIMELINES: Record<TypeGroup, TimelineItem[]> = {
   evening_social: [
-    { time: '4:30 PM',  activity: 'Vendor load-in and setup — furniture, bar, and lighting placed',        responsible: 'Property team' },
+    { time: '4:30 PM',  activity: 'Vendor load-in and setup: furniture, bar, and lighting placed',        responsible: 'Property team' },
     { time: '5:45 PM',  activity: 'Staff briefing, final walkthrough, and music check',                     responsible: 'Event lead' },
     { time: '6:00 PM',  activity: 'First pours staged; greeter positioned at entrance',                     responsible: 'Bar service' },
-    { time: '6:30 PM',  activity: 'Doors open — welcome drinks and passed appetizers begin',                responsible: 'Catering' },
+    { time: '6:30 PM',  activity: 'Doors open. Welcome drinks and passed appetizers begin',                responsible: 'Catering' },
     { time: '7:15 PM',  activity: 'Live music set begins; lounge lighting dims to evening level',           responsible: 'Entertainment' },
     { time: '8:00 PM',  activity: 'Property team welcome remarks (90 seconds) and community toast',         responsible: 'Property manager' },
     { time: '8:45 PM',  activity: 'Second appetizer pass and dessert service opens',                        responsible: 'Catering' },
@@ -526,29 +526,29 @@ const TIMELINES: Record<TypeGroup, TimelineItem[]> = {
     { time: '10:00 PM', activity: 'Event close, guest farewells, and breakdown begins',                     responsible: 'Property team' },
   ],
   daytime_social: [
-    { time: '11:00 AM', activity: 'Vendor load-in — stations, shade structures, and sound check',           responsible: 'Property team' },
+    { time: '11:00 AM', activity: 'Vendor load-in: stations, shade structures, and sound check',           responsible: 'Property team' },
     { time: '12:15 PM', activity: 'Staff briefing and safety walkthrough',                                  responsible: 'Event lead' },
-    { time: '1:00 PM',  activity: 'Doors open — check-in, welcome refreshments, and music begins',          responsible: 'Property team' },
+    { time: '1:00 PM',  activity: 'Doors open. Check-in, welcome refreshments, and music begins',          responsible: 'Property team' },
     { time: '1:30 PM',  activity: 'Food stations open for full service',                                    responsible: 'Catering' },
     { time: '2:30 PM',  activity: 'Featured activity and contests begin',                                   responsible: 'Entertainment' },
-    { time: '3:30 PM',  activity: 'Refresh pass — stations restocked, seating reset',                       responsible: 'Catering' },
+    { time: '3:30 PM',  activity: 'Refresh pass: stations restocked, seating reset',                       responsible: 'Catering' },
     { time: '4:30 PM',  activity: 'Final round of activities and raffle drawing',                           responsible: 'Event lead' },
     { time: '5:00 PM',  activity: 'Event close and breakdown',                                              responsible: 'Property team' },
   ],
   wellness: [
-    { time: '7:30 AM',  activity: 'Space setup — mats laid, caf\u00e9 station staged, playlist tested',       responsible: 'Property team' },
+    { time: '7:30 AM',  activity: 'Space setup: mats laid, caf\u00e9 station staged, playlist tested',       responsible: 'Property team' },
     { time: '8:15 AM',  activity: 'Instructor arrival and space walkthrough',                               responsible: 'Wellness instructor' },
-    { time: '8:30 AM',  activity: 'Check-in opens — mats assigned, infused water offered',                  responsible: 'Property team' },
-    { time: '8:45 AM',  activity: 'Class begins — all-levels guided session',                               responsible: 'Wellness instructor' },
+    { time: '8:30 AM',  activity: 'Check-in opens: mats assigned, infused water offered',                  responsible: 'Property team' },
+    { time: '8:45 AM',  activity: 'Class begins, all-levels guided session',                               responsible: 'Wellness instructor' },
     { time: '9:45 AM',  activity: 'Closing meditation and cooldown',                                        responsible: 'Wellness instructor' },
-    { time: '10:00 AM', activity: 'Wellness caf\u00e9 opens — coffee, juice, and light bites',                responsible: 'Catering' },
+    { time: '10:00 AM', activity: 'Wellness caf\u00e9 opens: coffee, juice, and light bites',                responsible: 'Catering' },
     { time: '10:45 AM', activity: 'Social wind-down and take-home gifts at exit',                           responsible: 'Property team' },
     { time: '11:00 AM', activity: 'Close and reset of the space',                                           responsible: 'Property team' },
   ],
   family: [
-    { time: '11:30 AM', activity: 'Setup — game stations, tents, and food carts placed',                    responsible: 'Property team' },
+    { time: '11:30 AM', activity: 'Setup: game stations, tents, and food carts placed',                    responsible: 'Property team' },
     { time: '1:30 PM',  activity: 'Vendor arrivals: entertainers, carts, and photo station',                responsible: 'Event lead' },
-    { time: '2:00 PM',  activity: 'Doors open — check-in with activity maps and prize tickets',             responsible: 'Property team' },
+    { time: '2:00 PM',  activity: 'Doors open. Check-in with activity maps and prize tickets',             responsible: 'Property team' },
     { time: '2:15 PM',  activity: 'Game stations and craft tent open; treats begin service',                responsible: 'Entertainment' },
     { time: '3:00 PM',  activity: 'Featured entertainment set (all ages)',                                  responsible: 'Entertainment' },
     { time: '4:00 PM',  activity: 'Contests and prize ceremony',                                            responsible: 'Event lead' },
@@ -556,12 +556,12 @@ const TIMELINES: Record<TypeGroup, TimelineItem[]> = {
     { time: '5:00 PM',  activity: 'Event close and family farewells',                                       responsible: 'Property team' },
   ],
   culinary: [
-    { time: '4:00 PM',  activity: 'Kitchen and dining setup — stations prepped, mise en place complete',    responsible: 'Catering' },
+    { time: '4:00 PM',  activity: 'Kitchen and dining setup: stations prepped, mise en place complete',    responsible: 'Catering' },
     { time: '5:30 PM',  activity: 'Chef and assistants arrive; final station check',                        responsible: 'Chef' },
-    { time: '6:00 PM',  activity: 'Guest arrival — welcome pour and seat assignments',                      responsible: 'Property team' },
+    { time: '6:00 PM',  activity: 'Guest arrival. Welcome pour and seat assignments',                      responsible: 'Property team' },
     { time: '6:20 PM',  activity: 'Session one begins: technique demonstration and hands-on prep',          responsible: 'Chef' },
     { time: '7:15 PM',  activity: 'Session two: mains preparation with paired pours',                       responsible: 'Chef' },
-    { time: '8:00 PM',  activity: 'Communal table service — guests enjoy the dishes prepared',              responsible: 'Catering' },
+    { time: '8:00 PM',  activity: 'Communal table service. Guests enjoy the dishes prepared',              responsible: 'Catering' },
     { time: '8:45 PM',  activity: 'Dessert course and chef Q&A',                                            responsible: 'Chef' },
     { time: '9:15 PM',  activity: 'Farewells with take-home recipe cards; breakdown begins',                responsible: 'Property team' },
   ],
@@ -623,14 +623,14 @@ const ALT_ENTERTAINMENT: Record<TypeGroup, string[]> = {
   wellness: [
     'Sound-bath closing with crystal bowls',
     'Cold-plunge demo and breathwork mini-session',
-    'Smoothie-bike station — pedal-blended drinks',
+    'Smoothie-bike station, pedal-blended drinks',
     'Mini massage chairs with a licensed therapist (10-minute slots)',
   ],
   family: [
     'Bubble-artist performance on the lawn',
     'Petting-zoo corner with a licensed handler',
     'Story-time tent on the half hour',
-    'Sidewalk-chalk mural wall — one big collaborative piece',
+    'Sidewalk-chalk mural wall. One big collaborative piece',
   ],
   culinary: [
     'Blind-tasting challenge round between courses',
@@ -691,7 +691,7 @@ function buildAlcohol(headcount: number, alcohol: string, budgetMid: number): Al
       fullBar
         ? 'Anchor the bar with two signature cocktails to control pour costs and speed the line'
         : 'Offer one crisp white, one versatile red, and a local flagship beer',
-      'Stock zero-proof options at a 1:5 ratio — visible, not hidden behind the bar',
+      'Stock zero-proof options at a 1:5 ratio: visible, not hidden behind the bar',
       'Arrange retail buy-back for unopened bottles to protect the budget',
       'Close the bar 30 minutes before event end with water and coffee service',
     ],
@@ -718,7 +718,7 @@ function buildBudget(budgetMid: number, alcohol: string, group: TypeGroup): stri
         ['D\u00e9cor, rentals & lighting', 0.12],
         ['Contingency reserve', 0.06],
       ]
-  return alloc.map(([label, share]) => `${label} — ${money(budgetMid * share)} (${Math.round(share * 100)}%)`)
+  return alloc.map(([label, share]) => `${label}: ${money(budgetMid * share)} (${Math.round(share * 100)}%)`)
 }
 
 function buildSetupLogistics(group: TypeGroup, venue: string): string[] {
@@ -774,13 +774,13 @@ function buildEmail(
     group === 'family' || group === 'daytime_social' ? 'afternoon' : 'evening'
   const subject = pick([
     `You\u2019re invited: ${title} at ${propertyName}`,
-    `Save the date — ${title}`,
+    `Save the date: ${title}`,
     `${propertyName} presents: ${title}`,
   ])
   const body = [
     `Dear Residents,`,
     ``,
-    `We\u2019re delighted to invite you to ${title} — a ${seasonWord.toLowerCase()} ${timeWord} created exclusively for the ${propertyName} community.`,
+    `We\u2019re delighted to invite you to ${title}, a ${seasonWord.toLowerCase()} ${timeWord} created exclusively for the ${propertyName} community.`,
     ``,
     `Expect ${concept.catering[0].split(':')[0].toLowerCase()}, ${concept.entertainment[0].toLowerCase().replace(/\.$/, '')}, and the company of your neighbors in one of our favorite spaces. ${form.alcohol === 'No alcohol' ? 'Refreshments will be served throughout.' : 'Complimentary food and drink will be served throughout.'}`,
     ``,

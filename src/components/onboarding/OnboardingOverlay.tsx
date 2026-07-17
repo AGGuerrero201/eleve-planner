@@ -320,7 +320,7 @@ function PickerPhase({ onSelect }: { onSelect: (tile: EventTile) => void }) {
         className="text-center text-[0.68rem] font-light mt-4"
         style={{ color: 'var(--stone, #8C8478)' }}
       >
-        Tap to generate immediately — no other setup required.
+        Tap to generate immediately, no other setup required.
       </p>
     </div>
   )

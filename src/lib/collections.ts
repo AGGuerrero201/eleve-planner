@@ -14,7 +14,7 @@ const SEASONAL_COLLECTIONS: Collection[] = [
   {
     id: 'spring-experiences',
     label: 'Spring Experiences',
-    description: 'Outdoor-forward programming as the season opens — terraces, rooftops, and fresh social energy.',
+    description: 'Outdoor-forward programming as the season opens: terraces, rooftops, and fresh social energy.',
     tier: 'seasonal',
     glyph: '❧',
     activeMonths: [3, 4, 5],
@@ -24,7 +24,7 @@ const SEASONAL_COLLECTIONS: Collection[] = [
   {
     id: 'summer-rooftop-series',
     label: 'Summer Rooftop Series',
-    description: 'The building\'s rooftop at its best — golden hour receptions, poolside socials, and cinema evenings.',
+    description: 'The building\'s rooftop at its best: golden hour receptions, poolside socials, and cinema evenings.',
     tier: 'seasonal',
     glyph: '◎',
     activeMonths: [6, 7, 8],
@@ -34,7 +34,7 @@ const SEASONAL_COLLECTIONS: Collection[] = [
   {
     id: 'fall-entertaining',
     label: 'Fall Entertaining',
-    description: 'The season\'s richest programming — harvest suppers, wine tastings, and curated social evenings.',
+    description: 'The season\'s richest programming: harvest suppers, wine tastings, and curated social evenings.',
     tier: 'seasonal',
     glyph: '◈',
     activeMonths: [9, 10, 11],
@@ -75,7 +75,7 @@ const HOSPITALITY_COLLECTIONS: Collection[] = [
   {
     id: 'elevated-networking',
     label: 'Elevated Networking',
-    description: 'Professional socials designed to create real connections — not generic happy hours.',
+    description: 'Professional socials designed to create real connections, not generic happy hours.',
     tier: 'hospitality',
     glyph: '◉',
     tags: ['Professional', 'Evening', 'Social'],
@@ -84,7 +84,7 @@ const HOSPITALITY_COLLECTIONS: Collection[] = [
   {
     id: 'craft-workshops',
     label: 'Craft Workshops',
-    description: 'Skill-based evenings where residents make something real — and take it home.',
+    description: 'Skill-based evenings where residents make something real. And take it home.',
     tier: 'hospitality',
     glyph: '◁',
     tags: ['Hands-On', 'Evening', 'Take-Home'],
@@ -132,7 +132,7 @@ const OPERATIONAL_COLLECTIONS: Collection[] = [
   {
     id: 'social-calendar-highlights',
     label: 'Social Calendar Highlights',
-    description: 'The events residents look forward to and talk about — building community one gathering at a time.',
+    description: 'The events residents look forward to and talk about. Building community one gathering at a time.',
     tier: 'operational',
     glyph: '◀',
     tags: ['Community', 'Social', 'Recurring'],

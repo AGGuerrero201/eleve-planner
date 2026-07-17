@@ -72,7 +72,7 @@ export async function generateEventPlan(
   if (isExperienceActive()) {
     await sleep(4200 + Math.random() * 1400)
     const plan = composeExperiencePlan(safeData, expGetProfile())
-    logActivity('generated', `Generated \u201C${plan.title}\u201D with AI planning`)
+    logActivity('generated', `Generated \u201C${plan.title}\u201D`)
     return plan
   }
 

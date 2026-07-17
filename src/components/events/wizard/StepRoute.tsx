@@ -47,10 +47,10 @@ export function StepRoute({ formData, isLoading, onGenerate, onLoadTemplate }: S
             <Zap size={12} className="text-gold shrink-0" strokeWidth={1.5} />
             <div>
               <p className="text-[0.72rem] font-medium text-gold-light leading-none">
-                Premium AI Plan
+                Tailored Event Plan
               </p>
               <p className="text-[0.62rem] font-light text-white/35 mt-0.5">
-                AI-generated to your brief
+                Built around your brief
               </p>
             </div>
           </div>
@@ -131,7 +131,7 @@ export function StepRoute({ formData, isLoading, onGenerate, onLoadTemplate }: S
                     </p>
                     {isInstant
                       ? <span className="text-[0.55rem] font-semibold text-green-600 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded-sm shrink-0 uppercase tracking-wide">Instant</span>
-                      : <span className="text-[0.55rem] font-semibold text-gold bg-gold/8 border border-gold/20 px-1.5 py-0.5 rounded-sm shrink-0 flex items-center gap-0.5 uppercase tracking-wide"><Sparkles size={7} />AI</span>
+                      : <span className="text-[0.55rem] font-semibold text-gold bg-gold/8 border border-gold/20 px-1.5 py-0.5 rounded-sm shrink-0 flex items-center gap-0.5 uppercase tracking-wide"><Sparkles size={7} />Custom</span>
                     }
                   </div>
                   <p className="text-[0.7rem] font-light text-muted leading-snug mb-2">
@@ -154,10 +154,10 @@ export function StepRoute({ formData, isLoading, onGenerate, onLoadTemplate }: S
             {!strongMatch && (
               <div className="px-4 py-3.5 bg-warm-gray/50">
                 <p className="text-[0.68rem] text-muted font-light leading-relaxed">
-                  No exact match — these are the closest in the library.
+                  No exact match. These are the closest in the library.
                 </p>
                 <p className="text-[0.67rem] text-gold/80 font-light mt-1">
-                  For a precise plan, use Premium AI →
+                  For a precise plan, choose Tailored Event Plan →
                 </p>
               </div>
             )}

@@ -55,7 +55,7 @@ const NOTES = [
   },
   {
     icon: Sparkles,
-    text: 'Template-based plans load instantly — no AI wait time required.',
+    text: 'Template-based plans load instantly, with no wait required.',
   },
   {
     icon: FileCheck,

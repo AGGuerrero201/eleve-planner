@@ -41,7 +41,7 @@ const PROPERTY_TYPES = [
 ]
 
 const FEATURES = [
-  { icon: Zap,           title: 'AI-Generated Plans',    body: 'Describe your event parameters and receive a complete plan in under 60 seconds — timeline, catering, staffing, budget breakdown, and a resident email draft.' },
+  { icon: Zap,           title: 'Tailored Event Plans', body: 'Describe your event parameters and receive a complete plan in under 60 seconds: timeline, catering, staffing, budget breakdown, and a resident email draft.' },
   { icon: Building2,     title: 'Property Intelligence', body: 'Create a property profile once. Elevé learns your amenities, resident demographics, community personality, and event spaces to generate events tailored specifically to your community.' },
   { icon: Store,         title: 'Vendor Hub',             body: 'Maintain a curated directory with COI tracking, price tiers, and category tags. Vendor recommendations surface automatically for every event.' },
   { icon: ClipboardList, title: 'Template Library',      body: '30 curated event templates organised by season, occasion, and resident profile. Launch a complete plan instantly, then refine it to match your property.' },
@@ -66,8 +66,8 @@ const AI_POINTS = [
 
 const VENDOR_POINTS = [
   'Categorised directory: catering, bar, entertainment, staffing, décor, and more',
-  'COI status tracking — on file, requested, expired, or not required',
-  'Price tier filtering — budget through luxury',
+  'COI status tracking: on file, requested, expired, or not required',
+  'Price tier filtering: budget through luxury',
   'Automatic vendor matching for every generated event',
   'Favorite vendors surfaced first in recommendations',
   'Previously used vendors flagged for easy re-booking',
@@ -77,7 +77,7 @@ const WORKFLOW_POINTS = [
   { status: 'In Planning', desc: 'Draft generated, details being refined',           dot: '#CEB48E' },
   { status: 'Confirmed',   desc: 'Vendors confirmed, logistics finalised',           dot: '#3D7FCC' },
   { status: 'Underway',    desc: 'Event is live and being delivered',                dot: '#B8955A' },
-  { status: 'Delivered',   desc: 'Complete — archived for reference and reuse',      dot: '#5A8A5A' },
+  { status: 'Delivered',   desc: 'Complete, archived for reference and reuse',      dot: '#5A8A5A' },
 ]
 
 const IMPACT_STATS = [
@@ -105,13 +105,13 @@ const COMPARISON_ROWS = [
   { traditional: 'Manages registrations',    eleve: 'Creates the event' },
   { traditional: 'Tracks attendees',         eleve: 'Generates complete plans' },
   { traditional: 'Stores event data',        eleve: 'Builds timelines and budgets' },
-  { traditional: 'Requires manual planning', eleve: 'AI-powered planning' },
+  { traditional: 'Requires manual planning', eleve: 'Intelligent, guided planning' },
   { traditional: 'Generic event tools',      eleve: 'Built for multifamily' },
 ]
 
 const PRICING_TIERS = [
   { name: 'Starter',      price: '$99',   period: '/month', featured: false, cta: 'Start Free Trial', desc: 'For single-property teams getting started with structured event planning.', features: ['Unlimited event generation', '30 curated templates', 'Vendor directory up to 25', 'Saved event library', 'Email support'] },
-  { name: 'Professional', price: '$249',  period: '/month', featured: true,  cta: 'Book a Demo',      desc: 'For lifestyle teams managing active event programmes across a property.',    features: ['Everything in Starter', 'Unlimited vendor directory', 'COI tracking', 'Section-level AI regeneration', 'Workflow status management', 'Priority support'] },
+  { name: 'Professional', price: '$249',  period: '/month', featured: true,  cta: 'Book a Demo',      desc: 'For lifestyle teams managing active event programmes across a property.',    features: ['Everything in Starter', 'Unlimited vendor directory', 'COI tracking', 'Section-level regeneration', 'Workflow status management', 'Priority support'] },
   { name: 'Portfolio',    price: 'Custom',period: '',        featured: false, cta: 'Contact Sales',    desc: 'For operators managing multiple properties or branded residential portfolios.', features: ['Everything in Professional', 'Multi-property workspace', 'Custom template library', 'Dedicated onboarding', 'SLA support'] },
 ]
 
@@ -198,8 +198,8 @@ export function LandingPage() {
 
           <p className="font-light leading-[1.9] mb-12 max-w-lg mx-auto animate-fade-up animate-delay-200"
              style={{ fontSize: 'clamp(0.95rem, 2vw, 1.05rem)', color: 'rgba(255,255,255,0.42)' }}>
-            Elevé gives property managers and lifestyle teams an AI-powered platform
-            to plan, manage, and deliver exceptional resident events — with vendor
+            Elevé gives property managers and lifestyle teams an intelligent platform
+            to plan, manage, and deliver exceptional resident events, with vendor
             tracking, status workflows, and ready-to-send communications built in.
           </p>
 
@@ -253,7 +253,7 @@ export function LandingPage() {
         </SectionHeading>
         <p className="font-light leading-[1.9] max-w-xl mx-auto"
            style={{ fontSize: '0.9rem', color: C.muted }}>
-          Most property teams are building event plans from scratch every time — searching vendor
+          Most property teams are building event plans from scratch every time: searching vendor
           contacts across emails, copying budgets from last year's spreadsheet, writing invitation
           copy at 10pm. Elevé replaces that entire process with a single, structured workflow.
         </p>
@@ -264,7 +264,7 @@ export function LandingPage() {
         <div className="max-w-5xl mx-auto px-6 py-16 sm:py-20">
           <div className="text-center mb-14">
             <Eyebrow dark>The platform</Eyebrow>
-            <SectionHeading dark>Everything in one place — from brief to resident email.</SectionHeading>
+            <SectionHeading dark>Everything in one place, from brief to resident email.</SectionHeading>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -439,14 +439,14 @@ export function LandingPage() {
         <div className="max-w-5xl mx-auto px-6 py-16 sm:py-20">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-14 items-start">
             <div>
-              <Eyebrow>AI generation</Eyebrow>
+              <Eyebrow>Intelligent planning</Eyebrow>
               <SectionHeading className="mb-5">
                 From idea to resident-ready event plan in under 60 seconds.
               </SectionHeading>
               <p className="font-light leading-[1.9] mb-8" style={{ fontSize: '0.875rem', color: C.muted }}>
                 Elevé combines your event requirements with your property's profile, amenities,
                 resident demographics, and community personality to generate event plans designed
-                specifically for your community — not a generic template, but a structured document
+                specifically for your community: not a generic template, but a structured document
                 ready to act on.
               </p>
               <ul className="space-y-2.5">
@@ -465,7 +465,7 @@ export function LandingPage() {
                 <div className="flex items-center gap-2">
                   <Zap size={12} style={{ color: C.gold }} strokeWidth={1.5} />
                   <span className="text-[0.6rem] font-medium uppercase" style={{ letterSpacing: '0.16em', color: C.goldLight }}>
-                    AI-generated plan
+                    Tailored plan
                   </span>
                 </div>
               </div>
@@ -492,7 +492,7 @@ export function LandingPage() {
                     Resident email subject
                   </p>
                   <p className="font-serif font-light italic" style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.45)' }}>
-                    "Join us on the rooftop this Saturday — cocktails as the city lights up."
+                    "Join us on the rooftop this Saturday for cocktails as the city lights up."
                   </p>
                 </div>
                 {/* Property Intelligence callout */}
@@ -563,7 +563,7 @@ export function LandingPage() {
               <SectionHeading className="mb-5">Your vendor directory, always ready.</SectionHeading>
               <p className="font-light leading-[1.9] mb-8" style={{ fontSize: '0.875rem', color: C.muted }}>
                 Stop searching your inbox for the caterer's contact. Elevé maintains your entire
-                vendor directory — with COI tracking, price tiers, and automatic matching to every
+                vendor directory, with COI tracking, price tiers, and automatic matching to every
                 event you generate.
               </p>
               <ul className="space-y-2.5">
@@ -585,7 +585,7 @@ export function LandingPage() {
         <div className="max-w-5xl mx-auto px-6 py-16 sm:py-20">
           <div className="text-center mb-14">
             <Eyebrow>Workflow management</Eyebrow>
-            <SectionHeading>From draft to delivered — tracked every step.</SectionHeading>
+            <SectionHeading>From draft to delivered, tracked every step.</SectionHeading>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -604,7 +604,7 @@ export function LandingPage() {
           </div>
 
           <p className="text-center mt-8 font-light" style={{ fontSize: '0.78rem', color: C.muted }}>
-            Every section of every plan is editable and regeneratable in place — timeline, catering, budget, email, and more.
+            Every section of every plan is editable and regeneratable in place: timeline, catering, budget, email, and more.
           </p>
         </div>
       </section>
@@ -769,7 +769,7 @@ export function LandingPage() {
                     } : {
                       letterSpacing: '0.10em', backgroundColor: 'transparent', borderColor: 'rgba(180,166,150,0.38)', color: C.charLight,
                     }}
-                    onClick={() => window.open(`mailto:demo@eleve.app?subject=${encodeURIComponent(cta + ' — ' + name)}`, '_blank')}>
+                    onClick={() => window.open(`mailto:demo@eleve.app?subject=${encodeURIComponent(cta + ': ' + name)}`, '_blank')}>
                     {cta}
                   </button>
                 </div>
@@ -792,7 +792,7 @@ export function LandingPage() {
           </SectionHeading>
           <p className="font-light mb-12 leading-[1.9]"
              style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.38)' }}>
-            Step inside the live platform with a fully planned luxury community —
+            Step inside the live platform with a fully planned luxury community,
             guided, interactive, and no account required. Or book a 20-minute
             walkthrough with the team.
           </p>

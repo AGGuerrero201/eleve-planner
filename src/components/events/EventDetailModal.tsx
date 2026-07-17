@@ -75,7 +75,7 @@ export function EventDetailModal({
         type="button"
         onClick={() => void handleRegenerate(section)}
         disabled={anyBusy}
-        title={`Regenerate ${SECTION_LABELS[section]} with AI`}
+        title={`Regenerate ${SECTION_LABELS[section]}`}
         className={cn(
           // Touch target: min 36px height, comfortable horizontal padding
           'flex items-center gap-1.5 text-[0.65rem] font-medium px-2.5 py-1.5 min-h-[36px] rounded-sm border',
@@ -220,7 +220,7 @@ export function EventDetailModal({
                     <span className="text-[0.7rem] text-gold font-medium">{v.estimatedCost}</span>
                   </div>
                   {v.suggestions.map((s: string, j: number) => (
-                    <p key={j} className="text-[0.78rem] text-charcoal font-light">— {s}</p>
+                    <p key={j} className="text-[0.78rem] text-charcoal font-light">- {s}</p>
                   ))}
                 </div>
               ))}

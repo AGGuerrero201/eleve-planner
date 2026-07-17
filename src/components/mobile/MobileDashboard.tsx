@@ -59,9 +59,9 @@ export function MobileDashboard({
 
       <div className="px-5">
         <div className="grid grid-cols-2 gap-2.5 mb-8">
-          <MobileStat label="Events in Library" value={eventsLoaded ? String(eventsCount) : '—'} icon={<BookOpen size={13} strokeWidth={1.5} />} />
-          <MobileStat label="Vendors on File" value={vendorsLoaded ? String(vendorsCount) : '—'} icon={<Store size={13} strokeWidth={1.5} />} />
-          <MobileStat label="Plans in Progress" value={eventsLoaded ? String(inProgressCount) : '—'} icon={<CalendarDays size={13} strokeWidth={1.5} />} />
+          <MobileStat label="Events in Library" value={eventsLoaded ? String(eventsCount) : '–'} icon={<BookOpen size={13} strokeWidth={1.5} />} />
+          <MobileStat label="Vendors on File" value={vendorsLoaded ? String(vendorsCount) : '–'} icon={<Store size={13} strokeWidth={1.5} />} />
+          <MobileStat label="Plans in Progress" value={eventsLoaded ? String(inProgressCount) : '–'} icon={<CalendarDays size={13} strokeWidth={1.5} />} />
           <MobileStat label="Templates" value="30" icon={<Package size={13} strokeWidth={1.5} />} />
         </div>
 
@@ -99,7 +99,7 @@ export function MobileDashboard({
             <ComingSoonCard
               icon={<PlayCircle size={16} strokeWidth={1.5} />}
               title="Live Event Mode"
-              description="A focused, one-handed view for running an event in progress — in development."
+              description="A focused, one-handed view for running an event in progress. In development."
               onClick={() => setShowLivePreview(true)}
             />
           </>
@@ -161,7 +161,7 @@ export function MobileDashboard({
         <ComingSoonSheet
           icon={<PlayCircle size={22} strokeWidth={1.5} />}
           title="Live Event Mode"
-          description="A dedicated, distraction-free screen for running an event once it starts — phase timing, quick actions, and at-a-glance status."
+          description="A dedicated, distraction-free screen for running an event once it starts: phase timing, quick actions, and at-a-glance status."
           detail="This requires live attendance and phase-tracking data that isn't part of the product yet. We'll wire this up once that data model exists."
           onClose={() => setShowLivePreview(false)}
         />

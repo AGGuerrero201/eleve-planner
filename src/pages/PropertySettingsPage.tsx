@@ -86,7 +86,7 @@ const PROPERTY_TYPE_OPTIONS = (Object.keys(PROPERTY_TYPE_LABELS) as PropertyType
 
 const LUXURY_OPTIONS = ([1, 2, 3, 4, 5] as LuxuryLevel[]).map((v) => ({
   value: String(v),
-  label: `${v} — ${LUXURY_LEVEL_LABELS[v]}`,
+  label: `${v}: ${LUXURY_LEVEL_LABELS[v]}`,
 }))
 
 const ATTENDANCE_OPTIONS = (Object.keys(ATTENDANCE_LABELS) as TypicalAttendance[]).map((v) => ({
@@ -228,7 +228,7 @@ export function PropertySettingsPage() {
         >
           {isNewProfile
             ? 'Tell Elevé about your community so every generated event feels purpose-built for your residents.'
-            : 'Update your property profile to refine AI-generated events.'}
+            : 'Update your property profile to refine future event plans.'}
         </p>
       </div>
 
@@ -243,7 +243,7 @@ export function PropertySettingsPage() {
         <ProfileCompletenessBar score={liveScore} />
         {liveScore >= 70 && (
           <p className="text-[0.7rem] font-light mt-2" style={{ color: 'var(--gold)' }}>
-            ✦ Profile is rich enough for property-aware AI generation
+            ✦ Profile is rich enough for property-aware planning
           </p>
         )}
       </div>
@@ -381,7 +381,7 @@ export function PropertySettingsPage() {
         <Textarea
           value={form.propertyDescription}
           onChange={(e) => set('propertyDescription', e.target.value)}
-          placeholder="Describe your property's character, architecture, location, or anything that makes it distinctive. This context helps the AI generate more specific event concepts."
+          placeholder="Describe your property's character, architecture, location, or anything that makes it distinctive. This context helps Elevé generate more specific event concepts."
           rows={4}
           hint={`${form.propertyDescription.length}/500`}
           maxLength={500}

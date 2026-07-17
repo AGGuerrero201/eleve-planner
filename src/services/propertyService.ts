@@ -151,7 +151,7 @@ function extractMessage(err: unknown): string {
       return 'Row-level security policy rejected this write. Check RLS policies on property_profiles in Supabase.'
     }
     if (e.code === 'PGRST301') {
-      return 'Supabase returned no data after insert — check that the table exists and RLS allows INSERT.'
+      return 'Supabase returned no data after insert. Check that the table exists and RLS allows INSERT.'
     }
     if ('message' in e && typeof e.message === 'string') {
       return e.message

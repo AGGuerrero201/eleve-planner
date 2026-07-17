@@ -107,7 +107,7 @@ export function EditableList({ items, onSave, bulletColor = 'text-gold' }: Edita
             </div>
           ) : (
             <div className="flex items-start gap-2 py-1">
-              <span className={cn('shrink-0 mt-0.5 font-light', bulletColor)}>—</span>
+              <span className={cn('shrink-0 mt-0.5 font-light', bulletColor)}>-</span>
               <span
                 className="flex-1 text-[0.875rem] text-charcoal font-light leading-relaxed cursor-pointer hover:text-charcoal/70 transition-colors"
                 onClick={() => startEdit(i)}

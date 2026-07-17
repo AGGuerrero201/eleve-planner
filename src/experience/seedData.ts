@@ -87,7 +87,7 @@ const SEED_EVENT_SPECS: SeedEventSpec[] = [
       venue:       'Rooftop',
       alcohol:     'Full bar',
       demographic: 'Young professionals (25–35)',
-      notes:       'Anchor event for the summer calendar — use the west terrace for sunset.',
+      notes:       'Anchor event for the summer calendar. Use the west terrace for sunset.',
     },
     title:   'Golden Hour on the Terrace',
     tagline: 'An evening of signature pours and skyline views',
@@ -155,7 +155,7 @@ const SEED_EVENT_SPECS: SeedEventSpec[] = [
       venue:       'Pool deck',
       alcohol:     'Full bar',
       demographic: 'Mixed',
-      notes:       'Delivered June 6 — highest attendance of the year so far.',
+      notes:       'Delivered June 6, the highest attendance of the year so far.',
     },
     title:   'Midsummer Splash',
     tagline: 'The deck event of the season',
@@ -210,7 +210,7 @@ function buildVendors(): Vendor[] {
     {
       id: 'exp_v_terroir', name: 'Terroir Catering Co.', category: 'catering',
       serviceArea: 'Greater Austin', priceTier: 'premium', coiStatus: 'on_file',
-      notes: 'Go-to for passed-service evenings. Ask for Danielle — she knows the terrace layout.',
+      notes: 'Go-to for passed-service evenings. Ask for Danielle, she knows the terrace layout.',
       tags: ['passed service', 'seasonal menus', 'reliable'],
       contact: { name: 'Danielle Reyes', email: 'events@terroircatering.com', phone: '(512) 555-0134' },
       previouslyUsed: true, favorite: true, rating: 5,
@@ -218,7 +218,7 @@ function buildVendors(): Vendor[] {
     {
       id: 'exp_v_larder', name: 'The Larder Group', category: 'catering',
       serviceArea: 'Austin & Hill Country', priceTier: 'luxury', coiStatus: 'on_file',
-      notes: 'Reserved for signature events — carving stations and plated dinners.',
+      notes: 'Reserved for signature events: carving stations and plated dinners.',
       tags: ['plated dinners', 'carving station', 'gala-grade'],
       contact: { name: 'Marcus Hale', email: 'marcus@thelardergroup.com' },
       previouslyUsed: true, favorite: false, rating: 5,
@@ -282,7 +282,7 @@ function buildVendors(): Vendor[] {
     {
       id: 'exp_v_copper', name: 'Copper Kettle Coffee Cart', category: 'specialty',
       serviceArea: 'Austin metro', priceTier: 'budget', coiStatus: 'expired',
-      notes: 'Charming espresso cart for morning events. COI expired — request renewal before booking.',
+      notes: 'Charming espresso cart for morning events. COI expired, request renewal before booking.',
       tags: ['espresso cart', 'mornings', 'COI renewal needed'],
       contact: { phone: '(512) 555-0148' },
       previouslyUsed: true, favorite: false, rating: 4,
@@ -300,7 +300,7 @@ function buildVendors(): Vendor[] {
 
 function buildActivity(): ActivityEntry[] {
   return [
-    { id: 'act_seed_1', ts: hoursAgo(9),  kind: 'generated', text: 'Generated “The Supper Club: Session One” with AI planning' },
+    { id: 'act_seed_1', ts: hoursAgo(9),  kind: 'generated', text: 'Generated “The Supper Club: Session One”' },
     { id: 'act_seed_2', ts: daysAgo(1),   kind: 'saved',     text: 'Saved “Sunrise Flow on the Deck” to the event library' },
     { id: 'act_seed_3', ts: daysAgo(2),   kind: 'status',    text: 'Moved “Golden Hour on the Terrace” to In Progress' },
     { id: 'act_seed_4', ts: daysAgo(4),   kind: 'vendor',    text: 'Requested COI renewal from Stem & Thorn Florals' },
